@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01 concluída
+**Status:** Em execução — T01–T02 concluídas
 
 ---
 
@@ -130,12 +130,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes começam vermelhos para transições permitidas e proibidas.
-- [ ] Confidence fora de `0..1`, enum inválido e evidência vazia são rejeitados.
-- [ ] Alterar páginas invalida todos os artefatos posteriores.
-- [ ] `pending_items()` cobre score, veredito, conflito e omissão.
-- [ ] Gate Quick passa.
-- [ ] Test count: pelo menos 18 testes unitários de domínio passam.
+- [x] Testes começam vermelhos para transições permitidas e proibidas.
+- [x] Confidence fora de `0..1`, enum inválido e evidência vazia são rejeitados.
+- [x] Alterar páginas invalida todos os artefatos posteriores.
+- [x] `pending_items()` cobre score, veredito, conflito e omissão.
+- [x] Gate Quick passa.
+- [x] Test count: 55 testes unitários de domínio passam.
 
 **Tests:** unit
 **Gate:** quick
@@ -644,7 +644,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | Task | Atomic deliverable | Status |
 | --- | --- | --- |
 | T01 | Bootstrap e contrato de comandos | ✅ Concluída |
-| T02 | Modelos e máquina de estados em um módulo coeso | ✅ Granular |
+| T02 | Modelos e máquina de estados em um módulo coeso | ✅ Concluída |
 | T03 | Repositório local | ✅ Granular |
 | T04 | Processador PDF | ✅ Granular |
 | T05 | Porta e contratos LLM | ✅ Granular |
