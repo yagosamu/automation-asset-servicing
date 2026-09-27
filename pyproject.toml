@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "asset-servicing"
+version = "0.1.0"
+description = "Local LLM-assisted extraction of investment fund regulations."
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "openai>=1.109,<2",
+    "openpyxl>=3.1,<4",
+    "pydantic>=2.11,<3",
+    "pymupdf>=1.26,<2",
+    "pypdf>=6,<7",
+    "streamlit>=1.50,<2",
+    "tenacity>=9,<10",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17,<2",
+    "pytest>=8.4,<9",
+    "pytest-cov>=6.2,<7",
+    "ruff>=0.12,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/asset_servicing"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "unit: fast tests of domain and pure application behavior",
+    "integration: tests that exercise local adapters and file boundaries",
+    "contract: tests for public contracts, schemas, and project configuration",
+    "ui: tests for the Streamlit user interface journeys",
+    "eval: golden-set and evaluation tests",
+    "needs_api: opt-in tests that require a live LLM API credential",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["asset_servicing"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 85
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["Regulamentos"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+files = ["src"]
+mypy_path = "src"
+python_version = "3.13"
+strict = true

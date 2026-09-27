@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Draft para aprovação
+**Status:** Em execução — T01 concluída
 
 ---
 
@@ -104,12 +104,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Um teste de contrato falha antes e passa depois do bootstrap.
-- [ ] `uv sync --group dev` cria ambiente reproduzível e lockfile.
-- [ ] Todos os marcadores da matriz estão registrados.
-- [ ] Quick, Full e Build existem como comandos documentados e executáveis.
-- [ ] Gate Build passa.
-- [ ] Test count: pelo menos 4 testes de contrato do projeto passam.
+- [x] O contrato executável cobre o bootstrap e passa depois da configuração.
+- [x] `uv sync --group dev` cria ambiente reproduzível e lockfile.
+- [x] Todos os marcadores da matriz estão registrados.
+- [x] Quick, Full e Build existem como comandos documentados e executáveis.
+- [x] Gate Build passa.
+- [x] Test count: 4 testes de contrato do projeto passam.
 
 **Tests:** contract
 **Gate:** build
@@ -643,7 +643,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 
 | Task | Atomic deliverable | Status |
 | --- | --- | --- |
-| T01 | Bootstrap e contrato de comandos | ✅ Granular |
+| T01 | Bootstrap e contrato de comandos | ✅ Concluída |
 | T02 | Modelos e máquina de estados em um módulo coeso | ✅ Granular |
 | T03 | Repositório local | ✅ Granular |
 | T04 | Processador PDF | ✅ Granular |

@@ -279,7 +279,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-45 | P1: Resiliência | Design | In Design |
 | ASET-46 | P1: Resiliência | Design | In Design |
 | ASET-47 | P1: Resiliência | Design | In Design |
-| ASET-48 | P1: Qualidade | Design | In Design |
+| ASET-48 | P1: Qualidade | Design | Implemented |
 | ASET-49 | P1: Qualidade | Design | In Design |
 | ASET-50 | P1: Qualidade | Design | In Design |
 | ASET-51 | P1: Qualidade | Design | In Design |
