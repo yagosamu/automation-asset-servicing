@@ -232,14 +232,14 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| ASET-01 | P1: Localização | Design | Partial (T03) |
-| ASET-02 | P1: Localização | Design | In Design |
+| ASET-01 | P1: Localização | Design | Partial (T03–T04) |
+| ASET-02 | P1: Localização | Design | Partial (T04) |
 | ASET-03 | P1: Localização | Design | In Design |
 | ASET-04 | P1: Localização | Design | In Design |
-| ASET-05 | P1: Localização | Design | In Design |
+| ASET-05 | P1: Localização | Design | Partial (T04) |
 | ASET-06 | P1: Localização | Design | In Design |
 | ASET-07 | P1: Localização | Design | In Design |
-| ASET-08 | P1: Extração | Design | In Design |
+| ASET-08 | P1: Extração | Design | Partial (T04) |
 | ASET-09 | P1: Extração | Design | Partial (T02) |
 | ASET-10 | P1: Extração | Design | In Design |
 | ASET-11 | P1: Extração | Design | In Design |
@@ -284,7 +284,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-50 | P1: Qualidade | Design | In Design |
 | ASET-51 | P1: Qualidade | Design | In Design |
 | ASET-52 | P1: Qualidade | Design | In Design |
-| ASET-53 | P1: Qualidade | Design | In Design |
+| ASET-53 | P1: Qualidade | Design | Partial (T04) |
 | ASET-54 | P1: Qualidade | Design | In Design |
 | ASET-55 | P3: Busca | - | Pending |
 | ASET-56 | P3: Busca | - | Pending |

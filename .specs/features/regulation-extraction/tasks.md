@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T03 concluídas
+**Status:** Em execução — T01–T04 concluídas
 
 ---
 
@@ -183,13 +183,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes cobrem PDF válido, não PDF, criptografado, ilegível, 50 MB e 200 páginas.
-- [ ] Hash e contagem de páginas são reproduzíveis para os quatro documentos.
-- [ ] A seleção preserva ordem e numeração original das páginas.
-- [ ] Prévia visual é gerada em diretório temporário e não versionado.
-- [ ] O adapter não contém regex ou regras de extração de conteúdo.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 14 testes de integração passam.
+- [x] Testes cobrem PDF válido, não PDF, criptografado, ilegível, 50 MB e 200 páginas.
+- [x] Hash e contagem de páginas são reproduzíveis para os quatro documentos.
+- [x] A seleção preserva ordem e numeração original das páginas.
+- [x] Prévia visual é gerada em diretório temporário e não versionado.
+- [x] O adapter não contém regex ou regras de extração de conteúdo.
+- [x] Gate Full passa.
+- [x] Test count: 17 testes de integração passam.
 
 **Tests:** integration
 **Gate:** full
@@ -646,7 +646,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T01 | Bootstrap e contrato de comandos | ✅ Concluída |
 | T02 | Modelos e máquina de estados em um módulo coeso | ✅ Concluída |
 | T03 | Repositório local | ✅ Concluída |
-| T04 | Processador PDF | ✅ Granular |
+| T04 | Processador PDF | ✅ Concluída |
 | T05 | Porta e contratos LLM | ✅ Granular |
 | T06 | Adapter OpenAI | ✅ Granular |
 | T07 | Localizador | ✅ Granular |
