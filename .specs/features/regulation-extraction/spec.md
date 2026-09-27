@@ -232,7 +232,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| ASET-01 | P1: Localização | Design | In Design |
+| ASET-01 | P1: Localização | Design | Partial (T03) |
 | ASET-02 | P1: Localização | Design | In Design |
 | ASET-03 | P1: Localização | Design | In Design |
 | ASET-04 | P1: Localização | Design | In Design |
@@ -262,8 +262,8 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-28 | P1: Revisão | Design | In Design |
 | ASET-29 | P1: Revisão | Design | In Design |
 | ASET-30 | P1: Revisão | Design | Partial (T02) |
-| ASET-31 | P1: Revisão | Design | In Design |
-| ASET-32 | P1: Revisão | Design | In Design |
+| ASET-31 | P1: Revisão | Design | Partial (T03) |
+| ASET-32 | P1: Revisão | Design | Partial (T03) |
 | ASET-33 | P1: Excel | Design | In Design |
 | ASET-34 | P1: Excel | Design | Partial (T02) |
 | ASET-35 | P1: Excel | Design | Partial (T02) |
@@ -274,11 +274,11 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-40 | P1: Excel | Design | In Design |
 | ASET-41 | P1: Resiliência | Design | In Design |
 | ASET-42 | P1: Resiliência | Design | In Design |
-| ASET-43 | P1: Resiliência | Design | In Design |
+| ASET-43 | P1: Resiliência | Design | Partial (T03) |
 | ASET-44 | P1: Resiliência | Design | Partial (T02) |
 | ASET-45 | P1: Resiliência | Design | Partial (T02) |
-| ASET-46 | P1: Resiliência | Design | In Design |
-| ASET-47 | P1: Resiliência | Design | In Design |
+| ASET-46 | P1: Resiliência | Design | Partial (T03) |
+| ASET-47 | P1: Resiliência | Design | Partial (T03) |
 | ASET-48 | P1: Qualidade | Design | Implemented |
 | ASET-49 | P1: Qualidade | Design | In Design |
 | ASET-50 | P1: Qualidade | Design | In Design |

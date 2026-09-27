@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T02 concluídas
+**Status:** Em execução — T01–T03 concluídas
 
 ---
 
@@ -156,13 +156,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de integração falham antes da implementação.
-- [ ] Save/load preserva todos os modelos e revisões.
-- [ ] Falha antes de `os.replace` mantém o último estado válido.
-- [ ] Eventos JSONL carregam `run_id`, estágio, duração, modelo, uso e erro sanitizado.
-- [ ] Uma chave sentinela não aparece em estado, eventos ou mensagens.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 12 testes de integração passam.
+- [x] Testes de integração falham antes da implementação.
+- [x] Save/load preserva todos os modelos e revisões.
+- [x] Falha antes de `os.replace` mantém o último estado válido.
+- [x] Eventos JSONL carregam `run_id`, estágio, duração, modelo, uso e erro sanitizado.
+- [x] Uma chave sentinela não aparece em estado, eventos ou mensagens.
+- [x] Gate Full passa.
+- [x] Test count: 12 testes de integração passam.
 
 **Tests:** integration
 **Gate:** full
@@ -645,7 +645,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | --- | --- | --- |
 | T01 | Bootstrap e contrato de comandos | ✅ Concluída |
 | T02 | Modelos e máquina de estados em um módulo coeso | ✅ Concluída |
-| T03 | Repositório local | ✅ Granular |
+| T03 | Repositório local | ✅ Concluída |
 | T04 | Processador PDF | ✅ Granular |
 | T05 | Porta e contratos LLM | ✅ Granular |
 | T06 | Adapter OpenAI | ✅ Granular |
