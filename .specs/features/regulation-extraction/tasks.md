@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T04 concluídas
+**Status:** Em execução — T01–T05 concluídas
 
 ---
 
@@ -210,12 +210,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de contrato começam vermelhos para campos ausentes e enums inválidos.
-- [ ] Cada agente possui request e response próprios.
-- [ ] O request do validador não possui campo de raciocínio ou confiança do extrator.
-- [ ] Os schemas representam localização, variáveis atômicas, validações e omissões.
-- [ ] Gate Quick passa.
-- [ ] Test count: pelo menos 14 testes de contrato passam.
+- [x] Testes de contrato começam vermelhos para campos ausentes e enums inválidos.
+- [x] Cada agente possui request e response próprios.
+- [x] O request do validador não possui campo de raciocínio ou confiança do extrator.
+- [x] Os schemas representam localização, variáveis atômicas, validações e omissões.
+- [x] Gate Quick passa.
+- [x] Test count: 27 testes de contrato passam.
 
 **Tests:** contract
 **Gate:** quick
@@ -647,7 +647,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T02 | Modelos e máquina de estados em um módulo coeso | ✅ Concluída |
 | T03 | Repositório local | ✅ Concluída |
 | T04 | Processador PDF | ✅ Concluída |
-| T05 | Porta e contratos LLM | ✅ Granular |
+| T05 | Porta e contratos LLM | ✅ Concluída |
 | T06 | Adapter OpenAI | ✅ Granular |
 | T07 | Localizador | ✅ Granular |
 | T08 | Extrator | ✅ Granular |
