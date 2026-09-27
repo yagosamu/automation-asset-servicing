@@ -2,7 +2,7 @@
 
 **Spec:** `.specs/features/regulation-extraction/spec.md`
 **Contexto:** `.specs/features/regulation-extraction/context.md`
-**Status:** Draft para aprovação
+**Status:** Approved
 
 ---
 
@@ -428,7 +428,7 @@ Um resumo por execução mostrará:
 
 | Concern | Location | Impact | Mitigation |
 | --- | --- | --- | --- |
-| Repositório ainda não inicializado | raiz do projeto | Sem histórico, branch ou proteção contra segredos | Inicializar Git antes da implementação, adicionar `.gitignore` e usar commits atômicos |
+| Repositório sem bootstrap Python ou CI | raiz do projeto | Gates ainda não são executáveis | Criar manifesto, lockfile, comandos locais e testes de contrato na primeira tarefa |
 | Apenas quatro documentos reais | `Regulamentos/` | Golden set pequeno pode superestimar generalização | Adicionar cenário sintético Capítulo 6 e casos adversariais; declarar a limitação |
 | Score da LLM não é calibrado | validador | Usuário pode interpretar confiança como probabilidade | Rubrica explícita, threshold conservador e teste adversarial |
 | Extrator e validador podem compartilhar vieses | adapters LLM | Erro consistente pode passar pelos dois | Prompts independentes, nenhuma confiança compartilhada, modelos configuráveis e mutações adversariais |
