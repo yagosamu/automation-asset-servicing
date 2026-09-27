@@ -272,20 +272,20 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-38 | P1: Excel | Design | Partial (T02) |
 | ASET-39 | P1: Excel | Design | In Design |
 | ASET-40 | P1: Excel | Design | In Design |
-| ASET-41 | P1: Resiliência | Design | In Design |
-| ASET-42 | P1: Resiliência | Design | In Design |
+| ASET-41 | P1: Resiliência | Design | Partial (T06) |
+| ASET-42 | P1: Resiliência | Design | Partial (T06) |
 | ASET-43 | P1: Resiliência | Design | Partial (T03) |
 | ASET-44 | P1: Resiliência | Design | Partial (T02) |
 | ASET-45 | P1: Resiliência | Design | Partial (T02) |
-| ASET-46 | P1: Resiliência | Design | Partial (T03) |
-| ASET-47 | P1: Resiliência | Design | Partial (T03) |
-| ASET-48 | P1: Qualidade | Design | Implemented |
+| ASET-46 | P1: Resiliência | Design | Partial (T03, T06) |
+| ASET-47 | P1: Resiliência | Design | Partial (T03, T06) |
+| ASET-48 | P1: Qualidade | Design | Implemented (T01, T06) |
 | ASET-49 | P1: Qualidade | Design | In Design |
 | ASET-50 | P1: Qualidade | Design | In Design |
 | ASET-51 | P1: Qualidade | Design | In Design |
 | ASET-52 | P1: Qualidade | Design | In Design |
 | ASET-53 | P1: Qualidade | Design | Partial (T04) |
-| ASET-54 | P1: Qualidade | Design | In Design |
+| ASET-54 | P1: Qualidade | Design | Partial (T06) |
 | ASET-55 | P3: Busca | - | Pending |
 | ASET-56 | P3: Busca | - | Pending |
 | ASET-57 | P3: Busca | - | Pending |

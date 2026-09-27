@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T05 concluídas
+**Status:** Em execução — T01–T06 concluídas
 
 ---
 
@@ -236,13 +236,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes mockados começam vermelhos para sucesso, refusal, schema inválido, timeout, rate limit e erro não transitório.
-- [ ] Timeout, rate limit e rede tentam no máximo três vezes com backoff injetável.
-- [ ] Refusal e resposta incompleta não são persistidas como sucesso.
-- [ ] Modelos e versões de prompt são configuráveis sem chave no código.
-- [ ] Logs e exceções não expõem chave ou header de autorização.
-- [ ] Gate Build da Phase 1 passa.
-- [ ] Test count: pelo menos 16 testes de contrato passam.
+- [x] Testes mockados começam vermelhos para sucesso, refusal, schema inválido, timeout, rate limit e erro não transitório.
+- [x] Timeout, rate limit e rede tentam no máximo três vezes com backoff injetável.
+- [x] Refusal e resposta incompleta não são persistidas como sucesso.
+- [x] Modelos e versões de prompt são configuráveis sem chave no código.
+- [x] Logs e exceções não expõem chave ou header de autorização.
+- [x] Gate Build da Phase 1 passa.
+- [x] Test count: 18 testes de contrato passam.
 
 **Tests:** contract
 **Gate:** build
@@ -648,7 +648,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T03 | Repositório local | ✅ Concluída |
 | T04 | Processador PDF | ✅ Concluída |
 | T05 | Porta e contratos LLM | ✅ Concluída |
-| T06 | Adapter OpenAI | ✅ Granular |
+| T06 | Adapter OpenAI | ✅ Concluída |
 | T07 | Localizador | ✅ Granular |
 | T08 | Extrator | ✅ Granular |
 | T09 | Validador | ✅ Granular |
