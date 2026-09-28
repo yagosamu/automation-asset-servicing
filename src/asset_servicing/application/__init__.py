@@ -8,6 +8,7 @@ from asset_servicing.application.pipeline import (
     RegulationPipeline,
     UsageLedger,
 )
+from asset_servicing.application.review_service import ReviewService
 from asset_servicing.application.validator import RegulationVariableValidator, ValidationBatch
 
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     "RegulationSectionLocator",
     "RegulationVariableExtractor",
     "RegulationVariableValidator",
+    "ReviewService",
     "ValidationBatch",
     "UsageLedger",
 ]

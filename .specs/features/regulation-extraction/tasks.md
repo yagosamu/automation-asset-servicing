@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T10 concluídas
+**Status:** Em execução — T01–T11 concluídas
 
 ---
 
@@ -372,13 +372,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes começam vermelhos para as quatro ações e entradas inválidas.
-- [ ] Somente ação humana explícita define `reviewed=True`.
-- [ ] Nome/valor originais e evidência permanecem imutáveis.
-- [ ] A auditoria registra antes, depois, ação, nota e instante.
-- [ ] Reabrir a execução restaura a fila e as decisões.
-- [ ] Gate Build da Phase 2 passa.
-- [ ] Test count: pelo menos 16 testes unitários e de integração passam.
+- [x] Testes começam vermelhos para as quatro ações e entradas inválidas.
+- [x] Somente ação humana explícita define `reviewed=True`.
+- [x] Nome/valor originais e evidência permanecem imutáveis.
+- [x] A auditoria registra antes, depois, ação, nota e instante.
+- [x] Reabrir a execução restaura a fila e as decisões.
+- [x] Gate Build da Phase 2 passa.
+- [x] Test count: 19 testes unitários e de integração passam.
 
 **Tests:** unit + integration
 **Gate:** build
