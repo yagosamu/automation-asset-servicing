@@ -265,12 +265,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Um fixture com seção equivalente no Capítulo 6 falha antes da implementação e passa depois.
-- [ ] O prompt busca significado e não fixa capítulo, título literal ou página.
-- [ ] Capítulo opcional orienta sem restringir a resposta.
-- [ ] Ausência de seção produz estado recuperável para intervalo manual.
-- [ ] Gate Quick passa.
-- [ ] Test count: pelo menos 12 testes unitários/contrato passam.
+- [x] Um fixture com seção equivalente no Capítulo 6 falha antes da implementação e passa depois.
+- [x] O prompt busca significado e não fixa capítulo, título literal ou página.
+- [x] Capítulo opcional orienta sem restringir a resposta.
+- [x] Ausência de seção produz estado recuperável para intervalo manual.
+- [x] Gate Quick passa.
+- [x] Test count: 20 testes unitários/contrato passam.
 
 **Tests:** unit + contract
 **Gate:** quick

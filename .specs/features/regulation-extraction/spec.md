@@ -234,11 +234,11 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | --- | --- | --- | --- |
 | ASET-01 | P1: Localização | Design | Partial (T03–T04) |
 | ASET-02 | P1: Localização | Design | Partial (T04) |
-| ASET-03 | P1: Localização | Design | In Design |
-| ASET-04 | P1: Localização | Design | Partial (T05) |
+| ASET-03 | P1: Localização | Design | Implemented (T07) |
+| ASET-04 | P1: Localização | Design | Implemented (T05, T07) |
 | ASET-05 | P1: Localização | Design | Partial (T04) |
-| ASET-06 | P1: Localização | Design | In Design |
-| ASET-07 | P1: Localização | Design | In Design |
+| ASET-06 | P1: Localização | Design | Partial (T02, T07) |
+| ASET-07 | P1: Localização | Design | Partial (T07) |
 | ASET-08 | P1: Extração | Design | Partial (T04) |
 | ASET-09 | P1: Extração | Design | Partial (T02, T05) |
 | ASET-10 | P1: Extração | Design | Partial (T05) |
@@ -282,7 +282,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-48 | P1: Qualidade | Design | Implemented (T01, T06) |
 | ASET-49 | P1: Qualidade | Design | In Design |
 | ASET-50 | P1: Qualidade | Design | In Design |
-| ASET-51 | P1: Qualidade | Design | In Design |
+| ASET-51 | P1: Qualidade | Design | Implemented (T07) |
 | ASET-52 | P1: Qualidade | Design | In Design |
 | ASET-53 | P1: Qualidade | Design | Partial (T04) |
 | ASET-54 | P1: Qualidade | Design | Partial (T06) |
