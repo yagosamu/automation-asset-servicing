@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T06 concluídas
+**Status:** Em execução — T01–T10 concluídas
 
 ---
 
@@ -345,13 +345,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de integração começam vermelhos para fluxo feliz, falha e retomada de cada estágio.
-- [ ] Cada estágio válido é persistido antes do próximo.
-- [ ] Rerun substitui apenas o estágio solicitado e invalida seus dependentes.
-- [ ] Uma segunda chamada concorrente para a mesma execução é recusada.
-- [ ] Eventos estruturados medem duração, modelo, prompt, páginas, uso e resultado.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 18 testes de integração passam.
+- [x] Testes de integração começam vermelhos para fluxo feliz, falha e retomada de cada estágio.
+- [x] Cada estágio válido é persistido antes do próximo.
+- [x] Rerun substitui apenas o estágio solicitado e invalida seus dependentes.
+- [x] Uma segunda chamada concorrente para a mesma execução é recusada.
+- [x] Eventos estruturados medem duração, modelo, prompt, páginas, uso e resultado.
+- [x] Gate Full passa.
+- [x] Test count: 20 testes de integração passam.
 
 **Tests:** integration
 **Gate:** full

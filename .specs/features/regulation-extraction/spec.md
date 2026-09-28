@@ -232,14 +232,14 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| ASET-01 | P1: Localização | Design | Partial (T03–T04) |
+| ASET-01 | P1: Localização | Design | Partial (T03–T04, T10) |
 | ASET-02 | P1: Localização | Design | Partial (T04) |
 | ASET-03 | P1: Localização | Design | Implemented (T07) |
 | ASET-04 | P1: Localização | Design | Implemented (T05, T07) |
 | ASET-05 | P1: Localização | Design | Partial (T04) |
-| ASET-06 | P1: Localização | Design | Partial (T02, T07) |
-| ASET-07 | P1: Localização | Design | Partial (T07) |
-| ASET-08 | P1: Extração | Design | Partial (T04, T08) |
+| ASET-06 | P1: Localização | Design | Implemented (T02, T07, T10) |
+| ASET-07 | P1: Localização | Design | Implemented (T07, T10) |
+| ASET-08 | P1: Extração | Design | Implemented (T04, T08, T10) |
 | ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
 | ASET-10 | P1: Extração | Design | Implemented (T05, T08) |
 | ASET-11 | P1: Extração | Design | Implemented (T08) |
@@ -247,7 +247,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-13 | P1: Extração | Design | Implemented (T08) |
 | ASET-14 | P1: Extração | Design | Partial (T05, T08) |
 | ASET-15 | P1: Extração | Design | Implemented (T08) |
-| ASET-16 | P1: Validação | Design | Partial (T05, T06, T09) |
+| ASET-16 | P1: Validação | Design | Implemented (T05, T06, T09, T10) |
 | ASET-17 | P1: Validação | Design | Implemented (T05, T09) |
 | ASET-18 | P1: Validação | Design | Implemented (T02, T05, T09) |
 | ASET-19 | P1: Validação | Design | Implemented (T02, T05, T09) |
@@ -255,7 +255,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-21 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-22 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-23 | P1: Validação | Design | Implemented (T02, T09) |
-| ASET-24 | P1: Revisão | Design | In Design |
+| ASET-24 | P1: Revisão | Design | Partial (T02, T09, T10) |
 | ASET-25 | P1: Revisão | Design | In Design |
 | ASET-26 | P1: Revisão | Design | In Design |
 | ASET-27 | P1: Revisão | Design | In Design |
@@ -272,13 +272,13 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-38 | P1: Excel | Design | Partial (T02) |
 | ASET-39 | P1: Excel | Design | In Design |
 | ASET-40 | P1: Excel | Design | In Design |
-| ASET-41 | P1: Resiliência | Design | Partial (T06) |
-| ASET-42 | P1: Resiliência | Design | Partial (T06) |
-| ASET-43 | P1: Resiliência | Design | Partial (T03) |
-| ASET-44 | P1: Resiliência | Design | Partial (T02) |
-| ASET-45 | P1: Resiliência | Design | Partial (T02) |
-| ASET-46 | P1: Resiliência | Design | Partial (T03, T06) |
-| ASET-47 | P1: Resiliência | Design | Partial (T03, T06) |
+| ASET-41 | P1: Resiliência | Design | Implemented (T06, T10) |
+| ASET-42 | P1: Resiliência | Design | Partial (T06, T10) |
+| ASET-43 | P1: Resiliência | Design | Implemented (T03, T10) |
+| ASET-44 | P1: Resiliência | Design | Implemented (T02, T10) |
+| ASET-45 | P1: Resiliência | Design | Implemented (T02, T10) |
+| ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10) |
+| ASET-47 | P1: Resiliência | Design | Partial (T03, T06, T10) |
 | ASET-48 | P1: Qualidade | Design | Implemented (T01, T06) |
 | ASET-49 | P1: Qualidade | Design | In Design |
 | ASET-50 | P1: Qualidade | Design | In Design |

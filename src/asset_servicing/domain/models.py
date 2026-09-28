@@ -229,14 +229,26 @@ class Run(BaseModel):
         RunState.CREATED: frozenset({RunState.LOCATING}),
         RunState.LOCATING: frozenset({RunState.LOCATION_READY, RunState.FAILED_LOCATION}),
         RunState.FAILED_LOCATION: frozenset({RunState.LOCATING}),
-        RunState.LOCATION_READY: frozenset({RunState.LOCATION_CONFIRMED}),
-        RunState.LOCATION_CONFIRMED: frozenset({RunState.EXTRACTING}),
+        RunState.LOCATION_READY: frozenset({RunState.LOCATING, RunState.LOCATION_CONFIRMED}),
+        RunState.LOCATION_CONFIRMED: frozenset({RunState.LOCATING, RunState.EXTRACTING}),
         RunState.EXTRACTING: frozenset({RunState.EXTRACTED, RunState.FAILED_EXTRACTION}),
-        RunState.FAILED_EXTRACTION: frozenset({RunState.EXTRACTING}),
-        RunState.EXTRACTED: frozenset({RunState.VALIDATING}),
+        RunState.FAILED_EXTRACTION: frozenset({RunState.LOCATING, RunState.EXTRACTING}),
+        RunState.EXTRACTED: frozenset(
+            {RunState.LOCATING, RunState.EXTRACTING, RunState.VALIDATING}
+        ),
         RunState.VALIDATING: frozenset({RunState.REVIEWING, RunState.FAILED_VALIDATION}),
-        RunState.FAILED_VALIDATION: frozenset({RunState.VALIDATING}),
-        RunState.REVIEWING: frozenset({RunState.REVIEWING, RunState.FINAL_READY}),
+        RunState.FAILED_VALIDATION: frozenset(
+            {RunState.LOCATING, RunState.EXTRACTING, RunState.VALIDATING}
+        ),
+        RunState.REVIEWING: frozenset(
+            {
+                RunState.LOCATING,
+                RunState.EXTRACTING,
+                RunState.VALIDATING,
+                RunState.REVIEWING,
+                RunState.FINAL_READY,
+            }
+        ),
         RunState.FINAL_READY: frozenset(),
     }
 

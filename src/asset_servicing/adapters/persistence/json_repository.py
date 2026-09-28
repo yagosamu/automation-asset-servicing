@@ -118,6 +118,14 @@ class JsonRunRepository:
         payload.pop("schema_version", None)
         return Run.model_validate(payload)
 
+    def source_path(self, run_id: str) -> Path:
+        """Return the persisted source PDF used to resume a run."""
+
+        source = self._run_dir(run_id) / "source.pdf"
+        if not source.is_file():
+            raise FileNotFoundError(f"run source not found: {run_id}")
+        return source
+
     def append_event(self, event: RunEvent) -> None:
         """Append a sanitized event through an atomic JSONL replacement."""
 
