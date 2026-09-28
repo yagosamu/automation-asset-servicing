@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T13 concluídas
+**Status:** Em execução — T01–T14 concluídas
 
 ---
 
@@ -454,12 +454,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de UI começam vermelhos para tabela geral e as quatro ações de revisão.
-- [ ] Pendências mostram evidência, página, score, veredito e justificativa.
-- [ ] Evidência não pode ser editada.
-- [ ] Contadores são atualizados após cada decisão persistida.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 12 testes de UI passam.
+- [x] Testes de UI começam vermelhos para tabela geral e as quatro ações de revisão.
+- [x] Pendências mostram evidência, página, score, veredito e justificativa.
+- [x] Evidência não pode ser editada.
+- [x] Contadores são atualizados após cada decisão persistida.
+- [x] Gate Full passa.
+- [x] Test count: 12 testes de UI passam.
 
 **Tests:** ui
 **Gate:** full

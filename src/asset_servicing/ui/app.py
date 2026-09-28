@@ -7,7 +7,13 @@ from typing import Protocol
 
 import streamlit as st
 
-from asset_servicing.domain import Run, SectionLocation
+from asset_servicing.domain import ExtractedVariable, ReviewItemKind, Run, SectionLocation
+
+_VERDICT_LABELS = {
+    "supported": "suportado",
+    "partially_supported": "parcialmente suportado",
+    "unsupported": "não suportado",
+}
 
 
 class Preview(Protocol):
@@ -36,6 +42,49 @@ class DocumentLocationPipeline(Protocol):
         page_start: int,
         page_end: int,
     ) -> list[Preview]: ...
+
+
+class ReviewWorkflow(Protocol):
+    """Public review operations consumed by the results UI."""
+
+    def get_run(self, run_id: str) -> Run: ...
+
+    def confirm(
+        self,
+        run_id: str,
+        variable_id: str,
+        *,
+        note: str | None = None,
+    ) -> ExtractedVariable: ...
+
+    def edit(
+        self,
+        run_id: str,
+        variable_id: str,
+        *,
+        name: str,
+        value: str,
+        note: str | None = None,
+    ) -> ExtractedVariable: ...
+
+    def mark_not_applicable(
+        self,
+        run_id: str,
+        variable_id: str,
+        *,
+        note: str,
+    ) -> ExtractedVariable: ...
+
+    def add_missing(
+        self,
+        run_id: str,
+        finding_id: str,
+        *,
+        name: str,
+        value: str,
+        evidence: str,
+        note: str | None = None,
+    ) -> ExtractedVariable: ...
 
 
 def render_document_location(
@@ -192,24 +241,233 @@ def _render_active_location(pipeline: DocumentLocationPipeline) -> None:
     )
 
 
+def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> None:
+    """Render the persisted extraction results and review counters."""
+
+    try:
+        run = review_service.get_run(run_id)
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(str(error))
+        return
+
+    validation_by_variable = {validation.variable_id: validation for validation in run.validations}
+    rows = []
+    for variable in run.variables:
+        validation = validation_by_variable.get(variable.id)
+        rows.append(
+            {
+                "Variável": variable.current_name,
+                "Valor": variable.current_value,
+                "Trecho-fonte": variable.evidence_text,
+                "Páginas": ", ".join(str(page) for page in variable.source_pages),
+                "Confiança": validation.confidence if validation else None,
+                "Veredito": validation.verdict.value if validation else "—",
+                "Foi revisado?": variable.reviewed,
+            }
+        )
+
+    pending = run.pending_items()
+    st.header("Resultados e revisão")
+    flash_message = st.session_state.pop("_review_flash", None)
+    if flash_message:
+        st.success(str(flash_message))
+    metric_columns = st.columns(3)
+    metric_columns[0].metric("Variáveis", len(run.variables))
+    metric_columns[1].metric("Pendências", len(pending))
+    metric_columns[2].metric(
+        "Revisadas",
+        sum(variable.reviewed for variable in run.variables),
+    )
+    st.dataframe(rows, width="stretch", hide_index=True)
+    if not pending:
+        st.success("Não há pendências de revisão.")
+        return
+
+    variables_by_id = {variable.id: variable for variable in run.variables}
+    findings_by_id = {finding.id: finding for finding in run.coverage_findings}
+    st.subheader("Fila de revisão")
+    for item in pending:
+        if item.kind is ReviewItemKind.VARIABLE and item.variable_id is not None:
+            variable = variables_by_id[item.variable_id]
+            validation = validation_by_variable[item.variable_id]
+            st.subheader(variable.current_name)
+            st.text_input(
+                "Nome atual",
+                value=variable.current_name,
+                disabled=True,
+                key=f"pending_name_{variable.id}",
+            )
+            st.text_input(
+                "Valor atual",
+                value=variable.current_value,
+                disabled=True,
+                key=f"pending_value_{variable.id}",
+            )
+            st.text_area(
+                "Trecho-fonte (somente leitura)",
+                value=variable.evidence_text,
+                disabled=True,
+                key=f"evidence_{variable.id}",
+            )
+            st.caption(f"Página(s): {', '.join(str(page) for page in variable.source_pages)}")
+            formatted_confidence = f"{validation.confidence:.2f}".replace(".", ",")
+            st.markdown(f"**Confiança atribuída pela LLM (rubrica):** {formatted_confidence}")
+            st.markdown(f"**Veredito:** {_VERDICT_LABELS[validation.verdict.value]}")
+            st.info(f"Justificativa do validador: {validation.rationale}")
+            confirm_note = st.text_input(
+                "Nota da confirmação (opcional)",
+                key=f"confirm_note_{variable.id}",
+            )
+            if st.button("Confirmar variável", key=f"confirm_{variable.id}"):
+                try:
+                    review_service.confirm(
+                        run_id,
+                        variable.id,
+                        note=confirm_note or None,
+                    )
+                except (OSError, RuntimeError, ValueError) as error:
+                    st.error(str(error))
+                else:
+                    st.session_state["_review_flash"] = "Variável confirmada."
+                    st.rerun()
+            st.markdown("##### Editar variável")
+            edit_name = st.text_input(
+                "Nome revisado",
+                value=variable.current_name,
+                key=f"edit_name_{variable.id}",
+            )
+            edit_value = st.text_input(
+                "Valor revisado",
+                value=variable.current_value,
+                key=f"edit_value_{variable.id}",
+            )
+            edit_note = st.text_input(
+                "Nota da edição (opcional)",
+                key=f"edit_note_{variable.id}",
+            )
+            if st.button("Salvar edição", key=f"edit_{variable.id}"):
+                try:
+                    review_service.edit(
+                        run_id,
+                        variable.id,
+                        name=edit_name,
+                        value=edit_value,
+                        note=edit_note or None,
+                    )
+                except (OSError, RuntimeError, ValueError) as error:
+                    st.error(str(error))
+                else:
+                    st.session_state["_review_flash"] = "Variável editada."
+                    st.rerun()
+            st.markdown("##### Marcar como não aplicável")
+            not_applicable_note = st.text_input(
+                "Justificativa obrigatória",
+                key=f"not_applicable_note_{variable.id}",
+            )
+            if st.button(
+                "Marcar como não aplicável",
+                key=f"not_applicable_{variable.id}",
+            ):
+                try:
+                    review_service.mark_not_applicable(
+                        run_id,
+                        variable.id,
+                        note=not_applicable_note,
+                    )
+                except (OSError, RuntimeError, ValueError) as error:
+                    st.error(str(error))
+                else:
+                    st.session_state["_review_flash"] = "Variável marcada como não aplicável."
+                    st.rerun()
+        elif item.finding_id is not None:
+            finding = findings_by_id[item.finding_id]
+            st.subheader("Possível omissão")
+            st.text_area(
+                "Descrição do apontamento",
+                value=finding.description,
+                disabled=True,
+                key=f"finding_description_{finding.id}",
+            )
+            st.text_area(
+                "Trecho indicado pelo validador",
+                value=finding.evidence_text,
+                disabled=True,
+                key=f"finding_evidence_{finding.id}",
+            )
+            st.caption(f"Página(s): {', '.join(str(page) for page in finding.source_pages)}")
+            missing_name = st.text_input(
+                "Nome da variável ausente",
+                value=finding.suggested_name or "",
+                key=f"missing_name_{finding.id}",
+            )
+            missing_value = st.text_input(
+                "Valor revisado da variável ausente",
+                key=f"missing_value_{finding.id}",
+            )
+            missing_evidence = st.text_area(
+                "Evidência revisada manualmente",
+                value=finding.evidence_text,
+                key=f"missing_evidence_{finding.id}",
+            )
+            missing_note = st.text_input(
+                "Nota da inclusão (opcional)",
+                key=f"missing_note_{finding.id}",
+            )
+            if st.button(
+                "Adicionar variável ausente",
+                key=f"add_missing_{finding.id}",
+            ):
+                try:
+                    review_service.add_missing(
+                        run_id,
+                        finding.id,
+                        name=missing_name,
+                        value=missing_value,
+                        evidence=missing_evidence,
+                        note=missing_note or None,
+                    )
+                except (OSError, RuntimeError, ValueError) as error:
+                    st.error(str(error))
+                else:
+                    st.session_state["_review_flash"] = "Variável ausente adicionada."
+                    st.rerun()
+
+
 def main() -> None:
     """Render the configured local application entry point."""
 
     pipeline = st.session_state.get("_asset_servicing_pipeline")
     regulations_dir = st.session_state.get("_asset_servicing_regulations_dir")
     upload_dir = st.session_state.get("_asset_servicing_upload_dir")
-    if pipeline is None or regulations_dir is None or upload_dir is None:
+    review_service = st.session_state.get("_asset_servicing_review_service")
+    review_run_id = st.session_state.get("_asset_servicing_review_run_id")
+    if (pipeline is None or regulations_dir is None or upload_dir is None) and (
+        review_service is None or review_run_id is None
+    ):
         st.error("A aplicação ainda não foi configurada com os serviços locais.")
         return
-    render_document_location(
-        pipeline=pipeline,
-        regulations_dir=Path(regulations_dir),
-        upload_dir=Path(upload_dir),
-    )
+    if pipeline is not None and regulations_dir is not None and upload_dir is not None:
+        render_document_location(
+            pipeline=pipeline,
+            regulations_dir=Path(regulations_dir),
+            upload_dir=Path(upload_dir),
+        )
+    if review_service is not None and review_run_id is not None:
+        render_review_results(
+            review_service=review_service,
+            run_id=str(review_run_id),
+        )
 
 
 if __name__ == "__main__":
     main()
 
 
-__all__ = ["DocumentLocationPipeline", "Preview", "main", "render_document_location"]
+__all__ = [
+    "DocumentLocationPipeline",
+    "Preview",
+    "ReviewWorkflow",
+    "main",
+    "render_document_location",
+    "render_review_results",
+]

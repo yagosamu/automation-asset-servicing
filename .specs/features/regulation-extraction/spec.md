@@ -255,13 +255,13 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-21 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-22 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-23 | P1: Validação | Design | Implemented (T02, T09) |
-| ASET-24 | P1: Revisão | Design | Partial (T02, T09–T11) |
-| ASET-25 | P1: Revisão | Design | Partial (T02, T09, T11) |
-| ASET-26 | P1: Revisão | Design | Implemented (T02, T11) |
-| ASET-27 | P1: Revisão | Design | Implemented (T02, T11) |
-| ASET-28 | P1: Revisão | Design | Implemented (T02, T11) |
-| ASET-29 | P1: Revisão | Design | Implemented (T02, T11) |
-| ASET-30 | P1: Revisão | Design | Implemented (T02, T11) |
+| ASET-24 | P1: Revisão | Design | Implemented (T02, T09–T11, T14) |
+| ASET-25 | P1: Revisão | Design | Implemented (T02, T09, T11, T14) |
+| ASET-26 | P1: Revisão | Design | Implemented (T02, T11, T14) |
+| ASET-27 | P1: Revisão | Design | Implemented (T02, T11, T14) |
+| ASET-28 | P1: Revisão | Design | Implemented (T02, T11, T14) |
+| ASET-29 | P1: Revisão | Design | Implemented (T02, T11, T14) |
+| ASET-30 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-31 | P1: Revisão | Design | Implemented (T03, T11) |
 | ASET-32 | P1: Revisão | Design | Implemented (T03, T11) |
 | ASET-33 | P1: Excel | Design | Implemented (T12) |
