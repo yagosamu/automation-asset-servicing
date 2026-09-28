@@ -118,6 +118,14 @@ class JsonRunRepository:
         payload.pop("schema_version", None)
         return Run.model_validate(payload)
 
+    def list_runs(self) -> list[Run]:
+        """Return every persisted run ordered from newest to oldest."""
+
+        if not self.root.is_dir():
+            return []
+        runs = [self.load_run(run_path.parent.name) for run_path in self.root.glob("*/run.json")]
+        return sorted(runs, key=lambda run: run.created_at, reverse=True)
+
     def source_path(self, run_id: str) -> Path:
         """Return the persisted source PDF used to resume a run."""
 

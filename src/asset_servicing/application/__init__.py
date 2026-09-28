@@ -1,5 +1,10 @@
 """Application use cases for regulation processing."""
 
+from asset_servicing.application.delivery_service import (
+    ExportArtifact,
+    RunDeliveryService,
+    RunSummary,
+)
 from asset_servicing.application.extractor import RegulationVariableExtractor
 from asset_servicing.application.locator import LocationOutcome, RegulationSectionLocator
 from asset_servicing.application.pipeline import (
@@ -13,6 +18,7 @@ from asset_servicing.application.validator import RegulationVariableValidator, V
 
 __all__ = [
     "AgentModels",
+    "ExportArtifact",
     "LocationOutcome",
     "PipelineBusyError",
     "RegulationPipeline",
@@ -20,6 +26,8 @@ __all__ = [
     "RegulationVariableExtractor",
     "RegulationVariableValidator",
     "ReviewService",
+    "RunDeliveryService",
+    "RunSummary",
     "ValidationBatch",
     "UsageLedger",
 ]

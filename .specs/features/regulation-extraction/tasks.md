@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T14 concluídas
+**Status:** Em execução — T01–T15 concluídas
 
 ---
 
@@ -480,12 +480,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de UI começam vermelhos para retomada, download preliminar, bloqueio e download final.
-- [ ] Refresh/reabertura preserva o progresso persistido.
-- [ ] O resumo mostra duração, contagens, distribuição de scores, retries e uso reportado.
-- [ ] Downloads usam os arquivos da execução correspondente.
-- [ ] Gate Build da Phase 3 passa.
-- [ ] Test count: pelo menos 10 testes de UI passam.
+- [x] Testes de UI começam vermelhos para retomada, download preliminar, bloqueio e download final.
+- [x] Refresh/reabertura preserva o progresso persistido.
+- [x] O resumo mostra duração, contagens, distribuição de scores, retries e uso reportado.
+- [x] Downloads usam os arquivos da execução correspondente.
+- [x] Gate Build da Phase 3 passa.
+- [x] Test count: 10 testes de UI passam.
 
 **Tests:** ui
 **Gate:** build

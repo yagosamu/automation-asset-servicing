@@ -7,6 +7,7 @@ from typing import Protocol
 
 import streamlit as st
 
+from asset_servicing.application.delivery_service import ExportArtifact, RunSummary
 from asset_servicing.domain import ExtractedVariable, ReviewItemKind, Run, SectionLocation
 
 _VERDICT_LABELS = {
@@ -85,6 +86,22 @@ class ReviewWorkflow(Protocol):
         evidence: str,
         note: str | None = None,
     ) -> ExtractedVariable: ...
+
+
+class DeliveryWorkflow(Protocol):
+    """Public recovery operations consumed by the delivery UI."""
+
+    def list_runs(self) -> list[Run]: ...
+
+    def get_run(self, run_id: str) -> Run: ...
+
+    def export_preliminary(self, run_id: str) -> ExportArtifact: ...
+
+    def export_final(self, run_id: str) -> ExportArtifact: ...
+
+    def get_export(self, run_id: str, *, final: bool) -> ExportArtifact | None: ...
+
+    def summary(self, run_id: str) -> RunSummary: ...
 
 
 def render_document_location(
@@ -433,6 +450,138 @@ def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> Non
                     st.rerun()
 
 
+def render_run_recovery(*, delivery_service: DeliveryWorkflow) -> str | None:
+    """Render persisted-run selection and return the active run identifier."""
+
+    try:
+        runs = delivery_service.list_runs()
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(str(error))
+        return None
+    st.header("Execuções salvas")
+    if not runs:
+        st.info("Nenhuma execução persistida foi encontrada.")
+        return None
+
+    runs_by_id = {run.run_id: run for run in runs}
+    selected_run_id = st.selectbox(
+        "Retomar execução",
+        list(runs_by_id),
+        key="saved_run",
+    )
+    if selected_run_id is None:
+        return None
+    selected_run = runs_by_id[selected_run_id]
+    st.caption(
+        f"{selected_run.document_name} · estado: {selected_run.state.value} · "
+        f"criada em {selected_run.created_at.isoformat()}"
+    )
+    return selected_run_id
+
+
+def render_run_delivery(*, delivery_service: DeliveryWorkflow, run_id: str) -> None:
+    """Render workbook generation and downloads for one persisted run."""
+
+    try:
+        run = delivery_service.get_run(run_id)
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(str(error))
+        return
+
+    _render_run_summary(delivery_service, run_id)
+    st.header("Arquivos da execução")
+    preliminary: ExportArtifact | None = None
+    if st.button("Gerar Excel preliminar", key="generate_preliminary"):
+        try:
+            preliminary = delivery_service.export_preliminary(run_id)
+        except (OSError, RuntimeError, ValueError) as error:
+            st.error(str(error))
+        else:
+            st.success("Excel preliminar gerado.")
+    if preliminary is None:
+        try:
+            preliminary = delivery_service.get_export(run_id, final=False)
+        except (OSError, RuntimeError, ValueError) as error:
+            st.error(str(error))
+    if preliminary is not None:
+        st.download_button(
+            "Baixar Excel preliminar",
+            data=preliminary.data,
+            file_name=preliminary.path.name,
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key="download_preliminary",
+        )
+
+    pending_count = len(run.pending_items())
+    if pending_count:
+        suffix = "pendência" if pending_count == 1 else "pendências"
+        st.warning(f"Excel final bloqueado: {pending_count} {suffix} de revisão aberta.")
+    final: ExportArtifact | None = None
+    if st.button(
+        "Gerar Excel final",
+        disabled=pending_count > 0,
+        key="generate_final",
+    ):
+        try:
+            final = delivery_service.export_final(run_id)
+        except (OSError, RuntimeError, ValueError) as error:
+            st.error(str(error))
+        else:
+            st.success("Excel final gerado.")
+    if final is None:
+        try:
+            final = delivery_service.get_export(run_id, final=True)
+        except (OSError, RuntimeError, ValueError) as error:
+            st.error(str(error))
+    if final is not None:
+        st.download_button(
+            "Baixar Excel final",
+            data=final.data,
+            file_name=final.path.name,
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key="download_final",
+        )
+
+
+def _render_run_summary(delivery_service: DeliveryWorkflow, run_id: str) -> None:
+    try:
+        summary = delivery_service.summary(run_id)
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(str(error))
+        return
+
+    st.header("Resumo operacional")
+    count_columns = st.columns(4)
+    count_columns[0].metric("Duração total", _format_duration(summary.total_duration_ms))
+    count_columns[1].metric("Variáveis extraídas", summary.variable_count)
+    count_columns[2].metric("Aprovadas", summary.approved_count)
+    count_columns[3].metric("Revisadas", summary.reviewed_count)
+    st.table(
+        [
+            {"Etapa": stage, "Duração": _format_duration(duration_ms)}
+            for stage, duration_ms in summary.stage_durations_ms.items()
+        ]
+    )
+    distribution = summary.confidence_distribution
+    st.markdown(
+        "**Distribuição de confiança:** "
+        f"Alta (≥ 0,85): {distribution['high']} · "
+        f"Média (0,50–0,84): {distribution['medium']} · "
+        f"Baixa (< 0,50): {distribution['low']}"
+    )
+    operation_columns = st.columns(2)
+    operation_columns[0].metric("Chamadas", summary.call_count)
+    operation_columns[1].metric("Retries", summary.retry_count)
+    usage_text = " · ".join(f"{key}: {value}" for key, value in sorted(summary.usage.items()))
+    st.markdown(f"**Uso reportado:** {usage_text or 'não informado'}")
+    st.caption(f"Modelos: {', '.join(summary.models) or 'não informado'}")
+    st.caption(f"Versões de prompt: {', '.join(summary.prompt_versions) or 'não informado'}")
+
+
+def _format_duration(duration_ms: int) -> str:
+    return f"{duration_ms / 1000:.2f} s".replace(".", ",")
+
+
 def main() -> None:
     """Render the configured local application entry point."""
 
@@ -441,8 +590,11 @@ def main() -> None:
     upload_dir = st.session_state.get("_asset_servicing_upload_dir")
     review_service = st.session_state.get("_asset_servicing_review_service")
     review_run_id = st.session_state.get("_asset_servicing_review_run_id")
-    if (pipeline is None or regulations_dir is None or upload_dir is None) and (
-        review_service is None or review_run_id is None
+    delivery_service = st.session_state.get("_asset_servicing_delivery_service")
+    if (
+        (pipeline is None or regulations_dir is None or upload_dir is None)
+        and (review_service is None or review_run_id is None)
+        and delivery_service is None
     ):
         st.error("A aplicação ainda não foi configurada com os serviços locais.")
         return
@@ -452,10 +604,21 @@ def main() -> None:
             regulations_dir=Path(regulations_dir),
             upload_dir=Path(upload_dir),
         )
-    if review_service is not None and review_run_id is not None:
+    active_run_id = None if review_run_id is None else str(review_run_id)
+    if delivery_service is not None:
+        recovered_run_id = render_run_recovery(delivery_service=delivery_service)
+        if recovered_run_id is not None:
+            active_run_id = recovered_run_id
+            st.session_state["_asset_servicing_review_run_id"] = recovered_run_id
+    if review_service is not None and active_run_id is not None:
         render_review_results(
             review_service=review_service,
-            run_id=str(review_run_id),
+            run_id=active_run_id,
+        )
+    if delivery_service is not None and active_run_id is not None:
+        render_run_delivery(
+            delivery_service=delivery_service,
+            run_id=active_run_id,
         )
 
 
@@ -465,9 +628,12 @@ if __name__ == "__main__":
 
 __all__ = [
     "DocumentLocationPipeline",
+    "DeliveryWorkflow",
     "Preview",
     "ReviewWorkflow",
     "main",
     "render_document_location",
     "render_review_results",
+    "render_run_delivery",
+    "render_run_recovery",
 ]

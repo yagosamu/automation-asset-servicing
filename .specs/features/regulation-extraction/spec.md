@@ -263,21 +263,21 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-29 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-30 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-31 | P1: Revisão | Design | Implemented (T03, T11) |
-| ASET-32 | P1: Revisão | Design | Implemented (T03, T11) |
-| ASET-33 | P1: Excel | Design | Implemented (T12) |
-| ASET-34 | P1: Excel | Design | Implemented (T02, T12) |
-| ASET-35 | P1: Excel | Design | Implemented (T02, T12) |
-| ASET-36 | P1: Excel | Design | Implemented (T12) |
-| ASET-37 | P1: Excel | Design | Implemented (T11, T12) |
-| ASET-38 | P1: Excel | Design | Implemented (T02, T12) |
-| ASET-39 | P1: Excel | Design | Implemented (T10, T12) |
-| ASET-40 | P1: Excel | Design | Implemented (T12) |
+| ASET-32 | P1: Revisão | Design | Implemented (T03, T11, T15) |
+| ASET-33 | P1: Excel | Design | Implemented (T12, T15) |
+| ASET-34 | P1: Excel | Design | Implemented (T02, T12, T15) |
+| ASET-35 | P1: Excel | Design | Implemented (T02, T12, T15) |
+| ASET-36 | P1: Excel | Design | Implemented (T12, T15) |
+| ASET-37 | P1: Excel | Design | Implemented (T11, T12, T15) |
+| ASET-38 | P1: Excel | Design | Implemented (T02, T12, T15) |
+| ASET-39 | P1: Excel | Design | Implemented (T10, T12, T15) |
+| ASET-40 | P1: Excel | Design | Implemented (T12, T15) |
 | ASET-41 | P1: Resiliência | Design | Implemented (T06, T10) |
 | ASET-42 | P1: Resiliência | Design | Partial (T06, T10) |
 | ASET-43 | P1: Resiliência | Design | Implemented (T03, T10) |
 | ASET-44 | P1: Resiliência | Design | Implemented (T02, T10) |
 | ASET-45 | P1: Resiliência | Design | Implemented (T02, T10) |
-| ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10) |
+| ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10, T15) |
 | ASET-47 | P1: Resiliência | Design | Partial (T03, T06, T10) |
 | ASET-48 | P1: Qualidade | Design | Implemented (T01, T06) |
 | ASET-49 | P1: Qualidade | Design | In Design |
