@@ -1,0 +1,57 @@
+schema_version: 1
+document_id: reg-23968-2026-05
+source_filename: DOC_REGUL_23968_193595_2026_05.pdf
+chapter:
+  number: 3
+  title: EMISSÃO, DISTRIBUIÇÃO, AMORTIZAÇÃO E PROCEDIMENTO APLICÁVEL À LIQUIDAÇÃO DA CLASSE
+  pages: [7]
+variables:
+  - id: reg-23968.redemption-availability
+    kind: prose
+    critical: true
+    accepted_names: [Disponibilidade de resgate, Regra de resgate]
+    accepted_values: [Somente no término do prazo de duração ou na amortização total]
+    pages: [7]
+    evidence: Não haverá resgate de cotas a não ser pelo término do prazo de duração ou amortização total da classe e/ou subclasse de cotas, conforme aplicável.
+  - id: reg-23968.closed-class-distribution
+    kind: prose
+    critical: true
+    accepted_names: [Distribuição de cotas de classe fechada]
+    accepted_values: [Deve observar a regulamentação de ofertas públicas de valores mobiliários]
+    pages: [7]
+    evidence: A distribuição de cotas de classe fechada deve observar a regulamentação específica sobre ofertas públicas de distribuição de valores mobiliários.
+  - id: reg-23968.subsequent-distribution
+    kind: prose
+    critical: true
+    accepted_names: [Nova distribuição de cotas]
+    accepted_values: [Não admitida antes do encerramento da distribuição anterior]
+    pages: [7]
+    evidence: Não é admitida nova distribuição de cotas de classe fechada antes de encerrada a distribuição anterior de cotas da mesma classe ou subclasse.
+  - id: reg-23968.issuance-terms
+    kind: prose
+    critical: true
+    accepted_names: [Condições de emissão e integralização]
+    accepted_values: [Definidas no documento de aceitação da oferta conforme a Assembleia de Cotistas]
+    pages: [7]
+    evidence: O valor de cada emissão de cotas e as condições de integralização seguirão o disposto no documento de aceitação da oferta de cotas da classe fechada
+  - id: reg-23968.amortization-proportion
+    kind: prose
+    critical: true
+    accepted_names: [Forma de amortização]
+    accepted_values: [Proporcional entre principal e rendimentos mediante aprovação em assembleia]
+    pages: [7]
+    evidence: A amortização de cotas será sempre efetuada de forma proporcional entre principal e rendimentos, mediante aprovação em assembleia de cotistas.
+  - id: reg-23968.amortization-scope
+    kind: prose
+    critical: true
+    accepted_names: [Abrangência da amortização]
+    accepted_values: [Todas as cotas com pagamento uniforme e sem redução do número de cotas]
+    pages: [7]
+    evidence: A amortização de cotas abrangerá todas as cotas, sendo caracterizada pelo pagamento uniforme a todos os cotistas
+  - id: reg-23968.early-liquidation
+    kind: prose
+    critical: true
+    accepted_names: [Liquidação antecipada]
+    accepted_values: [Divisão proporcional do patrimônio em até 30 dias após a assembleia]
+    pages: [7]
+    evidence: na proporção de suas cotas, no prazo máximo de 30 (trinta) dias, a contar da data de realização da referida assembleia.

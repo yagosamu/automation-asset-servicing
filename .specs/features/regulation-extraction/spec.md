@@ -280,11 +280,11 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10, T15) |
 | ASET-47 | P1: Resiliência | Design | Partial (T03, T06, T10) |
 | ASET-48 | P1: Qualidade | Design | Implemented (T01, T06) |
-| ASET-49 | P1: Qualidade | Design | In Design |
+| ASET-49 | P1: Qualidade | Design | Implemented (T16) |
 | ASET-50 | P1: Qualidade | Design | In Design |
 | ASET-51 | P1: Qualidade | Design | Implemented (T07) |
 | ASET-52 | P1: Qualidade | Design | Implemented (T09) |
-| ASET-53 | P1: Qualidade | Design | Partial (T04) |
+| ASET-53 | P1: Qualidade | Design | Implemented (T04, T16) |
 | ASET-54 | P1: Qualidade | Design | Partial (T06) |
 | ASET-55 | P3: Busca | - | Pending |
 | ASET-56 | P3: Busca | - | Pending |

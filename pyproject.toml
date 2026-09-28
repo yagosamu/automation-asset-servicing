@@ -14,6 +14,7 @@ dependencies = [
     "pydantic>=2.11,<3",
     "pymupdf>=1.26,<2",
     "pypdf>=6,<7",
+    "pyyaml>=6,<7",
     "streamlit>=1.50,<2",
     "tenacity>=9,<10",
 ]

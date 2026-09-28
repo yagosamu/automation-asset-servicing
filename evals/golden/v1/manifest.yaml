@@ -1,0 +1,22 @@
+schema_version: 1
+corpus_id: btg-regulations-v1
+annotator: candidate-assisted-by-codex
+annotation_date: "2026-09-28"
+normalization: unicode-nfkc-and-collapsed-whitespace
+documents:
+  - id: reg-23183-2026-05
+    filename: DOC_REGUL_23183_193223_2026_05.pdf
+    sha256: e308f8ec3f3924c7fd6aa11a4058323aeaa06a7183765eb0e08f7f2a93fb5e4e
+    expected: expected/DOC_REGUL_23183_193223_2026_05.yaml
+  - id: reg-23968-2026-05
+    filename: DOC_REGUL_23968_193595_2026_05.pdf
+    sha256: f2538e654b5478dc2079d22aa21d2b05a9c67d95d8a06cf64e8a69df0174ae11
+    expected: expected/DOC_REGUL_23968_193595_2026_05.yaml
+  - id: reg-24029-2026-05
+    filename: DOC_REGUL_24029_193593_2026_05.pdf
+    sha256: 297cc9931d116bbe01a8d11a48563234c746ae01f99103c5553a869b2f4b8ead
+    expected: expected/DOC_REGUL_24029_193593_2026_05.yaml
+  - id: reg-30148-2025-10
+    filename: DOC_REGUL_30148_163257_2025_10.pdf
+    sha256: 11a282ca4d7520687425783e5b1a19b8ab9c34d2ee0cb9451f06c5a6668228b5
+    expected: expected/DOC_REGUL_30148_163257_2025_10.yaml

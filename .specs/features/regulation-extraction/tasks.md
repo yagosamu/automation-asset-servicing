@@ -508,12 +508,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de integridade começam vermelhos antes dos manifests.
-- [ ] Os quatro hashes correspondem aos arquivos versionados.
-- [ ] IDs são únicos e cada trecho resolve na página declarada.
-- [ ] Todo campo marcado crítico possui nome e valor aceitos.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 10 testes de eval passam.
+- [x] Testes de integridade começam vermelhos antes dos manifests.
+- [x] Os quatro hashes correspondem aos arquivos versionados.
+- [x] IDs são únicos e cada trecho resolve na página declarada.
+- [x] Todo campo marcado crítico possui nome e valor aceitos.
+- [x] Gate Full passa.
+- [x] Test count: 14 testes de eval passam.
 
 **Tests:** eval
 **Gate:** full

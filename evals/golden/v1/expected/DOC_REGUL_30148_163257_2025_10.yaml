@@ -1,0 +1,78 @@
+schema_version: 1
+document_id: reg-30148-2025-10
+source_filename: DOC_REGUL_30148_163257_2025_10.pdf
+chapter:
+  number: 3
+  title: EMISSÃO, DISTRIBUIÇÃO, AMORTIZAÇÃO E PROCEDIMENTO APLICÁVEL À LIQUIDAÇÃO DA CLASSE
+  pages: [8, 9]
+variables:
+  - id: reg-30148.application-quota-value
+    kind: table
+    critical: true
+    accepted_names: [Valor da Cota para Aplicação, Cota de aplicação]
+    accepted_values: [D+0]
+    pages: [8]
+    evidence: Valor da Cota para Aplicação D+0
+  - id: reg-30148.redemption-lockup
+    kind: table
+    critical: true
+    accepted_names: [Carência Para Resgate, Carência de resgate]
+    accepted_values: [A qualquer tempo com rendimento]
+    pages: [8]
+    evidence: As cotas da classe podem ser resgatadas a qualquer tempo com rendimento.
+  - id: reg-30148.redemption-conversion
+    kind: table
+    critical: true
+    accepted_names: [Conversão do resgate, Prazo de conversão do resgate]
+    accepted_values: [D+6 Útil a partir da solicitação]
+    pages: [8]
+    evidence: "Conversão: D+ 6 Útil a partir da solicitação (“ Data da Conversão”)."
+  - id: reg-30148.redemption-payment
+    kind: table
+    critical: true
+    accepted_names: [Pagamento do resgate, Prazo de pagamento do resgate]
+    accepted_values: [D+1 Útil da Data da Conversão]
+    pages: [8]
+    evidence: "Pagamento: D+ 1 Útil da Data da Conversão."
+  - id: reg-30148.application-redemption-limits
+    kind: table
+    critical: false
+    accepted_names: [Valores Mínimos e Máximos para Aplicação e Resgate, Limites de aplicação e resgate]
+    accepted_values: [Disponíveis para consulta no site do ADMINISTRADOR]
+    pages: [9]
+    evidence: Os valores mínimos e máximos de aplicação e os valores mínimos de resgate e de manutenção de saldo das aplicações na classe
+  - id: reg-30148.compulsory-redemption
+    kind: prose
+    critical: false
+    accepted_names: [Resgate compulsório]
+    accepted_values: [Permitido se definido e aprovado em assembleia geral de cotistas]
+    pages: [9]
+    evidence: A classe poderá realizar resgates compulsórios de cotas, desde que as condições sejam definidas e aprovadas em assembleia geral de cotistas.
+  - id: reg-30148.residual-balance-redemption
+    kind: prose
+    critical: false
+    accepted_names: [Resgate do saldo residual]
+    accepted_values: [Resgate automático total quando o saldo ficar abaixo do mínimo de manutenção]
+    pages: [9]
+    evidence: as cotas serão automaticamente resgatadas em sua totalidade.
+  - id: reg-30148.early-liquidation
+    kind: prose
+    critical: false
+    accepted_names: [Liquidação antecipada]
+    accepted_values: [Divisão proporcional do patrimônio em até 30 dias após a assembleia]
+    pages: [9]
+    evidence: na proporção de suas cotas, no prazo máximo de 30 (trinta) dias, a contar da data de realização da referida assembleia.
+  - id: reg-30148.redemption-gate
+    kind: prose
+    critical: false
+    accepted_names: [Fechamento para resgates]
+    accepted_values: [Permitido em fechamento de mercados ou iliquidez excepcional]
+    pages: [9]
+    evidence: declarar o fechamento da classe de cotas para a realização de resgates no caso de fechamento dos mercados e em casos excepcionais de iliquidez
+  - id: reg-30148.illiquid-assets-sleeve
+    kind: prose
+    critical: false
+    accepted_names: [Cisão de ativos ilíquidos]
+    accepted_values: [Ativos excepcionalmente ilíquidos podem integralizar classe ou subclasse fechada]
+    pages: [9]
+    evidence: cindir do patrimônio da classe de cotas os ativos excepcionalmente ilíquidos

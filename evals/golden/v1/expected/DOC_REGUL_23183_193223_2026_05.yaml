@@ -1,0 +1,85 @@
+schema_version: 1
+document_id: reg-23183-2026-05
+source_filename: DOC_REGUL_23183_193223_2026_05.pdf
+chapter:
+  number: 3
+  title: DA EMISSÃO, APLICAÇÃO E RESGATE DE COTAS
+  pages: [6, 7]
+variables:
+  - id: reg-23183.application-quota-value
+    kind: table
+    critical: true
+    accepted_names: [Valor da Cota para Aplicação, Cota de aplicação]
+    accepted_values: [D+0]
+    pages: [6]
+    evidence: Valor da Cota para Aplicação D+0
+  - id: reg-23183.redemption-lockup
+    kind: table
+    critical: true
+    accepted_names: [Carência Para Resgate, Carência de resgate]
+    accepted_values: [A qualquer tempo com rendimento]
+    pages: [6]
+    evidence: As cotas da classe podem ser resgatadas a qualquer tempo com rendimento.
+  - id: reg-23183.redemption-conversion
+    kind: table
+    critical: true
+    accepted_names: [Conversão do resgate, Prazo de conversão do resgate]
+    accepted_values: [D+0 a partir da solicitação]
+    pages: [6]
+    evidence: "Conversão: D+0 a partir da solicitação (“Data da Conversão”)."
+  - id: reg-23183.redemption-payment
+    kind: table
+    critical: true
+    accepted_names: [Pagamento do resgate, Prazo de pagamento do resgate]
+    accepted_values: [D+1 Útil da Data da Conversão]
+    pages: [6]
+    evidence: "Pagamento: D+1 Útil da Data da Conversão."
+  - id: reg-23183.same-day-redemption
+    kind: table
+    critical: true
+    accepted_names: [Pagamento no mesmo dia, Regra especial de pagamento do resgate]
+    accepted_values: [D+0 para resgate inferior a 80% dos recursos do cotista]
+    pages: [6]
+    evidence: Caso o total de resgates solicitados pelo Cotista seja inferior a 80% (oitenta por cento) dos recursos detidos pelo mesmo, o pagamento do resgate será efetuado no dia da solicitação respectiva (D+0)
+  - id: reg-23183.application-redemption-limits
+    kind: table
+    critical: false
+    accepted_names: [Valores Mínimos e Máximos para Aplicação e Resgate, Limites de aplicação e resgate]
+    accepted_values: [Disponíveis para consulta no site do ADMINISTRADOR]
+    pages: [7]
+    evidence: Os valores mínimos e máximos de aplicação e os valores mínimos de resgate e de manutenção de saldo das aplicações
+  - id: reg-23183.compulsory-redemption
+    kind: prose
+    critical: false
+    accepted_names: [Resgate compulsório]
+    accepted_values: [Permitido se definido e aprovado em assembleia geral de cotistas]
+    pages: [7]
+    evidence: A classe poderá realizar resgates compulsórios de cotas, desde que as condições sejam definidas e aprovadas em assembleia geral de cotistas.
+  - id: reg-23183.residual-balance-redemption
+    kind: prose
+    critical: false
+    accepted_names: [Resgate do saldo residual]
+    accepted_values: [Resgate automático total quando o saldo ficar abaixo do mínimo de manutenção]
+    pages: [7]
+    evidence: as cotas serão automaticamente resgatadas em sua totalidade.
+  - id: reg-23183.early-liquidation
+    kind: prose
+    critical: false
+    accepted_names: [Liquidação antecipada]
+    accepted_values: [Divisão proporcional do patrimônio em até 30 dias após a assembleia]
+    pages: [7]
+    evidence: na proporção de suas cotas, no prazo máximo de 30 (trinta) dias, a contar da data de realização da referida assembleia.
+  - id: reg-23183.redemption-gate
+    kind: prose
+    critical: false
+    accepted_names: [Fechamento para resgates]
+    accepted_values: [Permitido em fechamento de mercados ou iliquidez excepcional]
+    pages: [7]
+    evidence: declarar o fechamento da classe de cotas para a realização de resgates no caso de fechamento dos mercados e em casos excepcionais de iliquidez
+  - id: reg-23183.illiquid-assets-sleeve
+    kind: prose
+    critical: false
+    accepted_names: [Cisão de ativos ilíquidos]
+    accepted_values: [Ativos excepcionalmente ilíquidos podem integralizar classe ou subclasse fechada]
+    pages: [7]
+    evidence: cindir do patrimônio da classe de cotas os ativos excepcionalmente ilíquidos
