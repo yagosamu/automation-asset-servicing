@@ -239,14 +239,14 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-05 | P1: Localização | Design | Partial (T04) |
 | ASET-06 | P1: Localização | Design | Partial (T02, T07) |
 | ASET-07 | P1: Localização | Design | Partial (T07) |
-| ASET-08 | P1: Extração | Design | Partial (T04) |
-| ASET-09 | P1: Extração | Design | Partial (T02, T05) |
-| ASET-10 | P1: Extração | Design | Partial (T05) |
-| ASET-11 | P1: Extração | Design | In Design |
-| ASET-12 | P1: Extração | Design | In Design |
-| ASET-13 | P1: Extração | Design | In Design |
-| ASET-14 | P1: Extração | Design | Partial (T05) |
-| ASET-15 | P1: Extração | Design | In Design |
+| ASET-08 | P1: Extração | Design | Partial (T04, T08) |
+| ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
+| ASET-10 | P1: Extração | Design | Implemented (T05, T08) |
+| ASET-11 | P1: Extração | Design | Implemented (T08) |
+| ASET-12 | P1: Extração | Design | Implemented (T08) |
+| ASET-13 | P1: Extração | Design | Implemented (T08) |
+| ASET-14 | P1: Extração | Design | Partial (T05, T08) |
+| ASET-15 | P1: Extração | Design | Implemented (T08) |
 | ASET-16 | P1: Validação | Design | In Design |
 | ASET-17 | P1: Validação | Design | Partial (T05) |
 | ASET-18 | P1: Validação | Design | Partial (T02, T05) |

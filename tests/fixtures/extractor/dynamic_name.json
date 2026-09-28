@@ -1,0 +1,12 @@
+{
+  "variables": [
+    {
+      "name": "resgate_compulsorio_por_desenquadramento",
+      "value": "permitido para reenquadramento da carteira",
+      "evidence_text": "O Administrador poderá promover o resgate compulsório de cotas para fins de reenquadramento da carteira.",
+      "source_pages": [16],
+      "source_kind": "prose",
+      "clause_reference": "Art. 20"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "variables": [
+    {
+      "name": "carencia_resgate",
+      "value": "180 dias a partir da aplicação inicial",
+      "evidence_text": "As cotas estarão sujeitas à carência de 180 (cento e oitenta) dias contados da aplicação inicial.",
+      "source_pages": [21],
+      "source_kind": "prose",
+      "clause_reference": "Art. 24, § 1º"
+    }
+  ]
+}

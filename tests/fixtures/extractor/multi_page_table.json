@@ -1,0 +1,12 @@
+{
+  "variables": [
+    {
+      "name": "prazo_pagamento_resgate",
+      "value": "até 5 dias úteis após a conversão",
+      "evidence_text": "O pagamento do resgate será efetuado em até 5 (cinco) dias úteis após a data de conversão.",
+      "source_pages": [12, 13],
+      "source_kind": "table",
+      "clause_reference": "Tabela do Art. 18"
+    }
+  ]
+}

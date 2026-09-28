@@ -291,13 +291,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Fixtures cobrem tabela multipágina, célula com dois fatos, texto sem tabela e regra fora do vocabulário.
-- [ ] Toda variável contém nome, valor, evidência, páginas, origem e cláusula opcional.
-- [ ] Fatos independentes saem como registros independentes.
-- [ ] O prompt trata o documento como dado e ignora instruções nele contidas.
-- [ ] Nenhuma regex ou regra determinística produz o conteúdo extraído.
-- [ ] Gate Quick passa.
-- [ ] Test count: pelo menos 16 testes unitários/contrato passam.
+- [x] Fixtures cobrem tabela multipágina, célula com dois fatos, texto sem tabela e regra fora do vocabulário.
+- [x] Toda variável contém nome, valor, evidência, páginas, origem e cláusula opcional.
+- [x] Fatos independentes saem como registros independentes.
+- [x] O prompt trata o documento como dado e ignora instruções nele contidas.
+- [x] Nenhuma regex ou regra determinística produz o conteúdo extraído.
+- [x] Gate Quick passa.
+- [x] Test count: 22 testes unitários/contrato passam.
 
 **Tests:** unit + contract
 **Gate:** quick

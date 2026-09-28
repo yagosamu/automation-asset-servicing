@@ -1,0 +1,20 @@
+{
+  "variables": [
+    {
+      "name": "prazo_conversao_resgate",
+      "value": "D+30 dias corridos",
+      "evidence_text": "Conversão em D+30 dias corridos e pagamento em D+2 dias úteis da conversão.",
+      "source_pages": [9],
+      "source_kind": "table",
+      "clause_reference": null
+    },
+    {
+      "name": "prazo_pagamento_resgate",
+      "value": "D+2 dias úteis da conversão",
+      "evidence_text": "Conversão em D+30 dias corridos e pagamento em D+2 dias úteis da conversão.",
+      "source_pages": [9],
+      "source_kind": "table",
+      "clause_reference": null
+    }
+  ]
+}
