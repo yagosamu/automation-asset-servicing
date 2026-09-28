@@ -12,7 +12,7 @@ from time import perf_counter
 from typing import Protocol
 from uuid import uuid4
 
-from asset_servicing.adapters.pdf import PdfProcessor
+from asset_servicing.adapters.pdf import PagePreview, PdfProcessor
 from asset_servicing.adapters.persistence import JsonRunRepository, RunEvent
 from asset_servicing.application.extractor import (
     EXTRACTOR_PROMPT_VERSION,
@@ -238,6 +238,23 @@ class RegulationPipeline:
             run.confirm_location(page_start=page_start, page_end=page_end)
             self._repository.save_run(run)
             return run
+
+    def preview_pages(
+        self,
+        run_id: str,
+        *,
+        page_start: int,
+        page_end: int,
+    ) -> list[PagePreview]:
+        """Render an inclusive source interval for human confirmation."""
+
+        with self._claim(run_id):
+            run = self._repository.load_run(run_id)
+            return self._pdf.render_pages(
+                self._repository.source_path(run_id),
+                pages=list(range(page_start, page_end + 1)),
+                output_dir=self._repository.root / run.run_id / "previews",
+            )
 
     def extract(
         self,

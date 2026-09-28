@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T12 concluídas
+**Status:** Em execução — T01–T13 concluídas
 
 ---
 
@@ -428,12 +428,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de UI começam vermelhos para arquivo válido, inválido, localização, correção e confirmação.
-- [ ] Extração permanece desabilitada antes da confirmação.
-- [ ] A UI exibe erro recuperável e entrada manual quando a seção não é localizada.
-- [ ] Upload e seleção da pasta usam o mesmo caso de uso.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 10 testes de UI passam.
+- [x] Testes de UI começam vermelhos para arquivo válido, inválido, localização, correção e confirmação.
+- [x] Extração permanece desabilitada antes da confirmação.
+- [x] A UI exibe erro recuperável e entrada manual quando a seção não é localizada.
+- [x] Upload e seleção da pasta usam o mesmo caso de uso.
+- [x] Gate Full passa.
+- [x] Test count: 12 testes de UI passam.
 
 **Tests:** ui
 **Gate:** full

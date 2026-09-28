@@ -578,3 +578,14 @@ def test_usage_ledger_keeps_parallel_run_metrics_isolated() -> None:
 
     assert all(not worker.is_alive() for worker in workers)
     assert captured == {"model-a": "model-a", "model-b": "model-b"}
+
+
+def test_preview_pages_renders_the_requested_original_interval(tmp_path: Path) -> None:
+    harness = make_harness(tmp_path)
+    harness.pipeline.create_run(harness.source_pdf)
+
+    previews = harness.pipeline.preview_pages("run-001", page_start=2, page_end=3)
+
+    assert [preview.page_number for preview in previews] == [2, 3]
+    assert all(preview.path.is_file() for preview in previews)
+    assert all(preview.path.parent.name == "previews" for preview in previews)

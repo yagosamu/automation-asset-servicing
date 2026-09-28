@@ -232,13 +232,13 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| ASET-01 | P1: Localização | Design | Partial (T03–T04, T10) |
-| ASET-02 | P1: Localização | Design | Partial (T04) |
-| ASET-03 | P1: Localização | Design | Implemented (T07) |
-| ASET-04 | P1: Localização | Design | Implemented (T05, T07) |
-| ASET-05 | P1: Localização | Design | Partial (T04) |
-| ASET-06 | P1: Localização | Design | Implemented (T02, T07, T10) |
-| ASET-07 | P1: Localização | Design | Implemented (T07, T10) |
+| ASET-01 | P1: Localização | Design | Implemented (T03–T04, T10, T13) |
+| ASET-02 | P1: Localização | Design | Implemented (T04, T13) |
+| ASET-03 | P1: Localização | Design | Implemented (T07, T13) |
+| ASET-04 | P1: Localização | Design | Implemented (T05, T07, T13) |
+| ASET-05 | P1: Localização | Design | Implemented (T04, T13) |
+| ASET-06 | P1: Localização | Design | Implemented (T02, T07, T10, T13) |
+| ASET-07 | P1: Localização | Design | Implemented (T07, T10, T13) |
 | ASET-08 | P1: Extração | Design | Implemented (T04, T08, T10) |
 | ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
 | ASET-10 | P1: Extração | Design | Implemented (T05, T08) |
