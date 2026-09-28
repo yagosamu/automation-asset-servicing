@@ -318,13 +318,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes começam vermelhos para correto, ambíguo, contraditório, sem suporte e omissão.
-- [ ] O validador executa em chamada separada e não recebe raciocínio ou score do extrator.
-- [ ] Score abaixo de `0,85`, veredito não suportado, conflito e omissão criam pendência.
-- [ ] O validador nunca altera automaticamente nome ou valor extraído.
-- [ ] 100% dos casos adversariais mínimos entram na revisão.
-- [ ] Gate Quick passa.
-- [ ] Test count: pelo menos 18 testes unitários/contrato passam.
+- [x] Testes começam vermelhos para correto, ambíguo, contraditório, sem suporte e omissão.
+- [x] O validador executa em chamada separada e não recebe raciocínio ou score do extrator.
+- [x] Score abaixo de `0,85`, veredito não suportado, conflito e omissão criam pendência.
+- [x] O validador nunca altera automaticamente nome ou valor extraído.
+- [x] 100% dos casos adversariais mínimos entram na revisão.
+- [x] Gate Quick passa.
+- [x] Test count: 31 testes unitários/contrato passam.
 
 **Tests:** unit + contract
 **Gate:** quick
