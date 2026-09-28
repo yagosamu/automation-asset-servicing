@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T11 concluídas
+**Status:** Em execução — T01–T12 concluídas
 
 ---
 
@@ -401,13 +401,13 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes de integração começam vermelhos para preliminar, final bloqueado, final liberado e variável editada.
-- [ ] A aba principal contém exatamente as cinco colunas na ordem especificada.
-- [ ] Score é numérico e revisão é booleana.
-- [ ] Não aplicáveis não aparecem na aba principal e permanecem na auditoria.
-- [ ] O workbook reaberto por `openpyxl` preserva valores, tipos e abas.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 14 testes de integração passam.
+- [x] Testes de integração começam vermelhos para preliminar, final bloqueado, final liberado e variável editada.
+- [x] A aba principal contém exatamente as cinco colunas na ordem especificada.
+- [x] Score é numérico e revisão é booleana.
+- [x] Não aplicáveis não aparecem na aba principal e permanecem na auditoria.
+- [x] O workbook reaberto por `openpyxl` preserva valores, tipos e abas.
+- [x] Gate Full passa.
+- [x] Test count: 14 testes de integração passam.
 
 **Tests:** integration
 **Gate:** full
