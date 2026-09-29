@@ -13,6 +13,7 @@ from types import SimpleNamespace
 import pymupdf
 import pytest
 
+from asset_servicing.adapters.export import ExcelExporter
 from asset_servicing.adapters.pdf import PdfProcessor
 from asset_servicing.adapters.persistence import JsonRunRepository
 from asset_servicing.application import (
@@ -151,7 +152,11 @@ def make_pdf(path: Path, *, pages: int = 4) -> None:
         document.close()
 
 
-def make_harness(tmp_path: Path) -> PipelineHarness:
+def make_harness(
+    tmp_path: Path,
+    *,
+    run_id_factory: Callable[[], str] = lambda: "run-001",
+) -> PipelineHarness:
     source_pdf = tmp_path / "regulamento.pdf"
     make_pdf(source_pdf)
     repository = JsonRunRepository(tmp_path / "runs")
@@ -175,7 +180,7 @@ def make_harness(tmp_path: Path) -> PipelineHarness:
             validator="validator-model",
         ),
         usage_ledger=usage_ledger,
-        run_id_factory=lambda: "run-001",
+        run_id_factory=run_id_factory,
         clock=lambda: datetime(2026, 9, 28, 12, 0, tzinfo=UTC),
         timer=StepTimer(),
     )
@@ -206,6 +211,27 @@ def test_create_run_persists_metadata_and_restartable_source(tmp_path: Path) -> 
     assert run.created_at == datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
     assert harness.repository.load_run("run-001") == run
     assert harness.repository.source_path("run-001").read_bytes() == harness.source_pdf.read_bytes()
+
+
+def test_reprocessing_a_completed_run_creates_new_history(tmp_path: Path) -> None:
+    run_ids = iter(("run-001", "run-002"))
+    harness = make_harness(tmp_path, run_id_factory=run_ids.__next__)
+    create_confirm_and_extract(harness)
+    harness.pipeline.validate("run-001")
+    ExcelExporter(harness.repository).export_final(harness.repository.load_run("run-001"))
+    completed = harness.repository.load_run("run-001")
+    completed.transition(RunState.FINAL_READY)
+    harness.repository.save_run(completed)
+    completed_snapshot = completed.model_dump(mode="json")
+
+    reprocessed = harness.pipeline.create_run(harness.source_pdf)
+
+    assert reprocessed.run_id == "run-002"
+    assert reprocessed.document_sha256 == completed.document_sha256
+    assert harness.repository.load_run("run-001").model_dump(mode="json") == completed_snapshot
+    assert {run.run_id for run in harness.repository.list_runs()} == {"run-001", "run-002"}
+    assert harness.repository.source_path("run-001").is_file()
+    assert harness.repository.source_path("run-002").is_file()
 
 
 def test_location_result_is_persisted_before_confirmation(tmp_path: Path) -> None:
