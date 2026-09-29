@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Phase 4 / T18 - cover the complete offline UI journey
-- **Completed**: T01–T17
+- **Phase / Task**: Phase 4 / T19 - add an opt-in live API smoke test
+- **Completed**: T01–T18
 - **In-progress** (file:line): none
-- **Next step**: Start T18 by closing the Streamlit runtime-composition seam, then add deterministic UI journeys and a visible Playwright acceptance run.
+- **Next step**: Start T19 with an explicit no-key skip contract, then add the isolated live three-agent smoke path and sanitized report.
 - **Blockers**: none
-- **Uncommitted files**: none before this handoff record
+- **Uncommitted files**: none after the T18 atomic commit
 - **Branch**: main

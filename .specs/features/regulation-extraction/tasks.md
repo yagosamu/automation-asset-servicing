@@ -560,12 +560,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] O teste falha antes de cobrir o primeiro fluxo completo.
-- [ ] O cenário inclui uma variável de baixa confiança revisada manualmente.
-- [ ] O preliminar é baixável antes da revisão e o final somente depois.
-- [ ] O workbook baixado é reaberto e validado programaticamente.
-- [ ] Gate Full passa sem rede ou chave.
-- [ ] Test count: pelo menos 4 jornadas de UI passam.
+- [x] O teste falha antes de cobrir o primeiro fluxo completo.
+- [x] O cenário inclui uma variável de baixa confiança revisada manualmente.
+- [x] O preliminar é baixável antes da revisão e o final somente depois.
+- [x] O workbook baixado é reaberto e validado programaticamente.
+- [x] Gate Full passa sem rede ou chave.
+- [x] Test count: 4 jornadas de UI passam.
 
 **Tests:** ui + integration
 **Gate:** full
@@ -660,7 +660,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T15 | UI de export/retomada | ✅ Granular |
 | T16 | Dataset golden | ✅ Granular |
 | T17 | Runner de eval | ✅ Granular |
-| T18 | Jornada E2E offline | ✅ Granular |
+| T18 | Jornada E2E offline | ✅ Concluída |
 | T19 | Smoke real opt-in | ✅ Granular |
 | T20 | README/runbook | ✅ Granular |
 

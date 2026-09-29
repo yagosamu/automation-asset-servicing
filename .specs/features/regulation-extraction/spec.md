@@ -290,7 +290,10 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-56 | P3: Busca | - | Pending |
 | ASET-57 | P3: Busca | - | Pending |
 
-**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; tarefas ainda não criadas.
+T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. ASET-54
+permanece parcial até o smoke test real opt-in da T19.
+
+**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T18 concluídas e T19–T20 pendentes.
 
 ---
 
@@ -318,4 +321,4 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 - [ ] Nenhum Excel final é produzido com pendência aberta.
 - [ ] Todos os trechos do golden set resolvem no documento e na página declarados.
 - [ ] A suíte offline passa sem rede, segredo ou chamada paga.
-- [ ] Uma pessoa consegue demonstrar seleção, localização, extração, validação, revisão e download em uma única sessão local.
+- [x] Uma pessoa consegue demonstrar seleção, localização, extração, validação, revisão e download em uma única sessão local.

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
@@ -43,6 +44,15 @@ class DocumentLocationPipeline(Protocol):
         page_start: int,
         page_end: int,
     ) -> list[Preview]: ...
+
+    def extract(
+        self,
+        run_id: str,
+        *,
+        preferred_vocabulary: list[str] | None = None,
+    ) -> list[ExtractedVariable]: ...
+
+    def validate(self, run_id: str) -> object: ...
 
 
 class ReviewWorkflow(Protocol):
@@ -102,6 +112,17 @@ class DeliveryWorkflow(Protocol):
     def get_export(self, run_id: str, *, final: bool) -> ExportArtifact | None: ...
 
     def summary(self, run_id: str) -> RunSummary: ...
+
+
+@dataclass(frozen=True, slots=True)
+class LocalAppServices:
+    """Concrete local dependencies supplied by an executable composition root."""
+
+    pipeline: DocumentLocationPipeline
+    regulations_dir: Path
+    upload_dir: Path
+    review_service: ReviewWorkflow
+    delivery_service: DeliveryWorkflow
 
 
 def render_document_location(
@@ -251,11 +272,24 @@ def _render_active_location(pipeline: DocumentLocationPipeline) -> None:
         else:
             st.session_state["location_confirmed"] = True
             st.success(f"Intervalo confirmado: páginas {int(page_start)} a {int(page_end)}.")
-    st.button(
+    if st.button(
         "Extrair informações",
         disabled=not bool(st.session_state.get("location_confirmed", False)),
         key="start_extraction",
-    )
+    ):
+        _extract_and_validate(pipeline, str(run_id))
+
+
+def _extract_and_validate(pipeline: DocumentLocationPipeline, run_id: str) -> None:
+    try:
+        pipeline.extract(run_id)
+        pipeline.validate(run_id)
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(f"Não foi possível concluir a extração e validação: {error}")
+        st.info("O progresso foi preservado. Clique em Extrair informações para tentar novamente.")
+        return
+    st.session_state["_asset_servicing_review_run_id"] = run_id
+    st.success("Extração e validação concluídas.")
 
 
 def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> None:
@@ -582,9 +616,15 @@ def _format_duration(duration_ms: int) -> str:
     return f"{duration_ms / 1000:.2f} s".replace(".", ",")
 
 
-def main() -> None:
+def main(services: LocalAppServices | None = None) -> None:
     """Render the configured local application entry point."""
 
+    if services is not None:
+        st.session_state["_asset_servicing_pipeline"] = services.pipeline
+        st.session_state["_asset_servicing_regulations_dir"] = services.regulations_dir
+        st.session_state["_asset_servicing_upload_dir"] = services.upload_dir
+        st.session_state["_asset_servicing_review_service"] = services.review_service
+        st.session_state["_asset_servicing_delivery_service"] = services.delivery_service
     pipeline = st.session_state.get("_asset_servicing_pipeline")
     regulations_dir = st.session_state.get("_asset_servicing_regulations_dir")
     upload_dir = st.session_state.get("_asset_servicing_upload_dir")
@@ -629,6 +669,7 @@ if __name__ == "__main__":
 __all__ = [
     "DocumentLocationPipeline",
     "DeliveryWorkflow",
+    "LocalAppServices",
     "Preview",
     "ReviewWorkflow",
     "main",
