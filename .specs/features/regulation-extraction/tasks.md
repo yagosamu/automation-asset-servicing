@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Correções T22–T25 concluídas — aguardando verificação independente final
+**Status:** P1 concluído — verificação independente final aprovada
 
 ---
 

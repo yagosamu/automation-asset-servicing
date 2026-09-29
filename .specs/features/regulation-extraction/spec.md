@@ -245,7 +245,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-11 | P1: Extração | Design | Implemented (T08) |
 | ASET-12 | P1: Extração | Design | Implemented (T08) |
 | ASET-13 | P1: Extração | Design | Implemented (T08) |
-| ASET-14 | P1: Extração | Design | Partial (T05, T08) |
+| ASET-14 | P1: Extração | Design | Verified (T05, T08) |
 | ASET-15 | P1: Extração | Design | Implemented (T08) |
 | ASET-16 | P1: Validação | Design | Implemented (T05, T06, T09, T10) |
 | ASET-17 | P1: Validação | Design | Implemented (T05, T09) |
@@ -273,12 +273,12 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-39 | P1: Excel | Design | Implemented (T10, T12, T15) |
 | ASET-40 | P1: Excel | Design | Implemented (T12, T15) |
 | ASET-41 | P1: Resiliência | Design | Implemented (T06, T10) |
-| ASET-42 | P1: Resiliência | Design | Partial (T06, T10) |
+| ASET-42 | P1: Resiliência | Design | Verified (T06, T10) |
 | ASET-43 | P1: Resiliência | Design | Implemented (T03, T10) |
 | ASET-44 | P1: Resiliência | Design | Implemented (T02, T10) |
 | ASET-45 | P1: Resiliência | Design | Implemented (T02, T10) |
 | ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10, T15) |
-| ASET-47 | P1: Resiliência | Design | Partial (T03, T06, T10, T20) |
+| ASET-47 | P1: Resiliência | Design | Verified (T03, T06, T10, T20) |
 | ASET-48 | P1: Qualidade | Design | Implemented (T01, T06, T20, T21) |
 | ASET-49 | P1: Qualidade | Design | Implemented (T16) |
 | ASET-50 | P1: Qualidade | Design | Implemented (T17) |
@@ -293,7 +293,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T25 concluídas e verificação independente final pendente.
+**Coverage:** 57 requisitos totais; 54 P1 verificados independentemente; 3 P3 postergados; T01–T25 concluídas.
 
 ---
 

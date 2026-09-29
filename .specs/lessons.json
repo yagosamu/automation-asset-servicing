@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "promote_threshold": 2,
+  "window_days": 45,
+  "quarantine_threshold": 2,
+  "next_id": 2,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "ac_gap::assert every required payload field against its expected value including injected timestamps",
+      "text": "Assert every required payload field against its expected value, including injected timestamps",
+      "signal": "ac_gap",
+      "scope": "pipeline-tests",
+      "status": "candidate",
+      "features": [
+        "regulation-extraction"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "ASET-01 (pipeline-tests)"
+      ],
+      "created": "2026-09-29T18:26:59Z",
+      "last_seen": "2026-09-29T18:26:59Z"
+    }
+  ]
+}
