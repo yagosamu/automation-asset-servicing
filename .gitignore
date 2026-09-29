@@ -15,6 +15,7 @@ htmlcov/
 
 # Runtime artifacts
 data/runs/
+data/uploads/
 output/
 tmp/
 

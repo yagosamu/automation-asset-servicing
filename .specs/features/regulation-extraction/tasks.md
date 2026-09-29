@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T15 concluídas
+**Status:** Em execução — T01–T20 concluídas
 
 ---
 
@@ -80,7 +80,7 @@ T12 -> T13 -> T14 -> T15
 ### Phase 4: Evidence and Handoff
 
 ```text
-T16 -> T17 -> T18 -> T19 -> T20
+T16 -> T17 -> T18 -> T19 -> T20 -> T21
 ```
 
 ---
@@ -596,11 +596,38 @@ T16 -> T17 -> T18 -> T19 -> T20
 **Gate:** live
 **Commit:** `test(smoke): add live API check`
 
-#### T20: Document setup and presentation runbook
+#### T20: Add the executable local application bootstrap
+
+**What:** Conectar configuração, provider OpenAI, pipeline, persistência, revisão e Excel em um entry point Streamlit executável sem duplicar regras de negócio.
+**Where:** `src/asset_servicing/ui/runtime.py`, `.gitignore`
+**Depends on:** T19
+**Reuses:** Adapters locais, serviços de aplicação, `LocalAppServices` e configuração independente dos três agentes.
+**Requirement:** ASET-47–48
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] O bootstrap monta pipeline, revisão e entrega com os adapters reais sem executar chamada de rede durante a composição.
+- [x] Os três modelos são configurados independentemente e o uso reportado é ligado ao ledger do pipeline.
+- [x] Dados, uploads e outputs permanecem em caminhos locais ignorados pelo Git.
+- [x] Configuração ausente falha com mensagem acionável e sem expor segredo.
+- [x] O entry point Streamlit chama a UI com os serviços locais configurados.
+- [x] Gate Quick passa.
+- [x] Test count: pelo menos 3 cenários de contrato do runtime passam.
+
+**Tests:** contract
+**Gate:** quick
+**Commit:** `feat(ui): add local runtime bootstrap`
+
+#### T21: Document setup and presentation runbook
 
 **What:** Criar README reproduzível com arquitetura, instalação, configuração, testes, limitações, premissas, demo principal, documento surpresa e recuperação de falhas.
 **Where:** `README.md`
-**Depends on:** T19
+**Depends on:** T20
 **Reuses:** Comandos canônicos, métricas do eval e fluxo final da interface.
 **Requirement:** ASET-48, ASET-54
 
@@ -620,7 +647,7 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Tests:** contract
 **Gate:** build
-**Commit:** `docs: add demo runbook`
+**Commit:** `docs(project): add setup and demo runbook`
 
 ---
 
@@ -632,10 +659,10 @@ Phase 1 -> Phase 2 -> Phase 3 -> Phase 4
 Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
-Phase 4: T16 -> T17 -> T18 -> T19 -> T20
+Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21
 ```
 
-As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas) e Phase 4 (5 tarefas). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas) e Phase 4 (6 tarefas). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -662,7 +689,8 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T17 | Runner de eval | ✅ Granular |
 | T18 | Jornada E2E offline | ✅ Concluída |
 | T19 | Smoke real opt-in | ✅ Concluída |
-| T20 | README/runbook | ✅ Granular |
+| T20 | Bootstrap local executável | ✅ Concluída |
+| T21 | README/runbook | ✅ Granular |
 
 ## Diagram-Definition Cross-Check
 
@@ -688,6 +716,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T18 | T17 | T17 -> T18 | ✅ Match |
 | T19 | T18 | T18 -> T19 | ✅ Match |
 | T20 | T19 | T19 -> T20 | ✅ Match |
+| T21 | T20 | T20 -> T21 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -712,7 +741,8 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T17 | Evals | eval | eval | ✅ OK |
 | T18 | Interface + adapters | ui + integration | ui + integration | ✅ OK |
 | T19 | Integração externa | needs_api | needs_api | ✅ OK |
-| T20 | Documentação | contract | contract | ✅ OK |
+| T20 | Composição da interface | contract | contract | ✅ OK |
+| T21 | Documentação | contract | contract | ✅ OK |
 
 ---
 
