@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Phase 4 / T17 - add offline extraction evaluation gates
-- **Completed**: T01–T16
+- **Phase / Task**: Phase 4 / T18 - cover the complete offline UI journey
+- **Completed**: T01–T17
 - **In-progress** (file:line): none
-- **Next step**: Start T17 with red tests for field coverage, accepted values, evidence, Chapter 6 and adversarial-review gates.
+- **Next step**: Start T18 by closing the Streamlit runtime-composition seam, then add deterministic UI journeys and a visible Playwright acceptance run.
 - **Blockers**: none
 - **Uncommitted files**: none before this handoff record
 - **Branch**: main

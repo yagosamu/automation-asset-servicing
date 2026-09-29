@@ -1,0 +1,16 @@
+schema_version: 1
+scenario_id: equivalent-section-in-chapter-6
+input:
+  chapter_hint: 3
+expected:
+  status: found
+  chapter: 6
+  title: CAPÍTULO 6 - DAS MOVIMENTAÇÕES DE COTAS
+  page_start: 18
+  page_end: 23
+recorded_output:
+  status: found
+  title: CAPÍTULO 6 - DAS MOVIMENTAÇÕES DE COTAS
+  page_start: 18
+  page_end: 23
+  rationale: A seção reúne regras de emissão, aplicação, resgate, amortização e liquidação de cotas.

@@ -26,6 +26,7 @@ dev = [
     "pytest-cov>=6.2,<7",
     "ruff>=0.12,<1",
     "types-openpyxl>=3.1,<4",
+    "types-pyyaml>=6,<7",
 ]
 
 [tool.hatch.build.targets.wheel]

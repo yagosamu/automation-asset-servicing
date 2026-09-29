@@ -1,0 +1,23 @@
+schema_version: 1
+cases:
+  - id: contradictory-redemption-deadline
+    description: O valor registrado contradiz diretamente o prazo expresso na fonte.
+    expected_review: true
+    recorded_output:
+      kind: variable
+      confidence: 0.35
+      verdict: unsupported
+      has_conflict: true
+  - id: unsupported-exit-fee
+    description: A taxa registrada não possui suporte nas páginas confirmadas.
+    expected_review: true
+    recorded_output:
+      kind: variable
+      confidence: 0.20
+      verdict: unsupported
+      has_conflict: false
+  - id: omitted-redemption-lockup
+    description: Uma carência presente na fonte não foi extraída.
+    expected_review: true
+    recorded_output:
+      kind: omission

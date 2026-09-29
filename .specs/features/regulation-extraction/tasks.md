@@ -534,12 +534,12 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Testes começam vermelhos para regressão de campo, valor, evidência, Capítulo 6 e erro adversarial sobrevivente.
-- [ ] O runner falha abaixo de 100% nos quatro gates definidos no desenho.
-- [ ] O relatório registra modelo/prompt, corpus, métricas, falhas e comparação com baseline.
-- [ ] Alterar prompt, schema ou pipeline sem relatório atualizado reprova o contrato.
-- [ ] Gate Full passa.
-- [ ] Test count: pelo menos 12 testes de eval passam.
+- [x] Testes começam vermelhos para regressão de campo, valor, evidência, Capítulo 6 e erro adversarial sobrevivente.
+- [x] O runner falha abaixo de 100% nos quatro gates definidos no desenho.
+- [x] O relatório registra modelo/prompt, corpus, métricas, falhas e comparação com baseline.
+- [x] Alterar prompt, schema ou pipeline sem relatório atualizado reprova o contrato.
+- [x] Gate Full passa.
+- [x] Test count: 30 testes de eval passam, incluindo 16 do runner.
 
 **Tests:** eval
 **Gate:** full
