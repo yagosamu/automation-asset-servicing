@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Verificação independente reprovou evidência — T22–T23 concluídas; T24–T25 abertas
+**Status:** Verificação independente reprovou evidência — T22–T24 concluídas; T25 aberta
 
 ---
 
@@ -695,8 +695,8 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 
 **Done when:**
 
-- [ ] IDs, valores, evidências e páginas distintos são preservados.
-- [ ] Gate Quick passa.
+- [x] IDs, valores, evidências e páginas distintos são preservados.
+- [x] Gate Quick passa.
 
 **Tests:** unit
 **Gate:** quick
@@ -765,7 +765,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T21 | README/runbook | ✅ Concluída |
 | T22 | Payload de criação completo | ✅ Concluída |
 | T23 | Histórico de reprocessamento | ✅ Concluída |
-| T24 | Nomes semânticos duplicados | ✅ Granular |
+| T24 | Nomes semânticos duplicados | ✅ Concluída |
 | T25 | Falha de persistência pré-provider | ✅ Granular |
 
 ## Diagram-Definition Cross-Check

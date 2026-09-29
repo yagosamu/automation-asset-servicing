@@ -12,8 +12,10 @@ from asset_servicing.application.extractor import RegulationVariableExtractor
 from asset_servicing.domain import SourceKind
 from asset_servicing.ports.llm import (
     AgentDocument,
+    AtomicVariable,
     ExtractionRequest,
     ExtractionResponse,
+    ExtractionSourceKind,
     LocateRequest,
     LocateResponse,
     ValidationRequest,
@@ -101,6 +103,61 @@ def test_cell_with_two_independent_facts_becomes_two_variables() -> None:
     ] == [
         ("var-conversao", "prazo_conversao_resgate", "D+30 dias corridos"),
         ("var-pagamento", "prazo_pagamento_resgate", "D+2 dias úteis da conversão"),
+    ]
+
+
+def test_duplicate_semantic_names_remain_distinct_until_review() -> None:
+    provider = StubLLMProvider(
+        ExtractionResponse(
+            variables=[
+                AtomicVariable(
+                    name="prazo_resgate",
+                    value="D+30",
+                    evidence_text="A conversão ocorrerá em trinta dias.",
+                    source_pages=[7],
+                    source_kind=ExtractionSourceKind.PROSE,
+                ),
+                AtomicVariable(
+                    name="prazo_resgate",
+                    value="D+60",
+                    evidence_text="Em outra classe, a conversão ocorrerá em sessenta dias.",
+                    source_pages=[8],
+                    source_kind=ExtractionSourceKind.TABLE,
+                ),
+            ]
+        )
+    )
+    extractor = RegulationVariableExtractor(
+        provider,
+        id_factory=id_factory("var-class-a", "var-class-b"),
+    )
+
+    variables = extractor.extract(make_document(), page_start=7, page_end=8)
+
+    assert [
+        (
+            variable.id,
+            variable.current_name,
+            variable.current_value,
+            variable.evidence_text,
+            variable.source_pages,
+        )
+        for variable in variables
+    ] == [
+        (
+            "var-class-a",
+            "prazo_resgate",
+            "D+30",
+            "A conversão ocorrerá em trinta dias.",
+            [7],
+        ),
+        (
+            "var-class-b",
+            "prazo_resgate",
+            "D+60",
+            "Em outra classe, a conversão ocorrerá em sessenta dias.",
+            [8],
+        ),
     ]
 
 
