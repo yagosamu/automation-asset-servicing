@@ -586,11 +586,11 @@ T16 -> T17 -> T18 -> T19 -> T20
 
 **Done when:**
 
-- [ ] Sem chave, o teste é explicitamente skipped e não falha a suíte offline.
-- [ ] Com chave, o teste executa localização, extração e validação em chamadas separadas.
-- [ ] O relatório contém duração, uso, modelos e contagens, sem segredo ou corpo integral do PDF.
-- [ ] Gate Live passa somente quando credencial estiver disponível.
-- [ ] Test count: pelo menos 3 cenários de configuração/smoke passam.
+- [x] Sem chave, o teste é explicitamente skipped e não falha a suíte offline.
+- [x] Com chave, o teste executa localização, extração e validação em chamadas separadas.
+- [x] O relatório contém duração, uso, modelos e contagens, sem segredo ou corpo integral do PDF.
+- [x] Gate Live passa somente quando credencial estiver disponível.
+- [x] Test count: pelo menos 3 cenários de configuração/smoke passam.
 
 **Tests:** needs_api
 **Gate:** live
@@ -661,7 +661,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T16 | Dataset golden | ✅ Granular |
 | T17 | Runner de eval | ✅ Granular |
 | T18 | Jornada E2E offline | ✅ Concluída |
-| T19 | Smoke real opt-in | ✅ Granular |
+| T19 | Smoke real opt-in | ✅ Concluída |
 | T20 | README/runbook | ✅ Granular |
 
 ## Diagram-Definition Cross-Check

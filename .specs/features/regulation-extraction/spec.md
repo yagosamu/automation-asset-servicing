@@ -285,15 +285,15 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-51 | P1: Qualidade | Design | Implemented (T07, T17) |
 | ASET-52 | P1: Qualidade | Design | Implemented (T09, T17) |
 | ASET-53 | P1: Qualidade | Design | Implemented (T04, T16, T17) |
-| ASET-54 | P1: Qualidade | Design | Partial (T06) |
+| ASET-54 | P1: Qualidade | Design | Implemented (T06, T19) |
 | ASET-55 | P3: Busca | - | Pending |
 | ASET-56 | P3: Busca | - | Pending |
 | ASET-57 | P3: Busca | - | Pending |
 
-T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. ASET-54
-permanece parcial até o smoke test real opt-in da T19.
+T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
+completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T18 concluídas e T19–T20 pendentes.
+**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T19 concluídas e T20 pendente.
 
 ---
 
