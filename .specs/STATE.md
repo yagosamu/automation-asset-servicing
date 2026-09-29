@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Phase 4 / T21 - document setup and presentation runbook
-- **Completed**: T01–T20
+- **Phase / Task**: Feature validation - independent verifier
+- **Completed**: T01–T21
 - **In-progress** (file:line): none
-- **Next step**: Add README contract tests, then write the reproducible setup and presentation runbook.
+- **Next step**: Dispatch the independent verifier for spec coverage and discrimination testing.
 - **Blockers**: none
-- **Uncommitted files**: none after the T20 atomic commit
+- **Uncommitted files**: none after the T21 atomic commit
 - **Branch**: main

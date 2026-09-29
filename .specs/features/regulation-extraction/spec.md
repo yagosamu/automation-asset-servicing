@@ -279,13 +279,13 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-45 | P1: Resiliência | Design | Implemented (T02, T10) |
 | ASET-46 | P1: Resiliência | Design | Implemented (T03, T06, T10, T15) |
 | ASET-47 | P1: Resiliência | Design | Partial (T03, T06, T10, T20) |
-| ASET-48 | P1: Qualidade | Design | Implemented (T01, T06, T20) |
+| ASET-48 | P1: Qualidade | Design | Implemented (T01, T06, T20, T21) |
 | ASET-49 | P1: Qualidade | Design | Implemented (T16) |
 | ASET-50 | P1: Qualidade | Design | Implemented (T17) |
 | ASET-51 | P1: Qualidade | Design | Implemented (T07, T17) |
 | ASET-52 | P1: Qualidade | Design | Implemented (T09, T17) |
 | ASET-53 | P1: Qualidade | Design | Implemented (T04, T16, T17) |
-| ASET-54 | P1: Qualidade | Design | Implemented (T06, T19) |
+| ASET-54 | P1: Qualidade | Design | Implemented (T06, T19, T21) |
 | ASET-55 | P3: Busca | - | Pending |
 | ASET-56 | P3: Busca | - | Pending |
 | ASET-57 | P3: Busca | - | Pending |
@@ -293,7 +293,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T20 concluídas e T21 pendente.
+**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T21 concluídas e verificação independente pendente.
 
 ---
 

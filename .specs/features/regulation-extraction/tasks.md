@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Em execução — T01–T20 concluídas
+**Status:** Implementação concluída — T01–T21; aguardando verificação independente
 
 ---
 
@@ -638,12 +638,12 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21
 
 **Done when:**
 
-- [ ] Testes de contrato verificam todos os comandos e headings obrigatórios.
-- [ ] A instalação parte de clone limpo e não exige arquivo secreto versionado.
-- [ ] O runbook cobre caminho feliz, revisão de baixa confiança, Capítulo 6 e fallback manual.
-- [ ] Limitações do corpus, score e uso de API externa estão explícitas.
-- [ ] Gate Build da Phase 4 passa.
-- [ ] Test count: pelo menos 4 testes de contrato da documentação passam.
+- [x] Testes de contrato verificam todos os comandos e headings obrigatórios.
+- [x] A instalação parte de clone limpo e não exige arquivo secreto versionado.
+- [x] O runbook cobre caminho feliz, revisão de baixa confiança, Capítulo 6 e fallback manual.
+- [x] Limitações do corpus, score e uso de API externa estão explícitas.
+- [x] Gate Build da Phase 4 passa.
+- [x] Test count: pelo menos 4 testes de contrato da documentação passam.
 
 **Tests:** contract
 **Gate:** build
@@ -690,7 +690,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T18 | Jornada E2E offline | ✅ Concluída |
 | T19 | Smoke real opt-in | ✅ Concluída |
 | T20 | Bootstrap local executável | ✅ Concluída |
-| T21 | README/runbook | ✅ Granular |
+| T21 | README/runbook | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 
