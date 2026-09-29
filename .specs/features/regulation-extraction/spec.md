@@ -232,7 +232,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| ASET-01 | P1: Localização | Design | Implemented (T03–T04, T10, T13) |
+| ASET-01 | P1: Localização | Design | Implemented (T03–T04, T10, T13, T22) |
 | ASET-02 | P1: Localização | Design | Implemented (T04, T13) |
 | ASET-03 | P1: Localização | Design | Implemented (T07, T13) |
 | ASET-04 | P1: Localização | Design | Implemented (T05, T07, T13) |
@@ -293,7 +293,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T21 concluídas e verificação independente pendente.
+**Coverage:** 57 requisitos totais; 54 P1 mapeados ao desenho; 3 P3 postergados; T01–T22 concluídas e correções T23–T25 abertas após a primeira verificação independente.
 
 ---
 

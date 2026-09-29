@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Feature validation - independent verifier
-- **Completed**: T01–T21
+- **Phase / Task**: Verifier fixes / T23 - prove completed-run reprocessing preserves history
+- **Completed**: T01–T22; independent verification round 1 returned FAIL on evidence
 - **In-progress** (file:line): none
-- **Next step**: Dispatch the independent verifier for spec coverage and discrimination testing.
+- **Next step**: Add the completed-run reprocessing history test, run Gate Full, and commit T23.
 - **Blockers**: none
-- **Uncommitted files**: none after the T21 atomic commit
+- **Uncommitted files**: verifier report and lessons artifacts remain pending final validation
 - **Branch**: main

@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Implementação concluída — T01–T21; aguardando verificação independente
+**Status:** Verificação independente reprovou evidência — T22 concluída; T23–T25 abertas
 
 ---
 
@@ -80,7 +80,7 @@ T12 -> T13 -> T14 -> T15
 ### Phase 4: Evidence and Handoff
 
 ```text
-T16 -> T17 -> T18 -> T19 -> T20 -> T21
+T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ```
 
 ---
@@ -649,6 +649,78 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21
 **Gate:** build
 **Commit:** `docs(project): add setup and demo runbook`
 
+#### T22: Assert the complete run-creation payload
+
+**What:** Fechar a lacuna ASET-01 com asserções exatas para nome, hash, páginas e timestamp produzido pelo clock injetado.
+**Where:** `tests/integration/test_pipeline.py`
+**Depends on:** T21
+**Reuses:** Harness determinístico do pipeline.
+**Requirement:** ASET-01
+
+**Done when:**
+
+- [x] O teste afirma todos os campos obrigatórios da execução criada e reidratada.
+- [x] Uma mutação do timestamp é detectada pelo teste.
+- [x] Gate Full passa.
+
+**Tests:** integration
+**Gate:** full
+**Commit:** `test(pipeline): assert creation timestamp`
+
+#### T23: Prove completed-run reprocessing preserves history
+
+**What:** Demonstrar que reprocessar o mesmo documento após gerar o resultado final cria novo `run_id` e preserva a execução anterior.
+**Where:** `tests/integration/test_pipeline.py`
+**Depends on:** T22
+**Reuses:** Pipeline, repositório e exportador reais com provider fake.
+**Requirement:** Edge case de reprocessamento concluído
+
+**Done when:**
+
+- [ ] A segunda execução recebe id distinto.
+- [ ] Ambas permanecem legíveis e a primeira não é alterada.
+- [ ] Gate Full passa.
+
+**Tests:** integration
+**Gate:** full
+**Commit:** `test(pipeline): preserve reprocessing history`
+
+#### T24: Preserve duplicate semantic variable names
+
+**What:** Demonstrar que dois fatos independentes com o mesmo nome semântico permanecem registros distintos até revisão.
+**Where:** `tests/unit/application/test_extractor.py`
+**Depends on:** T23
+**Reuses:** Extrator e provider estruturado fake.
+**Requirement:** Edge case de nomes semânticos duplicados
+
+**Done when:**
+
+- [ ] IDs, valores, evidências e páginas distintos são preservados.
+- [ ] Gate Quick passa.
+
+**Tests:** unit
+**Gate:** quick
+**Commit:** `test(extractor): preserve duplicate names`
+
+#### T25: Block paid calls when persistence fails
+
+**What:** Injetar falha ao persistir o estado em andamento e provar que o provider não é chamado e o último estado durável permanece intacto.
+**Where:** `tests/integration/test_pipeline.py`
+**Depends on:** T24
+**Reuses:** Harness do pipeline e repositório local.
+**Requirement:** Edge case de persistência indisponível
+
+**Done when:**
+
+- [ ] A falha de persistência é propagada antes da chamada ao localizador.
+- [ ] A lista de requests do provider permanece vazia.
+- [ ] O estado durável anterior permanece `created`.
+- [ ] Gate Build passa.
+
+**Tests:** integration
+**Gate:** build
+**Commit:** `test(pipeline): block calls on persistence failure`
+
 ---
 
 ## Phase Execution Map
@@ -659,10 +731,10 @@ Phase 1 -> Phase 2 -> Phase 3 -> Phase 4
 Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
-Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21
+Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ```
 
-As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas) e Phase 4 (6 tarefas). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas) e Phase 4 (10 tarefas após as correções do Verifier). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -691,6 +763,10 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T19 | Smoke real opt-in | ✅ Concluída |
 | T20 | Bootstrap local executável | ✅ Concluída |
 | T21 | README/runbook | ✅ Concluída |
+| T22 | Payload de criação completo | ✅ Concluída |
+| T23 | Histórico de reprocessamento | ✅ Granular |
+| T24 | Nomes semânticos duplicados | ✅ Granular |
+| T25 | Falha de persistência pré-provider | ✅ Granular |
 
 ## Diagram-Definition Cross-Check
 
@@ -717,6 +793,10 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T19 | T18 | T18 -> T19 | ✅ Match |
 | T20 | T19 | T19 -> T20 | ✅ Match |
 | T21 | T20 | T20 -> T21 | ✅ Match |
+| T22 | T21 | T21 -> T22 | ✅ Match |
+| T23 | T22 | T22 -> T23 | ✅ Match |
+| T24 | T23 | T23 -> T24 | ✅ Match |
+| T25 | T24 | T24 -> T25 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -743,6 +823,10 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T19 | Integração externa | needs_api | needs_api | ✅ OK |
 | T20 | Composição da interface | contract | contract | ✅ OK |
 | T21 | Documentação | contract | contract | ✅ OK |
+| T22 | Pipeline | integration | integration | ✅ OK |
+| T23 | Pipeline | integration | integration | ✅ OK |
+| T24 | Aplicação | unit | unit | ✅ OK |
+| T25 | Pipeline | integration | integration | ✅ OK |
 
 ---
 

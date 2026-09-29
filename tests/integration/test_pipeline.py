@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -198,8 +199,11 @@ def test_create_run_persists_metadata_and_restartable_source(tmp_path: Path) -> 
     run = harness.pipeline.create_run(harness.source_pdf)
 
     assert run.run_id == "run-001"
+    assert run.document_name == "regulamento.pdf"
+    assert run.document_sha256 == hashlib.sha256(harness.source_pdf.read_bytes()).hexdigest()
     assert run.state is RunState.CREATED
     assert run.page_count == 4
+    assert run.created_at == datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
     assert harness.repository.load_run("run-001") == run
     assert harness.repository.source_path("run-001").read_bytes() == harness.source_pdf.read_bytes()
 
