@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** Verificação independente reprovou evidência — T22–T24 concluídas; T25 aberta
+**Status:** Correções T22–T25 concluídas — aguardando verificação independente final
 
 ---
 
@@ -712,10 +712,10 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 
 **Done when:**
 
-- [ ] A falha de persistência é propagada antes da chamada ao localizador.
-- [ ] A lista de requests do provider permanece vazia.
-- [ ] O estado durável anterior permanece `created`.
-- [ ] Gate Build passa.
+- [x] A falha de persistência é propagada antes da chamada ao localizador.
+- [x] A lista de requests do provider permanece vazia.
+- [x] O estado durável anterior permanece `created`.
+- [x] Gate Build passa.
 
 **Tests:** integration
 **Gate:** build
@@ -766,7 +766,7 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T22 | Payload de criação completo | ✅ Concluída |
 | T23 | Histórico de reprocessamento | ✅ Concluída |
 | T24 | Nomes semânticos duplicados | ✅ Concluída |
-| T25 | Falha de persistência pré-provider | ✅ Granular |
+| T25 | Falha de persistência pré-provider | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 

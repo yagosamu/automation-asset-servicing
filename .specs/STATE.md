@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Verifier fixes / T25 - block paid calls when persistence fails
-- **Completed**: T01–T24; independent verification round 1 returned FAIL on evidence
+- **Phase / Task**: Feature validation - independent verifier round 2
+- **Completed**: T01–T25; all four round-1 evidence gaps addressed
 - **In-progress** (file:line): none
-- **Next step**: Add the persistence-failure negative-path test, run Gate Build, and commit T25.
+- **Next step**: Re-dispatch the independent verifier over the updated commit range.
 - **Blockers**: none
 - **Uncommitted files**: verifier report and lessons artifacts remain pending final validation
 - **Branch**: main

@@ -25,7 +25,7 @@ from asset_servicing.application import (
     RegulationVariableValidator,
     UsageLedger,
 )
-from asset_servicing.domain import RunState, ValidationVerdict
+from asset_servicing.domain import Run, RunState, ValidationVerdict
 from asset_servicing.ports.llm import (
     AtomicVariable,
     ExtractionRequest,
@@ -407,6 +407,30 @@ def test_in_progress_state_is_persisted_before_each_agent_call(
         harness.pipeline.extract("run-001")
     else:
         harness.pipeline.validate("run-001")
+
+
+def test_persistence_failure_stops_before_the_provider_call(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    harness = make_harness(tmp_path)
+    harness.pipeline.create_run(harness.source_pdf)
+    durable_before = harness.repository.load_run("run-001")
+    save_run = harness.repository.save_run
+
+    def fail_while_entering_location(run: Run, *, source_pdf: Path | None = None) -> None:
+        if run.state is RunState.LOCATING:
+            raise OSError("persistence unavailable before external call")
+        save_run(run, source_pdf=source_pdf)
+
+    monkeypatch.setattr(harness.repository, "save_run", fail_while_entering_location)
+
+    with pytest.raises(OSError, match="persistence unavailable before external call"):
+        harness.pipeline.locate_section("run-001")
+
+    assert harness.provider.locate_requests == []
+    assert harness.repository.load_run("run-001") == durable_before
+    assert harness.repository.load_run("run-001").state is RunState.CREATED
 
 
 def test_rerunning_location_replaces_location_and_invalidates_all_dependents(
