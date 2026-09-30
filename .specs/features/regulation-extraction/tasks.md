@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 refinado após UAT — T29 concluída, verificação independente pendente
+**Status:** P1 refinado após UAT — T29 concluída e aprovada por verificação independente
 
 ---
 

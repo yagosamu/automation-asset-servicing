@@ -244,7 +244,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-07 | P1: Localização | Design | Implemented (T07, T10, T13) |
 | ASET-08 | P1: Extração | Design | Verified (T04, T08, T10, T26, T28) |
 | ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
-| ASET-10 | P1: Extração | Design | Implemented (T05, T08, T29) |
+| ASET-10 | P1: Extração | Design | Verified (T05, T08, T29) |
 | ASET-11 | P1: Extração | Design | Implemented (T08) |
 | ASET-12 | P1: Extração | Design | Implemented (T08) |
 | ASET-13 | P1: Extração | Design | Implemented (T08) |
@@ -296,7 +296,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T29 concluídas, com verificação independente da T29 pendente.
+**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T29 concluídas, com T29 aprovada por verificação independente.
 
 ---
 
