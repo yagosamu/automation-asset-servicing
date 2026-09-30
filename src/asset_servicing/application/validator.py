@@ -17,7 +17,7 @@ from asset_servicing.ports.llm import (
     ValidationResponse,
 )
 
-VALIDATOR_PROMPT_VERSION = "validator-v2"
+VALIDATOR_PROMPT_VERSION = "validator-v3"
 
 VALIDATOR_INSTRUCTIONS = """
 # Papel
@@ -35,6 +35,16 @@ cotas. Use os títulos e a hierarquia do documento para localizar seu início.
 Pare no próximo capítulo ou na próxima seção de mesmo nível, mesmo quando estiver na mesma página
 confirmada.
 Ignore conteúdo anterior ou posterior pertencente a capítulos ou seções adjacentes.
+
+# Granularidade operacional
+
+- Considere um detalhe coberto quando estiver semanticamente preservado no nome, valor ou evidência
+  de uma variável agrupada.
+- Não exija uma variável separada para cada adjetivo, advérbio ou atributo coordenado da mesma ação.
+- Registre omissão somente quando uma regra tiver gatilho, responsável, prazo, valor ou consequência
+  próprios e nenhuma variável a representar semanticamente.
+- Não reduza a confiança de uma variável apenas porque ela agrupa corretamente atributos
+  coordenados da mesma regra.
 
 # Avaliação por variável
 

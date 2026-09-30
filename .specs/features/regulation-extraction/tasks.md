@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 corrigido após UAT — verificação independente aprovada
+**Status:** P1 refinado após UAT — T29 concluída, verificação independente pendente
 
 ---
 
@@ -86,7 +86,7 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ### Phase 5: UAT Corrections
 
 ```text
-T26 -> T27 -> T28
+T26 -> T27 -> T28 -> T29
 ```
 
 ---
@@ -807,6 +807,32 @@ T26 -> T27 -> T28
 **Gate:** build
 **Commit:** `test(agents): enforce section boundary`
 
+#### T29: Reduce extraction fragmentation
+
+**What:** Ajustar a granularidade operacional para agrupar atributos coordenados da mesma regra sem combinar regras que tenham gatilho, responsável, prazo, valor ou consequência próprios.
+**Where:** prompts do extrator e validador, testes contratuais, fixture e runner de eval, gravação e baseline offline
+**Depends on:** T28
+**Reuses:** Prompts versionados, golden set e runner de avaliação existentes.
+**Requirement:** ASET-10 e edge case de atributos coordenados
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] O extrator agrupa atributos coordenados da mesma ação em uma variável completa.
+- [x] O extrator ainda separa regras com gatilho, responsável, prazo, valor ou consequência próprios.
+- [x] O validador considera coberto um detalhe preservado no valor ou evidência de uma variável agrupada.
+- [x] Os prompts são versionados e protegidos por cláusulas completas e snapshots exatos.
+- [x] Uma fixture da cláusula 3.2 exige uma variável com todos os atributos e rejeita sua fragmentação.
+- [x] O relatório offline e o Gate Build passam.
+
+**Tests:** contract + eval
+**Gate:** build
+**Commit:** `fix(agents): reduce extraction fragmentation`
+
 ---
 
 ## Phase Execution Map
@@ -818,10 +844,10 @@ Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
 Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
-Phase 5: T26 -> T27 -> T28
+Phase 5: T26 -> T27 -> T28 -> T29
 ```
 
-As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (3 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (4 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -857,6 +883,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T26 | Limite semântico da seção nos agentes | ✅ Concluída |
 | T27 | Descarte auditável de possíveis omissões | ✅ Concluída |
 | T28 | Testes discriminantes da fronteira da seção | ✅ Concluída |
+| T29 | Granularidade operacional da extração | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 
@@ -890,6 +917,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T26 | T25 | Phase 4 -> Phase 5 | ✅ Match |
 | T27 | T26 | T26 -> T27 | ✅ Match |
 | T28 | T27 | T27 -> T28 | ✅ Match |
+| T29 | T28 | T28 -> T29 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -923,6 +951,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T26 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 | T27 | Domínio/aplicação/interface | unit + integration + ui | unit + integration + ui | ✅ OK |
 | T28 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
+| T29 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 
 ---
 

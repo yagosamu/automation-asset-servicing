@@ -30,6 +30,18 @@ def mutated_recording(
     return replace(paths, recorded_extractions=mutated_path)
 
 
+def mutated_granularity_fixture(
+    tmp_path: Path,
+    mutate: Callable[[dict[str, Any]], None],
+) -> EvaluationPaths:
+    paths = EvaluationPaths.defaults(ROOT)
+    fixture = yaml.safe_load(paths.granularity_fixture.read_text(encoding="utf-8"))
+    mutate(fixture)
+    mutated_path = tmp_path / "granularity_fixture.yaml"
+    mutated_path.write_text(yaml.safe_dump(fixture, allow_unicode=True), encoding="utf-8")
+    return replace(paths, granularity_fixture=mutated_path)
+
+
 def test_recorded_extractions_cover_all_critical_fields() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 
@@ -129,6 +141,33 @@ def test_adjacent_section_omission_fails_boundary_gate(tmp_path: Path) -> None:
     assert any(failure.gate == "adjacent_section_exclusion" for failure in report.failures)
 
 
+def test_fragmented_coordinated_attributes_fail_granularity_gate(tmp_path: Path) -> None:
+    def fragment_rule(fixture: dict[str, Any]) -> None:
+        case = fixture["cases"][0]
+        case["recorded_output"]["variables"] = [
+            {"name": "tratamento_equanime", "value": "equânime"},
+            {"name": "simultaneidade", "value": "simultânea"},
+            {"name": "proporcionalidade", "value": "proporcional"},
+            {"name": "taxa_saida", "value": "sem taxa de saída"},
+        ]
+
+    report = run_evaluation(mutated_granularity_fixture(tmp_path, fragment_rule))
+
+    assert report.passed is False
+    assert any(failure.gate == "operational_granularity" for failure in report.failures)
+
+
+def test_grouped_rule_missing_an_attribute_fails_granularity_gate(tmp_path: Path) -> None:
+    def remove_attribute(fixture: dict[str, Any]) -> None:
+        variable = fixture["cases"][0]["recorded_output"]["variables"][0]
+        variable["value"] = "Execução equânime, simultânea e proporcional entre todos os cotistas"
+
+    report = run_evaluation(mutated_granularity_fixture(tmp_path, remove_attribute))
+
+    assert report.passed is False
+    assert any(failure.gate == "operational_granularity" for failure in report.failures)
+
+
 def test_chapter_6_fixture_matches_the_recorded_location() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 
@@ -209,8 +248,8 @@ def test_report_records_models_prompts_corpus_and_generation_time() -> None:
     }
     assert report.prompt_versions == {
         "locator": "locator-v1",
-        "extractor": "extractor-v2",
-        "validator": "validator-v2",
+        "extractor": "extractor-v3",
+        "validator": "validator-v3",
     }
     assert report.corpus.corpus_id == "btg-regulations-v1"
     assert report.corpus.document_count == 4
@@ -265,7 +304,7 @@ def test_contract_change_requires_an_updated_baseline(tmp_path: Path) -> None:
 
 def test_recording_with_stale_prompt_version_fails_contract(tmp_path: Path) -> None:
     def change_prompt_version(recording: dict[str, Any]) -> None:
-        recording["prompt_versions"]["extractor"] = "extractor-v1"
+        recording["prompt_versions"]["extractor"] = "extractor-v2"
 
     report = run_evaluation(mutated_recording(tmp_path, change_prompt_version))
 

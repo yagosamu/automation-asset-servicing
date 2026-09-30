@@ -85,7 +85,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 1. [ASET-08] WHEN o usuário confirmar as páginas THEN o sistema SHALL enviar ao agente extrator somente o documento e o intervalo confirmados, junto com instruções que tratem o conteúdo do PDF como dados não confiáveis.
 2. [ASET-09] WHEN o agente extrair uma linha de tabela ou regra textual THEN o sistema SHALL registrar nome da variável, valor, trecho-fonte, página, origem `tabela` ou `texto` e referência de cláusula quando disponível.
-3. [ASET-10] WHEN uma célula ou cláusula contiver fatos independentes THEN o sistema SHALL representá-los como variáveis separadas.
+3. [ASET-10] WHEN uma célula ou cláusula contiver regras operacionalmente independentes, com gatilho, responsável, prazo, valor ou consequência próprios, THEN o sistema SHALL representá-las como variáveis separadas; atributos coordenados da mesma regra SHALL permanecer juntos.
 4. [ASET-11] WHEN uma informação corresponder ao vocabulário preferencial THEN o sistema SHALL usar o nome canônico indicado pelo agente extrator.
 5. [ASET-12] WHEN uma regra relevante não corresponder ao vocabulário preferencial THEN o sistema SHALL permitir que o agente crie um nome semântico novo.
 6. [ASET-13] The system SHALL executar a identificação e a extração sem regex, busca literal obrigatória ou regras determinísticas que produzam o conteúdo das variáveis.
@@ -227,6 +227,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 - WHEN uma execução concluída for reprocessada THEN o sistema SHALL criar nova execução em vez de sobrescrever silenciosamente o histórico anterior.
 - IF a página final confirmada contiver o início do capítulo seguinte THEN o extrator e o validador SHALL ignorar o conteúdo fora da seção-alvo, inclusive para detectar omissões.
 - IF uma possível omissão for falso positivo ou estiver fora de escopo THEN o revisor SHALL poder descartá-la com justificativa auditável sem criar uma variável.
+- IF uma cláusula listar atributos coordenados da mesma ação, como execução equânime, simultânea, proporcional e sem taxa, THEN o sistema SHALL representá-los em uma única variável sem perder os atributos no valor ou na evidência.
 
 ---
 
@@ -243,7 +244,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-07 | P1: Localização | Design | Implemented (T07, T10, T13) |
 | ASET-08 | P1: Extração | Design | Verified (T04, T08, T10, T26, T28) |
 | ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
-| ASET-10 | P1: Extração | Design | Implemented (T05, T08) |
+| ASET-10 | P1: Extração | Design | Implemented (T05, T08, T29) |
 | ASET-11 | P1: Extração | Design | Implemented (T08) |
 | ASET-12 | P1: Extração | Design | Implemented (T08) |
 | ASET-13 | P1: Extração | Design | Implemented (T08) |
@@ -295,7 +296,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 verificados; 3 P3 postergados; T01–T28 concluídas e correções de UAT aprovadas independentemente.
+**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T29 concluídas, com verificação independente da T29 pendente.
 
 ---
 

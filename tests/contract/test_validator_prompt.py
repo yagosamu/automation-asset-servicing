@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import hashlib
+from pathlib import Path
 
 import pytest
 
@@ -22,6 +22,7 @@ from asset_servicing.ports.llm import (
 )
 
 pytestmark = pytest.mark.contract
+PROMPT_SNAPSHOT = Path(__file__).parents[1] / "fixtures" / "prompts" / "validator-v3.txt"
 
 
 class CapturingProvider:
@@ -44,7 +45,7 @@ def normalized_prompt() -> str:
 
 
 def test_validator_uses_an_explicit_prompt_version() -> None:
-    assert VALIDATOR_PROMPT_VERSION == "validator-v2"
+    assert VALIDATOR_PROMPT_VERSION == "validator-v3"
 
 
 def test_prompt_excludes_adjacent_sections_from_coverage_findings() -> None:
@@ -68,9 +69,18 @@ def test_prompt_excludes_adjacent_sections_from_coverage_findings() -> None:
 
 
 def test_validator_prompt_matches_its_versioned_snapshot() -> None:
-    digest = hashlib.sha256(VALIDATOR_INSTRUCTIONS.encode()).hexdigest()
+    expected = PROMPT_SNAPSHOT.read_text(encoding="utf-8").strip()
 
-    assert digest == "8cb03c72de3a76d4a4f661a81aab456499552bac3bebcea72bc4a975ccc8bd59"
+    assert expected == VALIDATOR_INSTRUCTIONS
+
+
+def test_validator_accepts_complete_grouping_without_false_omissions() -> None:
+    prompt = normalized_prompt()
+
+    assert "detalhe coberto" in prompt
+    assert "valor ou evidência" in prompt
+    assert "não exija uma variável separada" in prompt
+    assert "não reduza a confiança" in prompt
 
 
 @pytest.mark.parametrize(

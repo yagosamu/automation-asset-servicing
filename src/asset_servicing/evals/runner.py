@@ -130,6 +130,7 @@ class EvaluationPaths:
     recorded_extractions: Path
     chapter_6_fixture: Path
     adjacent_section_fixture: Path
+    granularity_fixture: Path
     adversarial_cases: Path
     baseline: Path
     contract_files: tuple[tuple[str, Path], ...]
@@ -145,6 +146,7 @@ class EvaluationPaths:
             adjacent_section_fixture=(
                 root / "evals" / "golden" / "v1" / "adjacent_section_fixture.yaml"
             ),
+            granularity_fixture=(root / "evals" / "golden" / "v1" / "granularity_fixture.yaml"),
             adversarial_cases=root / "evals" / "golden" / "v1" / "adversarial_cases.yaml",
             baseline=root / "evals" / "baselines" / "v1.json",
             contract_files=tuple(
@@ -369,6 +371,28 @@ def run_evaluation(
                 )
             )
 
+    granularity_fixture = _load_yaml(paths.granularity_fixture)
+    for case in granularity_fixture["cases"]:
+        variables = case["recorded_output"]["variables"]
+        required_fragments = [
+            _normalized(fragment) for fragment in case["required_value_fragments"]
+        ]
+        has_complete_group = any(
+            all(fragment in _normalized(variable["value"]) for fragment in required_fragments)
+            for variable in variables
+        )
+        if len(variables) > case["max_variables"] or not has_complete_group:
+            failures.append(
+                EvaluationFailure(
+                    gate="operational_granularity",
+                    variable_id=case["id"],
+                    detail=(
+                        "Recorded output fragments coordinated attributes or loses required "
+                        "attributes from the grouped value."
+                    ),
+                )
+            )
+
     adversarial_fixture = _load_yaml(paths.adversarial_cases)
     adversarial_cases = [case for case in adversarial_fixture["cases"] if case["expected_review"]]
     routed_cases = 0
@@ -447,6 +471,7 @@ def run_evaluation(
         and baseline.compatible
         and not any(failure.gate == "recording_prompt_version" for failure in failures)
         and not any(failure.gate == "adjacent_section_exclusion" for failure in failures)
+        and not any(failure.gate == "operational_granularity" for failure in failures)
     )
     report = EvaluationReport(
         generated_at=generated_at or datetime.now(UTC),

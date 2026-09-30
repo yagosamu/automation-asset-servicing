@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import hashlib
+from pathlib import Path
 
 import pytest
 
@@ -22,6 +22,7 @@ from asset_servicing.ports.llm import (
 )
 
 pytestmark = pytest.mark.contract
+PROMPT_SNAPSHOT = Path(__file__).parents[1] / "fixtures" / "prompts" / "extractor-v3.txt"
 
 
 class CapturingProvider:
@@ -44,7 +45,7 @@ def normalized_prompt() -> str:
 
 
 def test_extractor_uses_an_explicit_prompt_version() -> None:
-    assert EXTRACTOR_PROMPT_VERSION == "extractor-v2"
+    assert EXTRACTOR_PROMPT_VERSION == "extractor-v3"
 
 
 def test_prompt_limits_extraction_to_the_target_section() -> None:
@@ -61,9 +62,17 @@ def test_prompt_limits_extraction_to_the_target_section() -> None:
 
 
 def test_extractor_prompt_matches_its_versioned_snapshot() -> None:
-    digest = hashlib.sha256(EXTRACTOR_INSTRUCTIONS.encode()).hexdigest()
+    expected = PROMPT_SNAPSHOT.read_text(encoding="utf-8").strip()
 
-    assert digest == "237dcb6f30cddebbf4986080319665ab4e31655259a7438a1fb214195baf05aa"
+    assert expected == EXTRACTOR_INSTRUCTIONS
+
+
+def test_prompt_groups_coordinated_attributes_but_splits_independent_rules() -> None:
+    prompt = normalized_prompt()
+
+    assert "mantenha juntos atributos coordenados da mesma ação" in prompt
+    assert "gatilho, responsável, prazo, valor ou consequência próprios" in prompt
+    assert "equânime, simultânea, proporcional e sem taxa" in prompt
 
 
 def test_prompt_treats_pdf_as_untrusted_data() -> None:

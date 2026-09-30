@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: Phase 5 complete - independent validation passed
-- **Completed**: T01–T28; Build 355 passed, 92.50% coverage, discrimination sensor 3/3 killed
+- **Phase / Task**: Phase 5 complete - T29 independent verification pending
+- **Completed**: T01–T29; Build 359 passed, 92.54% coverage, prompts v3 and granularity eval green
 - **In-progress** (file:line): none
-- **Next step**: Manual UI UAT with the real PDF; Chapter 4 must not produce omission findings.
+- **Next step**: Run a fresh independent verification over T29.
 - **Blockers**: none
-- **Uncommitted files**: final validation report and traceability updates ready for commit
+- **Uncommitted files**: T29 implementation, tests and specification updates ready for commit
 - **Branch**: main

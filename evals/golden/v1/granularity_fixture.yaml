@@ -1,0 +1,16 @@
+schema_version: 1
+cases:
+  - id: reg-23183-compulsory-redemption-attributes
+    clause_reference: "3.2"
+    source_excerpt: O referido resgate ocorrerá de forma equânime, simultânea e proporcional entre todos os cotistas e não terá incidência de cobrança de taxa de saída.
+    max_variables: 1
+    required_value_fragments:
+      - equânime
+      - simultânea
+      - proporcional
+      - sem taxa de saída
+    recorded_output:
+      variables:
+        - name: condicoes_resgate_compulsorio
+          value: Execução equânime, simultânea e proporcional entre todos os cotistas, sem taxa de saída
+          evidence: O referido resgate ocorrerá de forma equânime, simultânea e proporcional entre todos os cotistas e não terá incidência de cobrança de taxa de saída.
