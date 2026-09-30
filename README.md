@@ -158,39 +158,36 @@ Por padrão, o relatório é gravado em `tmp/live-smoke/live-smoke-report.json`.
 PDF, diretório de trabalho e relatório com `OPENAI_SMOKE_PDF`, `OPENAI_SMOKE_WORK_DIR` e
 `OPENAI_SMOKE_REPORT`.
 
-## Roteiro de apresentação
+## Decisões arquiteturais
 
-Antes da reunião:
+### Por que não RAG
 
-1. Execute o gate offline e guarde o resultado no terminal.
-2. Confirme as quatro variáveis obrigatórias sem exibir o valor de `OPENAI_API_KEY`.
-3. Inicie o Streamlit e mantenha `Regulamentos/` com os quatro documentos originais.
-4. Tenha um segundo terminal pronto para o eval e para o smoke opt-in.
+O fluxo processa um documento por execução e busca uma seção semanticamente bem definida. Depois
+da confirmação das páginas, extração e validação trabalham diretamente sobre a mesma fonte. Uma
+camada de RAG acrescentaria chunking, embeddings, indexação e recuperação sem resolver uma lacuna
+real do caso, além de criar novos pontos de falha e complexidade operacional. RAG passa a fazer
+sentido se o escopo evoluir para perguntas sobre uma coleção grande e persistente de regulamentos.
 
-### Parte 1: regulamento conhecido
+### Por que não uma pipeline de OCR
 
-1. Selecione um regulamento da pasta e informe Capítulo 3 apenas como dica.
-2. Clique em **Localizar capítulo**. Explique que o número do capítulo não é uma
-   regra fixa; a localização usa o significado da seção.
-3. Valide as prévias e clique em **Confirmar intervalo**.
-4. Clique em **Extrair informações**. Destaque que extração e validação são chamadas separadas.
-5. Mostre uma variável de baixa confiança, seu trecho, página, veredito e justificativa.
-6. Gere o **Excel preliminar** antes da revisão e mostre o bloqueio do **Excel final**.
-7. Confirme ou edite a pendência. Gere o **Excel final** e abra as abas `Variáveis` e `Auditoria`.
+Os agentes recebem o PDF multimodal, preservando texto, tabelas e representação visual no mesmo
+contexto. Para os documentos fornecidos, uma etapa dedicada de OCR duplicaria processamento e
+introduziria erros de segmentação e reconstrução de tabelas. A escolha não ignora documentos
+digitalizados: se o corpus real demonstrar baixa qualidade visual ou ausência recorrente de camada
+textual, OCR pode ser incluído como fallback condicionado e medido por evals.
 
-### Parte 2: documento surpresa no Capítulo 6
+### Por que agentes separados e revisão humana
 
-1. Faça upload do documento ou selecione-o na pasta e use `6` apenas como dica de capítulo.
-2. Repita a localização sem alterar código, prompt ou página fixa.
-3. Se a seção for localizada, confira as novas páginas e siga o mesmo fluxo.
-4. Se a localização for inconclusiva, use o intervalo manual descrito abaixo. Isso demonstra uma
-   recuperação controlada, não uma regra específica para o documento conhecido.
+Localização, extração e validação têm responsabilidades e prompts distintos. O validador não recebe
+o raciocínio nem o score do extrator, reduzindo confirmação automática do primeiro resultado. Casos
+incertos são encaminhados para revisão humana com valor, evidência, página, veredito e justificativa.
+Essa separação atende ao controle exigido sem esconder incerteza atrás de automação adicional.
 
-### Fallback manual de páginas
+### Por que execução local e persistência em arquivos
 
-Quando a interface informar que a seção não foi localizada, preencha **Página inicial** e
-**Página final**, clique em **Atualizar prévia**, confira o conteúdo e use **Confirmar intervalo**.
-A extração continua pelo mesmo pipeline e mantém a origem manual na auditoria.
+O case não exige cloud nem banco de dados. Execução local e arquivos JSON por `run_id` reduzem a
+superfície operacional, mantêm auditoria e permitem retomar falhas sem infraestrutura desnecessária.
+As gravações são atômicas e cada etapa concluída é persistida antes da próxima chamada externa.
 
 ## Recuperação de falhas
 

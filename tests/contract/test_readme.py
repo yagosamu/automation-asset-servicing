@@ -1,4 +1,4 @@
-"""Executable documentation contract for setup and presentation."""
+"""Executable documentation contract for setup and public technical context."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ def test_readme_has_the_required_operational_sections() -> None:
         "## Configuração",
         "## Execução",
         "## Qualidade e testes",
-        "## Roteiro de apresentação",
+        "## Decisões arquiteturais",
         "## Recuperação de falhas",
         "## Premissas e limitações",
     } <= headings
@@ -53,17 +53,15 @@ def test_readme_lists_the_canonical_runtime_and_quality_commands() -> None:
     assert "uv run mypy src" in readme
 
 
-def test_presentation_runbook_covers_primary_surprise_and_manual_paths() -> None:
+def test_public_readme_explains_the_main_architecture_tradeoffs() -> None:
     readme = _readme()
 
-    assert "Localizar capítulo" in readme
-    assert "Confirmar intervalo" in readme
-    assert "Extrair informações" in readme
-    assert "Excel preliminar" in readme
-    assert "Excel final" in readme
-    assert "Capítulo 6" in readme
-    assert "intervalo manual" in readme
-    assert "baixa confiança" in readme
+    assert "## Roteiro de apresentação" not in readme
+    assert "Por que não RAG" in readme
+    assert "Por que não uma pipeline de OCR" in readme
+    assert "um documento por execução" in readme
+    assert "PDF multimodal" in readme
+    assert "complexidade" in readme
 
 
 def test_recovery_instructions_match_the_persisted_ui_workflow() -> None:
