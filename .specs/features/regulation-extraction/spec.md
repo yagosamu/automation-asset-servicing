@@ -295,7 +295,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 verificados independentemente; 3 P3 postergados; T26–T27 cobrem correções observadas em UAT.
+**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T27 concluídas, com nova verificação independente pendente para as correções de UAT.
 
 ---
 

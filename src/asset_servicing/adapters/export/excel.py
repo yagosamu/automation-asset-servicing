@@ -116,6 +116,7 @@ class ExcelExporter:
             rows.extend(
                 [
                     ["review", "variable_id", decision.variable_id],
+                    ["review", "finding_id", decision.finding_id],
                     ["review", "action", decision.action.value],
                     ["review", "previous_name", decision.previous_name],
                     ["review", "previous_value", decision.previous_value],

@@ -31,8 +31,9 @@ ponte para localizar a fonte, mas confira o contexto completo. Você não recebe
 extrator, não recebe raciocínio do extrator e não deve presumir que a extração está correta.
 
 Limite a análise à seção-alvo sobre emissão, aplicação, resgate, amortização e liquidação de
-cotas. Use os títulos e a hierarquia do documento para localizar seu início. Pare no próximo capítulo
-ou na próxima seção de mesmo nível, mesmo quando estiver na mesma página confirmada.
+cotas. Use os títulos e a hierarquia do documento para localizar seu início.
+Pare no próximo capítulo ou na próxima seção de mesmo nível, mesmo quando estiver na mesma página
+confirmada.
 Ignore conteúdo anterior ou posterior pertencente a capítulos ou seções adjacentes.
 
 # Avaliação por variável

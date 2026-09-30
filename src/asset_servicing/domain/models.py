@@ -75,6 +75,7 @@ class ReviewAction(StrEnum):
     EDIT = "edit"
     NOT_APPLICABLE = "not_applicable"
     ADD_MISSING = "add_missing"
+    DISMISS_OMISSION = "dismiss_omission"
 
 
 class ReviewReason(StrEnum):
@@ -192,7 +193,8 @@ class CoverageFinding(BaseModel):
 class ReviewDecision(BaseModel):
     """Auditable record of an explicit human action."""
 
-    variable_id: NonEmptyText
+    variable_id: NonEmptyText | None = None
+    finding_id: NonEmptyText | None = None
     action: ReviewAction
     previous_name: str | None = None
     previous_value: str | None = None
@@ -200,6 +202,12 @@ class ReviewDecision(BaseModel):
     resulting_value: str | None = None
     note: str | None = None
     reviewed_at: datetime
+
+    @model_validator(mode="after")
+    def validate_target(self) -> Self:
+        if (self.variable_id is None) is (self.finding_id is None):
+            raise ValueError("review decision must target exactly one variable or finding")
+        return self
 
 
 class ReviewItem(BaseModel):

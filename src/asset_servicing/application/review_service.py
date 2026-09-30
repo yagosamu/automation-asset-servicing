@@ -8,6 +8,7 @@ from typing import Protocol
 from uuid import uuid4
 
 from asset_servicing.domain import (
+    CoverageFinding,
     ExtractedVariable,
     FindingReviewStatus,
     ReviewAction,
@@ -161,6 +162,40 @@ class ReviewService:
         self._invalidate_exports(run)
         self._repository.save_run(run)
         return variable
+
+    def dismiss_omission(
+        self,
+        run_id: str,
+        finding_id: str,
+        *,
+        note: str,
+    ) -> CoverageFinding:
+        """Resolve a false or out-of-scope omission without creating a variable."""
+
+        note = self._required_text(note, field="note")
+        run = self._repository.load_run(run_id)
+        self._ensure_reviewing(run)
+        finding = next(
+            (item for item in run.coverage_findings if item.id == finding_id),
+            None,
+        )
+        if finding is None:
+            raise ValueError(f"coverage finding not found: {finding_id}")
+        if finding.review_status is not FindingReviewStatus.PENDING:
+            raise ValueError(f"coverage finding already reviewed: {finding_id}")
+
+        finding.review_status = FindingReviewStatus.DISMISSED
+        run.reviews.append(
+            ReviewDecision(
+                finding_id=finding.id,
+                action=ReviewAction.DISMISS_OMISSION,
+                note=note,
+                reviewed_at=self._clock(),
+            )
+        )
+        self._invalidate_exports(run)
+        self._repository.save_run(run)
+        return finding
 
     def _review_variable(
         self,

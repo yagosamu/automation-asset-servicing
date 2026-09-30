@@ -12,6 +12,7 @@ from asset_servicing.application import ReviewService
 from asset_servicing.domain import (
     CoverageFinding,
     ExtractedVariable,
+    FindingReviewStatus,
     ReviewAction,
     ReviewStatus,
     Run,
@@ -287,6 +288,26 @@ def test_add_missing_creates_reviewed_variable_and_resolves_omission() -> None:
     assert persisted.coverage_findings[0].review_status.value == "accepted"
     assert list(app.dataframe[0].value["Variável"])[-1] == "carencia_resgate"
     assert [metric.value for metric in app.metric[:3]] == ["3", "1", "1"]
+
+
+def test_dismiss_omission_records_note_and_removes_it_from_the_queue() -> None:
+    app, repository = make_app()
+
+    app.get_by_key("dismiss_note_finding-pending").set_value(
+        "O trecho pertence ao capítulo seguinte."
+    )
+    app.get_by_key("dismiss_finding-pending").click().run()
+
+    persisted = repository.load_run("run-review-001")
+    finding = persisted.coverage_findings[0]
+    decision = persisted.reviews[0]
+    assert finding.review_status is FindingReviewStatus.DISMISSED
+    assert decision.action is ReviewAction.DISMISS_OMISSION
+    assert decision.finding_id == "finding-pending"
+    assert decision.note == "O trecho pertence ao capítulo seguinte."
+    assert [metric.value for metric in app.metric[:3]] == ["2", "1", "0"]
+    with pytest.raises(KeyError):
+        app.get_by_key("finding_description_finding-pending")
 
 
 def test_completed_review_shows_empty_queue_state() -> None:

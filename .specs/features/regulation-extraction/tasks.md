@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 em correção após UAT — T26 concluída, T27 pendente
+**Status:** P1 corrigido após UAT — verificação independente pendente
 
 ---
 
@@ -770,12 +770,12 @@ T26 -> T27
 
 **Done when:**
 
-- [ ] O serviço público exige justificativa não vazia para descartar a possível omissão.
-- [ ] A decisão persiste como revisada e restaura corretamente ao reabrir a execução.
-- [ ] A interface oferece a ação de descarte sem criar variável extraída.
-- [ ] A pendência descartada sai da fila e deixa de bloquear o Excel final.
-- [ ] A auditoria registra ação, justificativa, instante e estado resultante.
-- [ ] Gate Build passa.
+- [x] O serviço público exige justificativa não vazia para descartar a possível omissão.
+- [x] A decisão persiste como revisada e restaura corretamente ao reabrir a execução.
+- [x] A interface oferece a ação de descarte sem criar variável extraída.
+- [x] A pendência descartada sai da fila e deixa de bloquear o Excel final.
+- [x] A auditoria registra ação, justificativa, instante e estado resultante.
+- [x] Gate Build passa.
 
 **Tests:** unit + integration + ui
 **Gate:** build
@@ -829,7 +829,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T24 | Nomes semânticos duplicados | ✅ Concluída |
 | T25 | Falha de persistência pré-provider | ✅ Concluída |
 | T26 | Limite semântico da seção nos agentes | ✅ Concluída |
-| T27 | Descarte auditável de possíveis omissões | ⏳ Pendente |
+| T27 | Descarte auditável de possíveis omissões | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 

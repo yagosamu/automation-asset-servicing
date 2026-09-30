@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "baseline_id": "btg-regulations-offline-v1",
-  "contract_fingerprint": "ef04c3d735c902241e36de0a9a48a2c83e57ce7fbe65da7689199b348a55a529",
+  "contract_fingerprint": "fc1dfb526d657be2bf4f26336451cde932a3de2ab8ea1cbc72cf4d1820ed167b",
   "corpus_manifest_sha256": "0a590b7b434522be84f3881eb5263b6f2ea1795df1de6f300b852b0400c88122",
   "metrics": {
     "critical_field_coverage": 1.0,

@@ -13,6 +13,7 @@ from asset_servicing.application.review_service import RunRepository
 from asset_servicing.domain import (
     CoverageFinding,
     ExtractedVariable,
+    FindingReviewStatus,
     ReviewAction,
     ReviewStatus,
     Run,
@@ -139,3 +140,25 @@ def test_failed_save_does_not_expose_an_unpersisted_review(tmp_path: Path) -> No
     assert persisted.variables[0].reviewed is False
     assert persisted.variables[0].review_status is ReviewStatus.PENDING
     assert persisted.reviews == []
+
+
+def test_dismissed_omission_is_restored_without_reentering_the_queue(tmp_path: Path) -> None:
+    run = make_reviewing_run()
+    run.variables = []
+    run.validations = []
+    repository = JsonRunRepository(tmp_path / "runs")
+    repository.save_run(run)
+
+    make_service(repository).dismiss_omission(
+        "run-001",
+        "finding-001",
+        note="Fora da seção-alvo.",
+    )
+
+    reopened = make_service(JsonRunRepository(tmp_path / "runs")).get_run("run-001")
+    decision = reopened.reviews[0]
+    assert reopened.coverage_findings[0].review_status is FindingReviewStatus.DISMISSED
+    assert decision.action is ReviewAction.DISMISS_OMISSION
+    assert decision.finding_id == "finding-001"
+    assert decision.note == "Fora da seção-alvo."
+    assert reopened.pending_items() == []

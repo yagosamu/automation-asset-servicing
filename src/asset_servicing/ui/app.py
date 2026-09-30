@@ -9,7 +9,13 @@ from typing import Protocol
 import streamlit as st
 
 from asset_servicing.application.delivery_service import ExportArtifact, RunSummary
-from asset_servicing.domain import ExtractedVariable, ReviewItemKind, Run, SectionLocation
+from asset_servicing.domain import (
+    CoverageFinding,
+    ExtractedVariable,
+    ReviewItemKind,
+    Run,
+    SectionLocation,
+)
 
 _VERDICT_LABELS = {
     "supported": "suportado",
@@ -96,6 +102,14 @@ class ReviewWorkflow(Protocol):
         evidence: str,
         note: str | None = None,
     ) -> ExtractedVariable: ...
+
+    def dismiss_omission(
+        self,
+        run_id: str,
+        finding_id: str,
+        *,
+        note: str,
+    ) -> CoverageFinding: ...
 
 
 class DeliveryWorkflow(Protocol):
@@ -481,6 +495,26 @@ def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> Non
                     st.error(str(error))
                 else:
                     st.session_state["_review_flash"] = "Variável ausente adicionada."
+                    st.rerun()
+            st.markdown("##### Descartar apontamento")
+            dismiss_note = st.text_input(
+                "Justificativa obrigatória para o descarte",
+                key=f"dismiss_note_{finding.id}",
+            )
+            if st.button(
+                "Descartar possível omissão",
+                key=f"dismiss_{finding.id}",
+            ):
+                try:
+                    review_service.dismiss_omission(
+                        run_id,
+                        finding.id,
+                        note=dismiss_note,
+                    )
+                except (OSError, RuntimeError, ValueError) as error:
+                    st.error(str(error))
+                else:
+                    st.session_state["_review_flash"] = "Possível omissão descartada."
                     st.rerun()
 
 

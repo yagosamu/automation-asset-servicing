@@ -206,6 +206,46 @@ def test_add_missing_accepts_finding_and_creates_reviewed_human_variable() -> No
     assert persisted.pending_items() == []
 
 
+def test_dismiss_omission_preserves_finding_and_records_auditable_decision() -> None:
+    run = make_run()
+    run.variables = []
+    run.validations = []
+    repository = MemoryRunRepository(run)
+    service = make_service(repository)
+
+    finding = service.dismiss_omission(
+        "run-001",
+        "finding-001",
+        note="O apontamento pertence ao capítulo seguinte.",
+    )
+
+    persisted = repository.load_run("run-001")
+    decision = persisted.reviews[0]
+    assert finding.review_status is FindingReviewStatus.DISMISSED
+    assert persisted.coverage_findings[0].review_status is FindingReviewStatus.DISMISSED
+    assert decision.variable_id is None
+    assert decision.finding_id == "finding-001"
+    assert decision.action is ReviewAction.DISMISS_OMISSION
+    assert decision.note == "O apontamento pertence ao capítulo seguinte."
+    assert decision.reviewed_at == REVIEWED_AT
+    assert persisted.pending_items() == []
+    assert persisted.can_export_final() is True
+    assert persisted.preliminary_export_path is None
+    assert persisted.final_export_path is None
+
+
+def test_dismiss_omission_requires_a_non_blank_note() -> None:
+    repository = MemoryRunRepository(make_run())
+    service = make_service(repository)
+
+    with pytest.raises(ValueError, match="note"):
+        service.dismiss_omission("run-001", "finding-001", note="   ")
+
+    persisted = repository.load_run("run-001")
+    assert persisted.coverage_findings[0].review_status is FindingReviewStatus.PENDING
+    assert persisted.reviews == []
+
+
 def test_review_action_rejects_run_outside_reviewing_state() -> None:
     run = make_run()
     run.state = RunState.EXTRACTED

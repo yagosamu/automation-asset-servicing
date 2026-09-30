@@ -11,7 +11,9 @@ from openpyxl import load_workbook
 from asset_servicing.adapters.export import ExcelExporter, ExcelExportError
 from asset_servicing.adapters.persistence import JsonRunRepository, RunEvent
 from asset_servicing.domain import (
+    CoverageFinding,
     ExtractedVariable,
+    FindingReviewStatus,
     ReviewAction,
     ReviewDecision,
     ReviewStatus,
@@ -146,6 +148,38 @@ def test_final_export_is_released_after_human_review(tmp_path: Path) -> None:
 
     assert path.is_file()
     assert repository.load_run("run-001").final_export_path == str(path)
+
+
+def test_final_export_audits_a_dismissed_omission(tmp_path: Path) -> None:
+    run = make_run()
+    run.coverage_findings = [
+        CoverageFinding(
+            id="finding-001",
+            description="Possível regra do capítulo seguinte.",
+            evidence_text="CAPÍTULO 4 - PRESTADORES DE SERVIÇOS",
+            source_pages=[9],
+            review_status=FindingReviewStatus.DISMISSED,
+        )
+    ]
+    run.reviews = [
+        ReviewDecision(
+            finding_id="finding-001",
+            action=ReviewAction.DISMISS_OMISSION,
+            note="Fora da seção-alvo.",
+            reviewed_at=REVIEWED_AT,
+        )
+    ]
+    repository, exporter = persist_run(tmp_path, run)
+
+    path = exporter.export_final(repository.load_run("run-001"))
+    workbook = load_workbook(path)
+    try:
+        audit_values = list(workbook["Auditoria"].values)
+        assert any("finding-001" in str(value) for row in audit_values for value in row)
+        assert any("dismiss_omission" in str(value) for row in audit_values for value in row)
+        assert any("Fora da seção-alvo." in str(value) for row in audit_values for value in row)
+    finally:
+        workbook.close()
 
 
 def test_main_sheet_has_exact_case_columns_in_order(tmp_path: Path) -> None:
