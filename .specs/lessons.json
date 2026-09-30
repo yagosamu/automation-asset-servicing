@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 2,
+  "next_id": 3,
   "lessons": [
     {
       "id": "L-001",
@@ -22,6 +22,24 @@
       ],
       "created": "2026-09-29T18:26:59Z",
       "last_seen": "2026-09-29T18:26:59Z"
+    },
+    {
+      "id": "L-002",
+      "key": "surviving_mutant::test prompt constraints with complete semantic clauses or behavioral fixtures not isolated keywords",
+      "text": "Test prompt constraints with complete semantic clauses or behavioral fixtures, not isolated keywords.",
+      "signal": "surviving_mutant",
+      "scope": "prompts-evals",
+      "status": "candidate",
+      "features": [
+        "regulation-extraction"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        "validation.md M1/M3 (prompts-evals)"
+      ],
+      "created": "2026-09-30T11:22:41Z",
+      "last_seen": "2026-09-30T11:22:41Z"
     }
   ]
 }

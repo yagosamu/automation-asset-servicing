@@ -20,6 +20,12 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: ASET-01 (pipeline-tests)
 - last seen: 2026-09-29T18:26:59Z
 
+### L-002 - Test prompt constraints with complete semantic clauses or behavioral fixtures, not isolated keywords.
+- signal: `surviving_mutant` · recurrence: 1 feature(s) · scope: `prompts-evals` · harmful: 0
+- features: regulation-extraction
+- evidence: validation.md M1/M3 (prompts-evals)
+- last seen: 2026-09-30T11:22:41Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.
