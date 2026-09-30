@@ -96,6 +96,39 @@ def test_unresolvable_evidence_fails_evidence_gate(tmp_path: Path) -> None:
     assert any(failure.gate == "evidence_integrity" for failure in report.failures)
 
 
+def test_adjacent_section_variable_fails_boundary_gate(tmp_path: Path) -> None:
+    def add_adjacent_variable(recording: dict[str, Any]) -> None:
+        recording["documents"][0]["variables"].append(
+            {
+                "name": "Prazo de convocação da assembleia",
+                "value": "10 dias de antecedência",
+                "evidence": ("A convocação ocorrerá, no mínimo, com 10 (dez) dias de antecedência"),
+                "pages": [7],
+            }
+        )
+
+    report = run_evaluation(mutated_recording(tmp_path, add_adjacent_variable))
+
+    assert report.passed is False
+    assert any(failure.gate == "adjacent_section_exclusion" for failure in report.failures)
+
+
+def test_adjacent_section_omission_fails_boundary_gate(tmp_path: Path) -> None:
+    def add_adjacent_omission(recording: dict[str, Any]) -> None:
+        recording["documents"][0]["omissions"].append(
+            {
+                "description": "Possível regra de quórum omitida.",
+                "evidence": "O quórum para aprovação é de maioria simples dos votos dos presentes",
+                "pages": [7],
+            }
+        )
+
+    report = run_evaluation(mutated_recording(tmp_path, add_adjacent_omission))
+
+    assert report.passed is False
+    assert any(failure.gate == "adjacent_section_exclusion" for failure in report.failures)
+
+
 def test_chapter_6_fixture_matches_the_recorded_location() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 

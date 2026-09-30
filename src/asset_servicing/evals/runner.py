@@ -129,6 +129,7 @@ class EvaluationPaths:
     golden_root: Path
     recorded_extractions: Path
     chapter_6_fixture: Path
+    adjacent_section_fixture: Path
     adversarial_cases: Path
     baseline: Path
     contract_files: tuple[tuple[str, Path], ...]
@@ -141,6 +142,9 @@ class EvaluationPaths:
             golden_root=root / "evals" / "golden" / "v1",
             recorded_extractions=root / "evals" / "recorded" / "v1" / "extractions.yaml",
             chapter_6_fixture=root / "evals" / "golden" / "v1" / "chapter_6_fixture.yaml",
+            adjacent_section_fixture=(
+                root / "evals" / "golden" / "v1" / "adjacent_section_fixture.yaml"
+            ),
             adversarial_cases=root / "evals" / "golden" / "v1" / "adversarial_cases.yaml",
             baseline=root / "evals" / "baselines" / "v1.json",
             contract_files=tuple(
@@ -333,6 +337,38 @@ def run_evaluation(
             )
         )
 
+    boundary_fixture = _load_yaml(paths.adjacent_section_fixture)
+    boundary_document = next(
+        (
+            document
+            for document in recorded["documents"]
+            if document["document_id"] == boundary_fixture["document_id"]
+        ),
+        None,
+    )
+    forbidden_fragments = [
+        _normalized(fragment)
+        for fragment in boundary_fixture["adjacent_section"]["forbidden_fragments"]
+    ]
+    boundary_outputs = []
+    if boundary_document is not None:
+        boundary_outputs.extend(boundary_document.get("variables", []))
+        boundary_outputs.extend(boundary_document.get("omissions", []))
+    for output in boundary_outputs:
+        output_text = _normalized(
+            " ".join(
+                str(output.get(field, "")) for field in ("name", "value", "description", "evidence")
+            )
+        )
+        if any(fragment in output_text for fragment in forbidden_fragments):
+            failures.append(
+                EvaluationFailure(
+                    gate="adjacent_section_exclusion",
+                    document_id=boundary_fixture["document_id"],
+                    detail="Recorded output contains content from the adjacent section.",
+                )
+            )
+
     adversarial_fixture = _load_yaml(paths.adversarial_cases)
     adversarial_cases = [case for case in adversarial_fixture["cases"] if case["expected_review"]]
     routed_cases = 0
@@ -410,6 +446,7 @@ def run_evaluation(
         and chapter_passed
         and baseline.compatible
         and not any(failure.gate == "recording_prompt_version" for failure in failures)
+        and not any(failure.gate == "adjacent_section_exclusion" for failure in failures)
     )
     report = EvaluationReport(
         generated_at=generated_at or datetime.now(UTC),

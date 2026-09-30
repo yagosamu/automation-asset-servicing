@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+
 import pytest
 
 from asset_servicing.application.validator import (
@@ -46,14 +48,29 @@ def test_validator_uses_an_explicit_prompt_version() -> None:
 
 
 def test_prompt_excludes_adjacent_sections_from_coverage_findings() -> None:
-    prompt = normalized_prompt()
+    boundary_policy = (
+        "Limite a análise à seção-alvo sobre emissão, aplicação, resgate, amortização e liquidação "
+        "de\n"
+        "cotas. Use os títulos e a hierarquia do documento para localizar seu início.\n"
+        "Pare no próximo capítulo ou na próxima seção de mesmo nível, mesmo quando estiver na "
+        "mesma página\n"
+        "confirmada.\n"
+        "Ignore conteúdo anterior ou posterior pertencente a capítulos ou seções adjacentes."
+    )
+    omission_policy = (
+        "Não crie omissão quando uma variável existente já representar o fato. Não registre como "
+        "omissão\n"
+        "nenhum conteúdo de capítulo ou seção adjacente."
+    )
 
-    assert "seção-alvo" in prompt
-    assert "próximo capítulo" in prompt
-    assert "mesmo nível" in prompt
-    assert "mesma página" in prompt
-    assert "não registre" in prompt
-    assert "omissão" in prompt
+    assert boundary_policy in VALIDATOR_INSTRUCTIONS
+    assert omission_policy in VALIDATOR_INSTRUCTIONS
+
+
+def test_validator_prompt_matches_its_versioned_snapshot() -> None:
+    digest = hashlib.sha256(VALIDATOR_INSTRUCTIONS.encode()).hexdigest()
+
+    assert digest == "8cb03c72de3a76d4a4f661a81aab456499552bac3bebcea72bc4a975ccc8bd59"
 
 
 @pytest.mark.parametrize(

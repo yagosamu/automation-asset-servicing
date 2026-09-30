@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+
 import pytest
 
 from asset_servicing.application.extractor import (
@@ -46,13 +48,22 @@ def test_extractor_uses_an_explicit_prompt_version() -> None:
 
 
 def test_prompt_limits_extraction_to_the_target_section() -> None:
-    prompt = normalized_prompt()
+    boundary_policy = (
+        "Use os títulos e a hierarquia do documento para delimitar a seção-alvo. "
+        "Ignore conteúdo anterior\n"
+        "ao início dela. Pare no próximo capítulo ou na próxima seção de mesmo nível, mesmo quando "
+        "esse\n"
+        "conteúdo estiver na mesma página confirmada. Não extraia fatos de capítulos ou seções "
+        "adjacentes."
+    )
 
-    assert "seção-alvo" in prompt
-    assert "próximo capítulo" in prompt
-    assert "mesmo nível" in prompt
-    assert "mesma página" in prompt
-    assert "ignore" in prompt
+    assert boundary_policy in EXTRACTOR_INSTRUCTIONS
+
+
+def test_extractor_prompt_matches_its_versioned_snapshot() -> None:
+    digest = hashlib.sha256(EXTRACTOR_INSTRUCTIONS.encode()).hexdigest()
+
+    assert digest == "237dcb6f30cddebbf4986080319665ab4e31655259a7438a1fb214195baf05aa"
 
 
 def test_prompt_treats_pdf_as_untrusted_data() -> None:

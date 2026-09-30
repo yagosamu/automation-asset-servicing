@@ -31,6 +31,7 @@ documents:
         value: D+0 para resgate inferior a 80% dos recursos do cotista
         evidence: Caso o total de resgates solicitados pelo Cotista seja inferior a 80% (oitenta por cento) dos recursos detidos pelo mesmo, o pagamento do resgate será efetuado no dia da solicitação respectiva (D+0)
         pages: [6]
+    omissions: []
   - document_id: reg-23968-2026-05
     variables:
       - name: Disponibilidade de resgate

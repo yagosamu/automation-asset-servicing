@@ -1,0 +1,12 @@
+schema_version: 1
+document_id: reg-23183-2026-05
+target_section:
+  chapter: 3
+  page_end: 7
+adjacent_section:
+  chapter: 4
+  page_start: 7
+  title: ASSEMBLEIA ESPECIAL DE COTISTAS E DEMAIS PROCEDIMENTOS APLICÁVEIS ÀS MANIFESTAÇÕES DAS VONTADES DOS COTISTAS
+  forbidden_fragments:
+    - A convocação ocorrerá, no mínimo, com 10 (dez) dias de antecedência
+    - O quórum para aprovação é de maioria simples dos votos dos presentes

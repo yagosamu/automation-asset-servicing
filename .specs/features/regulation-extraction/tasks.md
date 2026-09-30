@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 corrigido após UAT — verificação independente pendente
+**Status:** P1 corrigido após verificação — nova verificação independente pendente
 
 ---
 
@@ -86,7 +86,7 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ### Phase 5: UAT Corrections
 
 ```text
-T26 -> T27
+T26 -> T27 -> T28
 ```
 
 ---
@@ -781,6 +781,32 @@ T26 -> T27
 **Gate:** build
 **Commit:** `feat(review): dismiss omission findings`
 
+#### T28: Make section-boundary tests discriminating
+
+**What:** Fechar os gaps do sensor com contratos exatos dos prompts e uma avaliação negativa que rejeite variáveis ou omissões originadas do capítulo adjacente.
+**Where:** testes contratuais dos prompts, fixture de fronteira, runner de eval e baseline offline
+**Depends on:** T27
+**Reuses:** Prompts v2, gravações offline e relatório de avaliação existentes.
+**Requirement:** ASET-08, ASET-19 e edge case de capítulo adjacente
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] Cada prompt possui snapshot exato e cláusula semântica completa para a fronteira da seção.
+- [x] Uma fixture identifica conteúdo real do Capítulo 4 que começa na última página confirmada.
+- [x] A avaliação falha quando uma variável gravada contém evidência do capítulo adjacente.
+- [x] A avaliação falha quando uma possível omissão gravada contém evidência do capítulo adjacente.
+- [x] O relatório offline passa com a gravação limpa e métricas preservadas.
+- [x] Gate Build passa.
+
+**Tests:** contract + eval
+**Gate:** build
+**Commit:** `test(agents): enforce section boundary`
+
 ---
 
 ## Phase Execution Map
@@ -792,10 +818,10 @@ Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
 Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
-Phase 5: T26 -> T27
+Phase 5: T26 -> T27 -> T28
 ```
 
-As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (2 correções de UAT). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (3 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -830,6 +856,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T25 | Falha de persistência pré-provider | ✅ Concluída |
 | T26 | Limite semântico da seção nos agentes | ✅ Concluída |
 | T27 | Descarte auditável de possíveis omissões | ✅ Concluída |
+| T28 | Testes discriminantes da fronteira da seção | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 
@@ -862,6 +889,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T25 | T24 | T24 -> T25 | ✅ Match |
 | T26 | T25 | Phase 4 -> Phase 5 | ✅ Match |
 | T27 | T26 | T26 -> T27 | ✅ Match |
+| T28 | T27 | T27 -> T28 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -894,6 +922,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T25 | Pipeline | integration | integration | ✅ OK |
 | T26 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 | T27 | Domínio/aplicação/interface | unit + integration + ui | unit + integration + ui | ✅ OK |
+| T28 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 
 ---
 
