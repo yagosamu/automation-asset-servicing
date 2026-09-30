@@ -181,6 +181,18 @@ def test_active_run_results_render_without_a_recovery_selection(tmp_path: Path) 
     overview = app.dataframe[0].value
     assert list(overview["Valor"]) == ["D+5"]
     assert list(overview["Confiança"]) == [0.72]
+    assert list(overview["Nível"]) == ["🟡 Média"]
+
+
+def test_variable_without_validation_is_visibly_unrated(tmp_path: Path) -> None:
+    app, repository = make_app(tmp_path)
+    run = repository.load_run("run-002")
+    run.validations = []
+    repository.save_run(run)
+
+    app.run()
+
+    assert list(app.dataframe[0].value["Nível"]) == ["⚪ Não avaliada"]
 
 
 def test_refresh_preserves_the_active_run_and_progress(tmp_path: Path) -> None:
@@ -288,6 +300,10 @@ def test_summary_shows_durations_counts_and_score_distribution(tmp_path: Path) -
     assert metrics["Variáveis extraídas"] == "3"
     assert metrics["Aprovadas"] == "1"
     assert metrics["Revisadas"] == "1"
+    operational_details = next(
+        expander for expander in app.expander if expander.label == "Detalhes operacionais"
+    )
+    assert operational_details.proto.expanded is False
     assert app.table[0].value.to_dict("records") == [
         {"Etapa": "location", "Duração": "1,00 s"},
         {"Etapa": "extraction", "Duração": "2,00 s"},

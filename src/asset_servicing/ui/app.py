@@ -25,6 +25,7 @@ _VERDICT_LABELS = {
 
 _ACTIVE_RUN_VIEW_KEYS = (
     "_asset_servicing_review_run_id",
+    "_extraction_flash",
     "_review_flash",
     "location_run_id",
     "location_page_count",
@@ -36,6 +37,8 @@ _ACTIVE_RUN_VIEW_KEYS = (
     "confirmed_page_start",
     "confirmed_page_end",
 )
+
+_STAGE_LABELS = ("Documento", "Localização", "Extração", "Revisão e Excel")
 
 
 class Preview(Protocol):
@@ -159,7 +162,6 @@ def render_document_location(
 ) -> None:
     """Render the intake and semantic-location stage."""
 
-    st.title("Extração de Regulamentos")
     source_kind = st.radio(
         "Origem do documento",
         ["Pasta do projeto", "Upload"],
@@ -218,10 +220,14 @@ def _start_location(
     if source_path is None:
         return
     _clear_active_run_view()
+    progress = st.status("Localizando capítulo...", expanded=True)
     try:
+        progress.write("Preparando o documento para análise...")
         run = pipeline.create_run(source_path)
+        progress.write("Analisando a estrutura e o conteúdo do regulamento...")
         location = pipeline.locate_section(run.run_id, chapter_hint=chapter_hint)
     except (OSError, RuntimeError, ValueError) as error:
+        progress.update(label="Não foi possível localizar o capítulo", state="error")
         st.error(str(error))
         return
     st.session_state["location_run_id"] = run.run_id
@@ -229,6 +235,7 @@ def _start_location(
     st.session_state["location_confirmed"] = False
     st.session_state["location_previews"] = []
     if location is None:
+        progress.update(label="Localização requer ajuste manual", state="error")
         st.session_state["location_result"] = None
         st.session_state["location_page_start"] = 1
         st.session_state["location_page_end"] = run.page_count
@@ -246,6 +253,7 @@ def _start_location(
         st.error(f"Não foi possível gerar a prévia: {error}")
     else:
         st.session_state["location_previews"] = [str(preview.path) for preview in previews]
+    progress.update(label="Capítulo localizado", state="complete", expanded=False)
 
 
 def _render_active_location(pipeline: DocumentLocationPipeline) -> None:
@@ -311,19 +319,21 @@ def _render_active_location(pipeline: DocumentLocationPipeline) -> None:
 
 
 def _extract_and_validate(pipeline: DocumentLocationPipeline, run_id: str) -> None:
+    progress = st.status("Processando informações...", expanded=True)
     try:
-        with st.spinner(
-            "Extraindo e validando informações. Isso pode levar alguns segundos...",
-            show_time=True,
-        ):
-            pipeline.extract(run_id)
-            pipeline.validate(run_id)
+        progress.write("Extraindo informações com o agente extrator...")
+        pipeline.extract(run_id)
+        progress.write("Validando evidências com o agente independente...")
+        pipeline.validate(run_id)
     except (OSError, RuntimeError, ValueError) as error:
+        progress.update(label="Processamento interrompido", state="error")
         st.error(f"Não foi possível concluir a extração e validação: {error}")
         st.info("O progresso foi preservado. Clique em Extrair informações para tentar novamente.")
         return
+    progress.update(label="Extração e validação concluídas", state="complete", expanded=False)
     st.session_state["_asset_servicing_review_run_id"] = run_id
-    st.success("Extração e validação concluídas.")
+    st.session_state["_extraction_flash"] = "Extração e validação concluídas."
+    st.rerun()
 
 
 def _clear_active_run_view() -> None:
@@ -333,7 +343,41 @@ def _clear_active_run_view() -> None:
         st.session_state.pop(key, None)
 
 
-def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> None:
+def _active_stage() -> int:
+    if st.session_state.get("_asset_servicing_review_run_id") is not None:
+        return 4
+    if st.session_state.get("location_confirmed", False):
+        return 3
+    if st.session_state.get("location_run_id") is not None:
+        return 2
+    return 1
+
+
+def _render_stage_indicator() -> None:
+    current_stage = _active_stage()
+    columns = st.columns(len(_STAGE_LABELS))
+    for number, (column, label) in enumerate(zip(columns, _STAGE_LABELS, strict=True), start=1):
+        marker = "✅" if number < current_stage else "🔵" if number == current_stage else "⚪"
+        column.markdown(f"**{marker} {number}. {label}**")
+    st.caption(f"Etapa {current_stage} de {len(_STAGE_LABELS)}")
+
+
+def _confidence_level(confidence: float | None) -> str:
+    if confidence is None:
+        return "⚪ Não avaliada"
+    if confidence >= 0.85:
+        return "🟢 Alta"
+    if confidence >= 0.50:
+        return "🟡 Média"
+    return "🔴 Baixa"
+
+
+def render_review_results(
+    *,
+    review_service: ReviewWorkflow,
+    run_id: str,
+    show_metrics: bool = True,
+) -> None:
     """Render the persisted extraction results and review counters."""
 
     try:
@@ -353,6 +397,7 @@ def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> Non
                 "Trecho-fonte": variable.evidence_text,
                 "Páginas": ", ".join(str(page) for page in variable.source_pages),
                 "Confiança": validation.confidence if validation else None,
+                "Nível": _confidence_level(validation.confidence if validation else None),
                 "Veredito": validation.verdict.value if validation else "—",
                 "Foi revisado?": variable.reviewed,
             }
@@ -363,14 +408,27 @@ def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> Non
     flash_message = st.session_state.pop("_review_flash", None)
     if flash_message:
         st.success(str(flash_message))
-    metric_columns = st.columns(3)
-    metric_columns[0].metric("Variáveis", len(run.variables))
-    metric_columns[1].metric("Pendências", len(pending))
-    metric_columns[2].metric(
-        "Revisadas",
-        sum(variable.reviewed for variable in run.variables),
+    if show_metrics:
+        metric_columns = st.columns(3)
+        metric_columns[0].metric("Variáveis", len(run.variables))
+        metric_columns[1].metric("Pendências", len(pending))
+        metric_columns[2].metric(
+            "Revisadas",
+            sum(variable.reviewed for variable in run.variables),
+        )
+    st.dataframe(
+        rows,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Confiança": st.column_config.ProgressColumn(
+                "Confiança",
+                min_value=0.0,
+                max_value=1.0,
+                format="%.2f",
+            )
+        },
     )
-    st.dataframe(rows, width="stretch", hide_index=True)
     if not pending:
         st.success("Não há pendências de revisão.")
         return
@@ -554,7 +612,6 @@ def render_run_delivery(*, delivery_service: DeliveryWorkflow, run_id: str) -> N
         st.error(str(error))
         return
 
-    _render_run_summary(delivery_service, run_id)
     st.header("Arquivos da execução")
     preliminary: ExportArtifact | None = None
     if st.button("Gerar Excel preliminar", key="generate_preliminary"):
@@ -607,6 +664,26 @@ def render_run_delivery(*, delivery_service: DeliveryWorkflow, run_id: str) -> N
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             key="download_final",
         )
+    with st.expander("Detalhes operacionais", expanded=False):
+        _render_run_summary(delivery_service, run_id)
+
+
+def render_executive_summary(*, delivery_service: DeliveryWorkflow, run_id: str) -> None:
+    """Render the primary decision metrics for the active run."""
+
+    try:
+        run = delivery_service.get_run(run_id)
+        summary = delivery_service.summary(run_id)
+    except (OSError, RuntimeError, ValueError) as error:
+        st.error(str(error))
+        return
+
+    st.header("Visão geral")
+    columns = st.columns(4)
+    columns[0].metric("Variáveis", summary.variable_count)
+    columns[1].metric("Pendências", len(run.pending_items()))
+    columns[2].metric("Aprovadas", summary.approved_count)
+    columns[3].metric("Duração total", _format_duration(summary.total_duration_ms))
 
 
 def _render_run_summary(delivery_service: DeliveryWorkflow, run_id: str) -> None:
@@ -651,6 +728,11 @@ def _format_duration(duration_ms: int) -> str:
 def main(services: LocalAppServices | None = None) -> None:
     """Render the configured local application entry point."""
 
+    st.set_page_config(
+        page_title="Extração Inteligente de Regulamentos",
+        page_icon="📄",
+        layout="wide",
+    )
     if services is not None:
         st.session_state["_asset_servicing_pipeline"] = services.pipeline
         st.session_state["_asset_servicing_regulations_dir"] = services.regulations_dir
@@ -670,18 +752,39 @@ def main(services: LocalAppServices | None = None) -> None:
     ):
         st.error("A aplicação ainda não foi configurada com os serviços locais.")
         return
+    st.title("Extração Inteligente de Regulamentos")
+    st.caption("Localização, validação independente e revisão humana de informações de fundos.")
+    stage_container = st.container()
+    active_before_location = st.session_state.get("_asset_servicing_review_run_id") is not None
     if pipeline is not None and regulations_dir is not None and upload_dir is not None:
-        render_document_location(
-            pipeline=pipeline,
-            regulations_dir=Path(regulations_dir),
-            upload_dir=Path(upload_dir),
-        )
+        with st.expander(
+            "Documento e localização",
+            expanded=not active_before_location,
+        ):
+            render_document_location(
+                pipeline=pipeline,
+                regulations_dir=Path(regulations_dir),
+                upload_dir=Path(upload_dir),
+            )
+    with stage_container:
+        _render_stage_indicator()
     review_run_id = st.session_state.get("_asset_servicing_review_run_id")
     active_run_id = None if review_run_id is None else str(review_run_id)
+    extraction_flash = st.session_state.pop("_extraction_flash", None)
+    if extraction_flash:
+        st.success(str(extraction_flash))
+    if active_run_id is None and st.session_state.get("location_run_id") is None:
+        st.info("Selecione um regulamento e localize o capítulo para iniciar a extração.")
+    if delivery_service is not None and active_run_id is not None:
+        render_executive_summary(
+            delivery_service=delivery_service,
+            run_id=active_run_id,
+        )
     if review_service is not None and active_run_id is not None:
         render_review_results(
             review_service=review_service,
             run_id=active_run_id,
+            show_metrics=delivery_service is None,
         )
     if delivery_service is not None and active_run_id is not None:
         render_run_delivery(

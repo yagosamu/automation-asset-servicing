@@ -114,7 +114,19 @@ def make_app(
 def test_initial_view_offers_project_folder_and_upload(tmp_path: Path) -> None:
     app = make_app(tmp_path, FakePipeline())
 
-    assert app.title[0].value == "Extração de Regulamentos"
+    assert app.title[0].value == "Extração Inteligente de Regulamentos"
+    assert any(
+        "validação independente e revisão humana" in caption.value for caption in app.caption
+    )
+    assert [item.value for item in app.markdown[:4]] == [
+        "**🔵 1. Documento**",
+        "**⚪ 2. Localização**",
+        "**⚪ 3. Extração**",
+        "**⚪ 4. Revisão e Excel**",
+    ]
+    assert app.expander[0].label == "Documento e localização"
+    assert app.expander[0].proto.expanded is True
+    assert any("Selecione um regulamento" in item.value for item in app.info)
     assert app.get_by_key("document_source").value == "Pasta do projeto"
     assert app.get_by_key("project_pdf").value == "regulamento.pdf"
     assert len(app.file_uploader) == 0
@@ -127,8 +139,11 @@ def test_project_pdf_starts_run_and_shows_location(tmp_path: Path) -> None:
     app.get_by_key("start_location").click().run()
 
     assert pipeline.created_paths[0].name == "regulamento.pdf"
+    assert "**🔵 2. Localização**" in [item.value for item in app.markdown]
+    assert app.status[0].label == "Capítulo localizado"
+    assert app.status[0].state == "complete"
     assert app.subheader[0].value.startswith("CAPÍTULO 3")
-    assert "Páginas 7 a 9" in app.markdown[0].value
+    assert "Páginas 7 a 9" in [item.value for item in app.markdown]
     assert "regras de movimentação" in app.info[0].value
 
 
@@ -213,6 +228,7 @@ def test_confirmation_persists_corrected_pages_and_enables_extraction(tmp_path: 
     app.get_by_key("confirm_location").click().run()
 
     assert pipeline.confirmed_ranges == [(6, 8)]
+    assert "**🔵 3. Extração**" in [item.value for item in app.markdown]
     assert "páginas 6 a 8" in app.success[0].value
     assert app.get_by_key("start_extraction").disabled is False
 

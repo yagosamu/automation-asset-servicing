@@ -215,6 +215,21 @@ def test_complete_journey_reviews_low_confidence_and_downloads_workbooks(
         "prazo_pagamento_resgate",
         "aplicacao_minima",
     ]
+    assert list(app.dataframe[0].value["Nível"]) == ["🟡 Média", "🟢 Alta"]
+    metrics = {metric.proto.label: metric.value for metric in app.metric}
+    assert metrics["Variáveis"] == "2"
+    assert metrics["Pendências"] == "1"
+    assert metrics["Aprovadas"] == "1"
+    assert metrics["Duração total"].endswith(" s")
+    assert "**🔵 4. Revisão e Excel**" in [item.value for item in app.markdown]
+    document_section = next(
+        expander for expander in app.expander if expander.label == "Documento e localização"
+    )
+    assert document_section.proto.expanded is False
+    operational_details = next(
+        expander for expander in app.expander if expander.label == "Detalhes operacionais"
+    )
+    assert operational_details.proto.expanded is False
     assert "Execuções salvas" not in [header.value for header in app.header]
     assert "saved_run" not in [selectbox.key for selectbox in app.selectbox]
     assert app.get_by_key("generate_final").disabled is True
@@ -330,6 +345,11 @@ def test_selecting_another_regulation_clears_the_previous_visible_run(
     app.get_by_key("project_pdf").select("regulamento-seguinte.pdf").run()
 
     assert "_asset_servicing_review_run_id" not in app.session_state
+    assert "**🔵 1. Documento**" in [item.value for item in app.markdown]
+    document_section = next(
+        expander for expander in app.expander if expander.label == "Documento e localização"
+    )
+    assert document_section.proto.expanded is True
     assert len(app.dataframe) == 0
     assert len(app.image) == 0
     assert {
@@ -350,6 +370,8 @@ def test_failed_extraction_can_retry_without_recreating_the_run(tmp_path: Path) 
     app.get_by_key("start_extraction").click().run()
 
     assert any("falha transitória gravada" in error.value for error in app.error)
+    assert app.status[0].label == "Processamento interrompido"
+    assert app.status[0].state == "error"
     assert any("progresso foi preservado" in info.value for info in app.info)
     assert harness.repository.list_runs()[0].run_id == "run-e2e"
 
