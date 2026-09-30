@@ -241,7 +241,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-05 | P1: Localização | Design | Implemented (T04, T13) |
 | ASET-06 | P1: Localização | Design | Implemented (T02, T07, T10, T13) |
 | ASET-07 | P1: Localização | Design | Implemented (T07, T10, T13) |
-| ASET-08 | P1: Extração | Design | Implemented (T04, T08, T10, T26, T28) |
+| ASET-08 | P1: Extração | Design | Verified (T04, T08, T10, T26, T28) |
 | ASET-09 | P1: Extração | Design | Implemented (T02, T05, T08) |
 | ASET-10 | P1: Extração | Design | Implemented (T05, T08) |
 | ASET-11 | P1: Extração | Design | Implemented (T08) |
@@ -252,10 +252,10 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-16 | P1: Validação | Design | Implemented (T05, T06, T09, T10) |
 | ASET-17 | P1: Validação | Design | Implemented (T05, T09) |
 | ASET-18 | P1: Validação | Design | Implemented (T02, T05, T09) |
-| ASET-19 | P1: Validação | Design | Implemented (T02, T05, T09, T26, T28) |
+| ASET-19 | P1: Validação | Design | Verified (T02, T05, T09, T26, T28) |
 | ASET-20 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-21 | P1: Validação | Design | Implemented (T02, T09) |
-| ASET-22 | P1: Validação | Design | Implemented (T02, T09, T27) |
+| ASET-22 | P1: Validação | Design | Verified (T02, T09, T27) |
 | ASET-23 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-24 | P1: Revisão | Design | Implemented (T02, T09–T11, T14) |
 | ASET-25 | P1: Revisão | Design | Implemented (T02, T09, T11, T14) |
@@ -264,11 +264,11 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-28 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-29 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-30 | P1: Revisão | Design | Implemented (T02, T11, T14) |
-| ASET-31 | P1: Revisão | Design | Implemented (T03, T11) |
-| ASET-32 | P1: Revisão | Design | Implemented (T03, T11, T15) |
+| ASET-31 | P1: Revisão | Design | Verified (T03, T11, T27) |
+| ASET-32 | P1: Revisão | Design | Verified (T03, T11, T15, T27) |
 | ASET-33 | P1: Excel | Design | Implemented (T12, T15) |
-| ASET-34 | P1: Excel | Design | Implemented (T02, T12, T15) |
-| ASET-35 | P1: Excel | Design | Implemented (T02, T12, T15) |
+| ASET-34 | P1: Excel | Design | Verified (T02, T12, T15, T27) |
+| ASET-35 | P1: Excel | Design | Verified (T02, T12, T15, T27) |
 | ASET-36 | P1: Excel | Design | Implemented (T12, T15) |
 | ASET-37 | P1: Excel | Design | Implemented (T11, T12, T15) |
 | ASET-38 | P1: Excel | Design | Implemented (T02, T12, T15) |
@@ -295,7 +295,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T28 reforça a prova discriminante das correções de UAT.
+**Coverage:** 57 requisitos totais; 54 P1 verificados; 3 P3 postergados; T01–T28 concluídas e correções de UAT aprovadas independentemente.
 
 ---
 
