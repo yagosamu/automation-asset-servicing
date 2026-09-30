@@ -312,8 +312,12 @@ def _render_active_location(pipeline: DocumentLocationPipeline) -> None:
 
 def _extract_and_validate(pipeline: DocumentLocationPipeline, run_id: str) -> None:
     try:
-        pipeline.extract(run_id)
-        pipeline.validate(run_id)
+        with st.spinner(
+            "Extraindo e validando informações. Isso pode levar alguns segundos...",
+            show_time=True,
+        ):
+            pipeline.extract(run_id)
+            pipeline.validate(run_id)
     except (OSError, RuntimeError, ValueError) as error:
         st.error(f"Não foi possível concluir a extração e validação: {error}")
         st.info("O progresso foi preservado. Clique em Extrair informações para tentar novamente.")
