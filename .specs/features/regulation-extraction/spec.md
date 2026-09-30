@@ -36,7 +36,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | --- | --- | --- | --- |
 | Modelo de variáveis | Híbrido, com nomes preferenciais e criação dinâmica | Equilibra comparação entre fundos e cobertura de redações novas | Sim |
 | Granularidade | Uma variável por fato independente | Melhora revisão, busca e uso posterior | Sim |
-| Limite de revisão | Score menor que `0,85` ou veredito diferente de suportado | Produz casos revisáveis sem tratar score como probabilidade | Sim |
+| Limite de revisão | Score menor que `0,85` ou veredito diferente de `supported` | Produz casos revisáveis sem tratar score como probabilidade | Sim |
 | Exportação | Preliminar a qualquer momento; final somente sem pendências | Mantém transparência sem bloquear diagnóstico | Sim |
 | Localização | Semântica, com capítulo opcional e correção manual de páginas | Atende ao documento surpresa e protege a demonstração | Sim |
 | Busca em linguagem natural | Bônus após o núcleo P1 estar estável | Evita sacrificar confiabilidade por escopo adicional | Sim |
@@ -106,10 +106,10 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 1. [ASET-16] WHEN a extração terminar THEN o sistema SHALL executar um agente validador em chamada separada da chamada do agente extrator.
 2. [ASET-17] WHEN uma variável for validada THEN o sistema SHALL fornecer ao validador o valor extraído e a fonte, sem fornecer raciocínio, veredito ou score produzido pelo extrator.
-3. [ASET-18] WHEN o validador concluir uma avaliação THEN o sistema SHALL registrar score entre `0,00` e `1,00`, base de suporte `literal`, `normalizada`, `parcial` ou `não_suportada`, veredito `suportado`, `parcialmente_suportado` ou `nao_suportado`, justificativa curta e lista de problemas; a base, a faixa do score e o veredito SHALL ser coerentes entre si.
+3. [ASET-18] WHEN o validador concluir uma avaliação THEN o sistema SHALL registrar score entre `0,00` e `1,00`, base de suporte `literal`, `normalized`, `partial` ou `unsupported`, veredito `supported`, `partially_supported` ou `unsupported`, justificativa curta e lista de problemas; a base, a faixa do score e o veredito SHALL ser coerentes entre si.
 4. [ASET-19] WHEN o validador concluir o conjunto THEN o sistema SHALL registrar possíveis omissões identificadas ao comparar a seção-fonte com a lista extraída.
 5. [ASET-20] IF o score for menor que `0,85` THEN o sistema SHALL colocar a variável na fila de revisão.
-6. [ASET-21] IF o veredito for `parcialmente_suportado` ou `nao_suportado` THEN o sistema SHALL colocar a variável na fila de revisão independentemente do score.
+6. [ASET-21] IF o veredito for `partially_supported` ou `unsupported` THEN o sistema SHALL colocar a variável na fila de revisão independentemente do score.
 7. [ASET-22] IF o validador apontar conflito ou possível omissão THEN o sistema SHALL criar uma pendência revisável sem alterar automaticamente o resultado do extrator.
 8. [ASET-23] The system SHALL exibir o score como confiança atribuída pela LLM com rubrica documentada e não como probabilidade calibrada; `1,00` SHALL permanecer válido para suporte literal, completo e inequívoco, sem reprovação baseada apenas na distribuição dos scores.
 

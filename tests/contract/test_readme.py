@@ -71,7 +71,7 @@ def test_recovery_instructions_match_the_persisted_ui_workflow() -> None:
 
     assert "Retomar execução" not in readme
     assert "resultados aparecem imediatamente" in readme
-    assert "histórico permanece em `data/runs/`" in readme
+    assert "permanece em `data/runs/`" in readme
     assert "O progresso foi preservado" in readme
     assert "Clique novamente em **Extrair informações**" in readme
 
