@@ -56,7 +56,7 @@ def test_readme_lists_the_canonical_runtime_and_quality_commands() -> None:
 def test_presentation_runbook_covers_primary_surprise_and_manual_paths() -> None:
     readme = _readme()
 
-    assert "Criar execução e localizar seção" in readme
+    assert "Localizar capítulo" in readme
     assert "Confirmar intervalo" in readme
     assert "Extrair informações" in readme
     assert "Excel preliminar" in readme

@@ -101,7 +101,7 @@ Fluxo operacional:
 
 1. Escolha **Pasta do projeto** ou **Upload**.
 2. Selecione o PDF e, se for útil, informe **Capítulo esperado (opcional)**.
-3. Clique em **Criar execução e localizar seção**.
+3. Clique em **Localizar capítulo**.
 4. Confira título, justificativa, páginas e prévias. Corrija as páginas se necessário.
 5. Clique em **Confirmar intervalo** e depois em **Extrair informações**.
 6. Analise a tabela completa e resolva cada pendência: confirmar, editar, marcar como não
@@ -170,7 +170,7 @@ Antes da reunião:
 ### Parte 1: regulamento conhecido
 
 1. Selecione um regulamento da pasta e informe Capítulo 3 apenas como dica.
-2. Clique em **Criar execução e localizar seção**. Explique que o número do capítulo não é uma
+2. Clique em **Localizar capítulo**. Explique que o número do capítulo não é uma
    regra fixa; a localização usa o significado da seção.
 3. Valide as prévias e clique em **Confirmar intervalo**.
 4. Clique em **Extrair informações**. Destaque que extração e validação são chamadas separadas.

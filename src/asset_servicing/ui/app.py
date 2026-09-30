@@ -200,7 +200,7 @@ def render_document_location(
         key="chapter_hint",
     )
     if st.button(
-        "Criar execução e localizar seção",
+        "Localizar capítulo",
         disabled=source_path is None,
         key="start_location",
         type="primary",
