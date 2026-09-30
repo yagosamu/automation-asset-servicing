@@ -14,6 +14,7 @@ from asset_servicing.adapters.llm.openai_responses import LLMUsage, OpenAIConfig
 from asset_servicing.domain import ValidationVerdict
 from asset_servicing.ports.llm import (
     AtomicVariable,
+    EvidenceSupport,
     ExtractionRequest,
     ExtractionResponse,
     ExtractionSourceKind,
@@ -74,6 +75,7 @@ class RecordingProvider:
                 VariableValidation(
                     variable_id=request.variables[0].variable_id,
                     confidence=0.97,
+                    evidence_support=EvidenceSupport.LITERAL,
                     verdict=ValidationVerdict.SUPPORTED,
                     rationale="O valor está diretamente sustentado.",
                     issues=[],

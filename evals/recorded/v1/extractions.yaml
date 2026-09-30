@@ -7,7 +7,7 @@ models:
 prompt_versions:
   locator: locator-v1
   extractor: extractor-v3
-  validator: validator-v3
+  validator: validator-v4
 documents:
   - document_id: reg-23183-2026-05
     variables:

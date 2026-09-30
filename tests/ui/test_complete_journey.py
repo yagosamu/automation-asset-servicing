@@ -29,6 +29,7 @@ from asset_servicing.application import (
 from asset_servicing.domain import ValidationVerdict
 from asset_servicing.ports.llm import (
     AtomicVariable,
+    EvidenceSupport,
     ExtractionRequest,
     ExtractionResponse,
     ExtractionSourceKind,
@@ -97,7 +98,8 @@ class RecordedProvider:
             validations=[
                 VariableValidation(
                     variable_id=low_confidence.variable_id,
-                    confidence=0.42,
+                    confidence=0.72,
+                    evidence_support=EvidenceSupport.PARTIAL,
                     verdict=ValidationVerdict.PARTIALLY_SUPPORTED,
                     rationale="O prazo exige confirmação humana.",
                     issues=["Redação ambígua"],
@@ -105,6 +107,7 @@ class RecordedProvider:
                 VariableValidation(
                     variable_id=supported.variable_id,
                     confidence=0.97,
+                    evidence_support=EvidenceSupport.LITERAL,
                     verdict=ValidationVerdict.SUPPORTED,
                     rationale="Valor diretamente sustentado pela tabela.",
                     issues=[],
@@ -226,7 +229,7 @@ def test_complete_journey_reviews_low_confidence_and_downloads_workbooks(
         "prazo_pagamento_resgate",
         "D+30",
         "O pagamento do resgate ocorrerá em até trinta dias.",
-        0.42,
+        0.72,
         False,
     ]
 
@@ -247,7 +250,7 @@ def test_complete_journey_reviews_low_confidence_and_downloads_workbooks(
         "prazo_resgate",
         "até D+30",
         "O pagamento do resgate ocorrerá em até trinta dias.",
-        0.42,
+        0.72,
         True,
     ]
 

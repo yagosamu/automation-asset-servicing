@@ -131,6 +131,7 @@ class EvaluationPaths:
     chapter_6_fixture: Path
     adjacent_section_fixture: Path
     granularity_fixture: Path
+    confidence_calibration_fixture: Path
     adversarial_cases: Path
     baseline: Path
     contract_files: tuple[tuple[str, Path], ...]
@@ -147,6 +148,9 @@ class EvaluationPaths:
                 root / "evals" / "golden" / "v1" / "adjacent_section_fixture.yaml"
             ),
             granularity_fixture=(root / "evals" / "golden" / "v1" / "granularity_fixture.yaml"),
+            confidence_calibration_fixture=(
+                root / "evals" / "golden" / "v1" / "confidence_calibration.yaml"
+            ),
             adversarial_cases=root / "evals" / "golden" / "v1" / "adversarial_cases.yaml",
             baseline=root / "evals" / "baselines" / "v1.json",
             contract_files=tuple(
@@ -393,6 +397,38 @@ def run_evaluation(
                 )
             )
 
+    confidence_fixture = _load_yaml(paths.confidence_calibration_fixture)
+    calibrated_cases = 0
+    for case in confidence_fixture["cases"]:
+        expected = case["expected"]
+        output = case["recorded_output"]
+        confidence = output["confidence"]
+        within_band = expected["confidence_min"] <= confidence and (
+            confidence <= expected["confidence_max"]
+            if expected["confidence_max"] == 1.0
+            else confidence < expected["confidence_max"]
+        )
+        calibrated = (
+            output["evidence_support"] == expected["evidence_support"]
+            and within_band
+            and output["verdict"] == expected["verdict"]
+            and output["has_conflict"] is expected["has_conflict"]
+        )
+        if calibrated:
+            calibrated_cases += 1
+        else:
+            failures.append(
+                EvaluationFailure(
+                    gate="confidence_calibration",
+                    variable_id=case["id"],
+                    detail=(
+                        "Recorded evidence support, confidence band, verdict, or conflict differs "
+                        "from the calibrated expectation."
+                    ),
+                )
+            )
+    confidence_calibration = _metric(calibrated_cases, len(confidence_fixture["cases"]))
+
     adversarial_fixture = _load_yaml(paths.adversarial_cases)
     adversarial_cases = [case for case in adversarial_fixture["cases"] if case["expected_review"]]
     routed_cases = 0
@@ -413,6 +449,7 @@ def run_evaluation(
         "critical_value_accuracy": value_accuracy,
         "evidence_integrity": evidence_integrity,
         "adversarial_review_recall": adversarial_recall,
+        "confidence_calibration": confidence_calibration,
     }
 
     current_prompt_versions = {

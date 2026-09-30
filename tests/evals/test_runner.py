@@ -42,6 +42,18 @@ def mutated_granularity_fixture(
     return replace(paths, granularity_fixture=mutated_path)
 
 
+def mutated_confidence_fixture(
+    tmp_path: Path,
+    mutate: Callable[[dict[str, Any]], None],
+) -> EvaluationPaths:
+    paths = EvaluationPaths.defaults(ROOT)
+    fixture = yaml.safe_load(paths.confidence_calibration_fixture.read_text(encoding="utf-8"))
+    mutate(fixture)
+    mutated_path = tmp_path / "confidence_calibration.yaml"
+    mutated_path.write_text(yaml.safe_dump(fixture, allow_unicode=True), encoding="utf-8")
+    return replace(paths, confidence_calibration_fixture=mutated_path)
+
+
 def test_recorded_extractions_cover_all_critical_fields() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 
@@ -168,6 +180,55 @@ def test_grouped_rule_missing_an_attribute_fails_granularity_gate(tmp_path: Path
     assert any(failure.gate == "operational_granularity" for failure in report.failures)
 
 
+def test_confidence_fixture_covers_each_evidence_support_level() -> None:
+    report = run_evaluation(EvaluationPaths.defaults(ROOT))
+
+    calibration = report.metrics["confidence_calibration"]
+    assert calibration.numerator == 4
+    assert calibration.denominator == 4
+    assert calibration.score == 1.0
+    assert calibration.passed is True
+
+
+def test_normalized_score_of_one_fails_confidence_calibration(tmp_path: Path) -> None:
+    def overstate_normalized_case(fixture: dict[str, Any]) -> None:
+        fixture["cases"][1]["recorded_output"]["confidence"] = 1.0
+
+    report = run_evaluation(mutated_confidence_fixture(tmp_path, overstate_normalized_case))
+
+    assert report.metrics["confidence_calibration"].passed is False
+    assert report.passed is False
+    assert any(failure.gate == "confidence_calibration" for failure in report.failures)
+
+
+def test_contradicted_case_without_conflict_fails_confidence_calibration(tmp_path: Path) -> None:
+    def remove_conflict(fixture: dict[str, Any]) -> None:
+        fixture["cases"][3]["recorded_output"]["has_conflict"] = False
+
+    report = run_evaluation(mutated_confidence_fixture(tmp_path, remove_conflict))
+
+    assert report.metrics["confidence_calibration"].passed is False
+    assert report.passed is False
+    assert any(failure.gate == "confidence_calibration" for failure in report.failures)
+
+
+def test_all_literal_scores_of_one_do_not_fail_by_distribution(tmp_path: Path) -> None:
+    def keep_only_literal_cases(fixture: dict[str, Any]) -> None:
+        literal = fixture["cases"][0]
+        fixture["cases"] = [
+            {**literal, "id": "literal-one"},
+            {**literal, "id": "literal-two"},
+        ]
+
+    report = run_evaluation(mutated_confidence_fixture(tmp_path, keep_only_literal_cases))
+
+    calibration = report.metrics["confidence_calibration"]
+    assert calibration.numerator == 2
+    assert calibration.denominator == 2
+    assert calibration.passed is True
+    assert report.passed is True
+
+
 def test_chapter_6_fixture_matches_the_recorded_location() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 
@@ -220,11 +281,12 @@ def test_surviving_adversarial_error_fails_review_gate(tmp_path: Path) -> None:
     assert any(failure.gate == "adversarial_review_recall" for failure in report.failures)
 
 
-def test_all_four_metrics_are_blocking_at_one_hundred_percent() -> None:
+def test_all_five_metrics_are_blocking_at_one_hundred_percent() -> None:
     report = run_evaluation(EvaluationPaths.defaults(ROOT))
 
     assert set(report.metrics) == {
         "adversarial_review_recall",
+        "confidence_calibration",
         "critical_field_coverage",
         "critical_value_accuracy",
         "evidence_integrity",
@@ -249,7 +311,7 @@ def test_report_records_models_prompts_corpus_and_generation_time() -> None:
     assert report.prompt_versions == {
         "locator": "locator-v1",
         "extractor": "extractor-v3",
-        "validator": "validator-v3",
+        "validator": "validator-v4",
     }
     assert report.corpus.corpus_id == "btg-regulations-v1"
     assert report.corpus.document_count == 4
@@ -275,6 +337,7 @@ def test_baseline_comparison_has_zero_metric_deltas() -> None:
     assert report.baseline.corpus_matches is True
     assert report.baseline.metric_deltas == {
         "adversarial_review_recall": 0.0,
+        "confidence_calibration": 0.0,
         "critical_field_coverage": 0.0,
         "critical_value_accuracy": 0.0,
         "evidence_integrity": 0.0,

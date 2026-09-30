@@ -3,6 +3,7 @@
 from asset_servicing.domain.models import (
     ConfidenceBasis,
     CoverageFinding,
+    EvidenceSupport,
     ExtractedVariable,
     FindingReviewStatus,
     ReviewAction,
@@ -22,6 +23,7 @@ from asset_servicing.domain.models import (
 __all__ = [
     "ConfidenceBasis",
     "CoverageFinding",
+    "EvidenceSupport",
     "ExtractedVariable",
     "FindingReviewStatus",
     "ReviewAction",

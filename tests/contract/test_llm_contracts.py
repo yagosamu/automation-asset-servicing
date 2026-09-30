@@ -10,6 +10,7 @@ from pydantic import BaseModel, ValidationError
 from asset_servicing.ports.llm import (
     AgentDocument,
     AtomicVariable,
+    EvidenceSupport,
     ExtractionRequest,
     ExtractionResponse,
     ExtractionSourceKind,
@@ -260,6 +261,7 @@ def test_variable_validation_records_score_verdict_rationale_and_issues() -> Non
     result = VariableValidation(
         variable_id="variable-001",
         confidence=0.72,
+        evidence_support=EvidenceSupport.PARTIAL,
         verdict=ValidationVerdict.PARTIALLY_SUPPORTED,
         rationale="O prazo está explícito, mas a contagem não está definida.",
         issues=["Unidade de contagem ambígua"],
@@ -267,6 +269,7 @@ def test_variable_validation_records_score_verdict_rationale_and_issues() -> Non
     )
 
     assert result.confidence == 0.72
+    assert result.evidence_support is EvidenceSupport.PARTIAL
     assert result.verdict is ValidationVerdict.PARTIALLY_SUPPORTED
     assert result.rationale == "O prazo está explícito, mas a contagem não está definida."
     assert result.issues == ["Unidade de contagem ambígua"]
@@ -281,6 +284,7 @@ def test_variable_validation_rejects_score_outside_closed_unit_interval(
         VariableValidation(
             variable_id="variable-001",
             confidence=confidence,
+            evidence_support=EvidenceSupport.LITERAL,
             verdict=ValidationVerdict.SUPPORTED,
             rationale="Valor diretamente sustentado.",
             issues=[],
@@ -293,10 +297,78 @@ def test_variable_validation_rejects_an_invalid_verdict_enum() -> None:
             {
                 "variable_id": "variable-001",
                 "confidence": 0.9,
+                "evidence_support": "normalized",
                 "verdict": "probably_supported",
                 "rationale": "Veredito fora do contrato.",
                 "issues": [],
             }
+        )
+
+
+def test_variable_validation_requires_evidence_support() -> None:
+    with pytest.raises(ValidationError, match="evidence_support"):
+        VariableValidation.model_validate(
+            {
+                "variable_id": "variable-001",
+                "confidence": 1.0,
+                "verdict": "supported",
+                "rationale": "Valor literal e integralmente sustentado.",
+                "issues": [],
+            }
+        )
+
+
+@pytest.mark.parametrize(
+    ("evidence_support", "confidence", "verdict"),
+    [
+        (EvidenceSupport.LITERAL, 1.0, ValidationVerdict.SUPPORTED),
+        (EvidenceSupport.NORMALIZED, 0.9, ValidationVerdict.SUPPORTED),
+        (EvidenceSupport.PARTIAL, 0.72, ValidationVerdict.PARTIALLY_SUPPORTED),
+        (EvidenceSupport.UNSUPPORTED, 0.35, ValidationVerdict.UNSUPPORTED),
+    ],
+)
+def test_variable_validation_accepts_each_calibrated_support_band(
+    evidence_support: EvidenceSupport,
+    confidence: float,
+    verdict: ValidationVerdict,
+) -> None:
+    result = VariableValidation(
+        variable_id="variable-001",
+        confidence=confidence,
+        evidence_support=evidence_support,
+        verdict=verdict,
+        rationale="Classificação coerente com a evidência.",
+        issues=[],
+    )
+
+    assert result.confidence == confidence
+    assert result.evidence_support is evidence_support
+    assert result.verdict is verdict
+
+
+@pytest.mark.parametrize(
+    ("evidence_support", "confidence", "verdict"),
+    [
+        (EvidenceSupport.NORMALIZED, 1.0, ValidationVerdict.SUPPORTED),
+        (EvidenceSupport.LITERAL, 0.9, ValidationVerdict.SUPPORTED),
+        (EvidenceSupport.PARTIAL, 0.9, ValidationVerdict.PARTIALLY_SUPPORTED),
+        (EvidenceSupport.UNSUPPORTED, 0.7, ValidationVerdict.UNSUPPORTED),
+        (EvidenceSupport.LITERAL, 0.99, ValidationVerdict.PARTIALLY_SUPPORTED),
+    ],
+)
+def test_variable_validation_rejects_incoherent_support_band_or_verdict(
+    evidence_support: EvidenceSupport,
+    confidence: float,
+    verdict: ValidationVerdict,
+) -> None:
+    with pytest.raises(ValidationError, match="evidence support"):
+        VariableValidation(
+            variable_id="variable-001",
+            confidence=confidence,
+            evidence_support=evidence_support,
+            verdict=verdict,
+            rationale="Combinação incoerente.",
+            issues=[],
         )
 
 

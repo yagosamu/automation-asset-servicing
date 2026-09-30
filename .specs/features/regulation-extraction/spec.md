@@ -106,14 +106,14 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 1. [ASET-16] WHEN a extração terminar THEN o sistema SHALL executar um agente validador em chamada separada da chamada do agente extrator.
 2. [ASET-17] WHEN uma variável for validada THEN o sistema SHALL fornecer ao validador o valor extraído e a fonte, sem fornecer raciocínio, veredito ou score produzido pelo extrator.
-3. [ASET-18] WHEN o validador concluir uma avaliação THEN o sistema SHALL registrar score entre `0,00` e `1,00`, veredito `suportado`, `parcialmente_suportado` ou `nao_suportado`, justificativa curta e lista de problemas.
+3. [ASET-18] WHEN o validador concluir uma avaliação THEN o sistema SHALL registrar score entre `0,00` e `1,00`, base de suporte `literal`, `normalizada`, `parcial` ou `não_suportada`, veredito `suportado`, `parcialmente_suportado` ou `nao_suportado`, justificativa curta e lista de problemas; a base, a faixa do score e o veredito SHALL ser coerentes entre si.
 4. [ASET-19] WHEN o validador concluir o conjunto THEN o sistema SHALL registrar possíveis omissões identificadas ao comparar a seção-fonte com a lista extraída.
 5. [ASET-20] IF o score for menor que `0,85` THEN o sistema SHALL colocar a variável na fila de revisão.
 6. [ASET-21] IF o veredito for `parcialmente_suportado` ou `nao_suportado` THEN o sistema SHALL colocar a variável na fila de revisão independentemente do score.
 7. [ASET-22] IF o validador apontar conflito ou possível omissão THEN o sistema SHALL criar uma pendência revisável sem alterar automaticamente o resultado do extrator.
-8. [ASET-23] The system SHALL exibir o score como confiança atribuída pela LLM com rubrica documentada e não como probabilidade calibrada.
+8. [ASET-23] The system SHALL exibir o score como confiança atribuída pela LLM com rubrica documentada e não como probabilidade calibrada; `1,00` SHALL permanecer válido para suporte literal, completo e inequívoco, sem reprovação baseada apenas na distribuição dos scores.
 
-**Independent Test:** Injetar valores corretos, ambíguos, contraditórios e uma omissão conhecida; verificar que o validador mantém os corretos e encaminha os demais para revisão.
+**Independent Test:** Injetar casos literais, normalizados, parcialmente sustentados, contraditórios e uma omissão conhecida; verificar coerência de base, faixa e veredito, aceitar `1,00` no caso literal e encaminhar os casos de risco para revisão.
 
 ---
 
@@ -228,6 +228,8 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 - IF a página final confirmada contiver o início do capítulo seguinte THEN o extrator e o validador SHALL ignorar o conteúdo fora da seção-alvo, inclusive para detectar omissões.
 - IF uma possível omissão for falso positivo ou estiver fora de escopo THEN o revisor SHALL poder descartá-la com justificativa auditável sem criar uma variável.
 - IF uma cláusula listar atributos coordenados da mesma ação, como execução equânime, simultânea, proporcional e sem taxa, THEN o sistema SHALL representá-los em uma única variável sem perder os atributos no valor ou na evidência.
+- IF todas as variáveis de uma execução tiverem suporte literal, completo e inequívoco THEN o sistema SHALL permitir que todas recebam `1,00` sem criar falha ou pendência somente por saturação da distribuição.
+- IF a base de suporte, a faixa de confiança e o veredito forem incoerentes THEN o sistema SHALL rejeitar a resposta estruturada antes de persistir a validação.
 
 ---
 
@@ -252,12 +254,12 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-15 | P1: Extração | Design | Implemented (T08) |
 | ASET-16 | P1: Validação | Design | Implemented (T05, T06, T09, T10) |
 | ASET-17 | P1: Validação | Design | Implemented (T05, T09) |
-| ASET-18 | P1: Validação | Design | Implemented (T02, T05, T09) |
+| ASET-18 | P1: Validação | Design | Implemented (T02, T05, T09, T30) |
 | ASET-19 | P1: Validação | Design | Verified (T02, T05, T09, T26, T28) |
 | ASET-20 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-21 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-22 | P1: Validação | Design | Verified (T02, T09, T27) |
-| ASET-23 | P1: Validação | Design | Implemented (T02, T09) |
+| ASET-23 | P1: Validação | Design | Implemented (T02, T09, T30) |
 | ASET-24 | P1: Revisão | Design | Implemented (T02, T09–T11, T14) |
 | ASET-25 | P1: Revisão | Design | Implemented (T02, T09, T11, T14) |
 | ASET-26 | P1: Revisão | Design | Implemented (T02, T11, T14) |
@@ -296,7 +298,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T29 concluídas, com T29 aprovada por verificação independente.
+**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T30 concluídas, com verificação independente da T30 pendente.
 
 ---
 

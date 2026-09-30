@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 refinado após UAT — T29 concluída e aprovada por verificação independente
+**Status:** P1 refinado após UAT — T30 concluída, verificação independente pendente
 
 ---
 
@@ -86,7 +86,7 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ### Phase 5: UAT Corrections
 
 ```text
-T26 -> T27 -> T28 -> T29
+T26 -> T27 -> T28 -> T29 -> T30
 ```
 
 ---
@@ -833,6 +833,32 @@ T26 -> T27 -> T28 -> T29
 **Gate:** build
 **Commit:** `fix(agents): reduce extraction fragmentation`
 
+#### T30: Calibrate validator confidence
+
+**What:** Tornar a base do score explícita e estruturalmente coerente com sua faixa e veredito, preservando `1,00` para evidência literal sem punir saturação por si só.
+**Where:** contratos e modelos de validação, prompt versionado do validador, fixture e runner de eval, recordings e baseline offline
+**Depends on:** T29
+**Reuses:** Agente validador independente, Structured Outputs, rubrica de confiança e runner de avaliação existentes.
+**Requirement:** ASET-18, ASET-23 e edge cases de coerência e saturação
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] Cada validação nova informa base `literal`, `normalized`, `partial` ou `unsupported`.
+- [x] O contrato rejeita base, faixa e veredito incoerentes antes da persistência.
+- [x] O prompt reserva `1,00` para suporte literal, completo e inequívoco e orienta a classificação antes do score.
+- [x] O eval cobre casos literal, normalizado, parcial e contraditório com resultado definido pela spec.
+- [x] Um caso literal com `1,00`, inclusive quando todos os casos forem literais, permanece aprovado.
+- [x] O relatório offline e o Gate Build passam.
+
+**Tests:** unit + contract + eval
+**Gate:** build
+**Commit:** `fix(validator): calibrate confidence scores`
+
 ---
 
 ## Phase Execution Map
@@ -844,10 +870,10 @@ Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
 Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
-Phase 5: T26 -> T27 -> T28 -> T29
+Phase 5: T26 -> T27 -> T28 -> T29 -> T30
 ```
 
-As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (4 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (5 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -884,6 +910,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T27 | Descarte auditável de possíveis omissões | ✅ Concluída |
 | T28 | Testes discriminantes da fronteira da seção | ✅ Concluída |
 | T29 | Granularidade operacional da extração | ✅ Concluída |
+| T30 | Calibração discriminante da confiança | ✅ Concluída |
 
 ## Diagram-Definition Cross-Check
 
@@ -918,6 +945,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T27 | T26 | T26 -> T27 | ✅ Match |
 | T28 | T27 | T27 -> T28 | ✅ Match |
 | T29 | T28 | T28 -> T29 | ✅ Match |
+| T30 | T29 | T29 -> T30 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -952,6 +980,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T27 | Domínio/aplicação/interface | unit + integration + ui | unit + integration + ui | ✅ OK |
 | T28 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 | T29 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
+| T30 | Domínio/contratos/prompts/evals | unit + contract + eval | unit + contract + eval | ✅ OK |
 
 ---
 

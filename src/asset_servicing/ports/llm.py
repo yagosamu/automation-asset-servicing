@@ -7,7 +7,7 @@ from typing import Annotated, Protocol, Self, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
-from asset_servicing.domain.models import ValidationVerdict
+from asset_servicing.domain.models import EvidenceSupport, ValidationVerdict
 
 NonEmptyText = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 PageNumber = Annotated[int, Field(strict=True, gt=0)]
@@ -137,10 +137,24 @@ class VariableValidation(_ContractModel):
 
     variable_id: NonEmptyText
     confidence: float = Field(strict=True, ge=0, le=1)
+    evidence_support: EvidenceSupport
     verdict: ValidationVerdict
     rationale: NonEmptyText
     issues: list[NonEmptyText]
     has_conflict: bool = Field(default=False, strict=True)
+
+    @model_validator(mode="after")
+    def validate_evidence_support(self) -> Self:
+        expected: dict[EvidenceSupport, tuple[float, float, ValidationVerdict]] = {
+            EvidenceSupport.LITERAL: (0.95, 1.01, ValidationVerdict.SUPPORTED),
+            EvidenceSupport.NORMALIZED: (0.85, 0.95, ValidationVerdict.SUPPORTED),
+            EvidenceSupport.PARTIAL: (0.60, 0.85, ValidationVerdict.PARTIALLY_SUPPORTED),
+            EvidenceSupport.UNSUPPORTED: (0.00, 0.60, ValidationVerdict.UNSUPPORTED),
+        }
+        minimum, exclusive_maximum, verdict = expected[self.evidence_support]
+        if not minimum <= self.confidence < exclusive_maximum or self.verdict is not verdict:
+            raise ValueError("evidence support, confidence band, and verdict must be coherent")
+        return self
 
 
 class OmissionFinding(_ContractModel):
@@ -176,6 +190,7 @@ class LLMProvider(Protocol):
 __all__ = [
     "AgentDocument",
     "AtomicVariable",
+    "EvidenceSupport",
     "ExtractionRequest",
     "ExtractionResponse",
     "ExtractionSourceKind",

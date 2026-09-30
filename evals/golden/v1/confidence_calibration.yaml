@@ -1,0 +1,58 @@
+schema_version: 1
+cases:
+  - id: literal-complete
+    evidence: O pagamento do resgate será realizado em D+1 útil.
+    extracted_value: D+1 útil
+    expected:
+      evidence_support: literal
+      confidence_min: 0.95
+      confidence_max: 1.0
+      verdict: supported
+      has_conflict: false
+    recorded_output:
+      evidence_support: literal
+      confidence: 1.0
+      verdict: supported
+      has_conflict: false
+  - id: normalized-synthesis
+    evidence: O pagamento será uniforme entre todos os cotistas e não reduzirá o número de cotas.
+    extracted_value: Pagamento uniforme sem redução do número de cotas
+    expected:
+      evidence_support: normalized
+      confidence_min: 0.85
+      confidence_max: 0.95
+      verdict: supported
+      has_conflict: false
+    recorded_output:
+      evidence_support: normalized
+      confidence: 0.9
+      verdict: supported
+      has_conflict: false
+  - id: partial-context
+    evidence: O prazo observará as condições definidas no parágrafo seguinte.
+    extracted_value: Prazo de 30 dias
+    expected:
+      evidence_support: partial
+      confidence_min: 0.6
+      confidence_max: 0.85
+      verdict: partially_supported
+      has_conflict: false
+    recorded_output:
+      evidence_support: partial
+      confidence: 0.72
+      verdict: partially_supported
+      has_conflict: false
+  - id: contradicted-value
+    evidence: A conversão ocorrerá em D+60.
+    extracted_value: D+30
+    expected:
+      evidence_support: unsupported
+      confidence_min: 0.0
+      confidence_max: 0.6
+      verdict: unsupported
+      has_conflict: true
+    recorded_output:
+      evidence_support: unsupported
+      confidence: 0.25
+      verdict: unsupported
+      has_conflict: true

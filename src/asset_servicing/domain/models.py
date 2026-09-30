@@ -60,6 +60,15 @@ class ConfidenceBasis(StrEnum):
     LLM_RUBRIC = "llm_rubric"
 
 
+class EvidenceSupport(StrEnum):
+    """How directly the source supports one validated value."""
+
+    LITERAL = "literal"
+    NORMALIZED = "normalized"
+    PARTIAL = "partial"
+    UNSUPPORTED = "unsupported"
+
+
 class FindingReviewStatus(StrEnum):
     """Human-review state for a possible omission."""
 
@@ -172,6 +181,7 @@ class ValidationResult(BaseModel):
 
     variable_id: NonEmptyText
     confidence: float = Field(ge=0, le=1)
+    evidence_support: EvidenceSupport | None = None
     verdict: ValidationVerdict
     rationale: NonEmptyText
     issues: list[str]

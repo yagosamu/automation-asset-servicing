@@ -125,6 +125,7 @@ def test_validator_maps_score_verdict_rationale_issues_and_conflict() -> None:
         {
             "variable_id": "var-correct",
             "confidence": 0.97,
+            "evidence_support": "literal",
             "verdict": "supported",
             "rationale": "O valor está explícito e completo na fonte.",
             "issues": [],
@@ -134,6 +135,7 @@ def test_validator_maps_score_verdict_rationale_issues_and_conflict() -> None:
         {
             "variable_id": "var-ambiguous",
             "confidence": 0.72,
+            "evidence_support": "partial",
             "verdict": "partially_supported",
             "rationale": "A fonte sustenta apenas parte da condição extraída.",
             "issues": ["A condição temporal depende do parágrafo seguinte."],
@@ -143,6 +145,7 @@ def test_validator_maps_score_verdict_rationale_issues_and_conflict() -> None:
         {
             "variable_id": "var-conflict",
             "confidence": 0.35,
+            "evidence_support": "unsupported",
             "verdict": "unsupported",
             "rationale": "O prazo extraído contradiz o prazo expresso na fonte.",
             "issues": ["A variável informa D+30, mas a fonte informa D+60."],
@@ -152,6 +155,7 @@ def test_validator_maps_score_verdict_rationale_issues_and_conflict() -> None:
         {
             "variable_id": "var-unsupported",
             "confidence": 0.2,
+            "evidence_support": "unsupported",
             "verdict": "unsupported",
             "rationale": "O valor extraído não aparece nas páginas confirmadas.",
             "issues": ["Não há suporte documental para a taxa informada."],

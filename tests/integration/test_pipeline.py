@@ -28,6 +28,7 @@ from asset_servicing.application import (
 from asset_servicing.domain import Run, RunState, ValidationVerdict
 from asset_servicing.ports.llm import (
     AtomicVariable,
+    EvidenceSupport,
     ExtractionRequest,
     ExtractionResponse,
     ExtractionSourceKind,
@@ -87,6 +88,7 @@ class FakeLLMProvider:
                     VariableValidation(
                         variable_id="variable-001",
                         confidence=0.97,
+                        evidence_support=EvidenceSupport.LITERAL,
                         verdict=ValidationVerdict.SUPPORTED,
                         rationale="Valor diretamente sustentado.",
                         issues=[],
@@ -498,7 +500,8 @@ def test_rerunning_validation_replaces_only_validation_outputs(tmp_path: Path) -
             validations=[
                 VariableValidation(
                     variable_id="variable-001",
-                    confidence=0.42,
+                    confidence=0.72,
+                    evidence_support=EvidenceSupport.PARTIAL,
                     verdict=ValidationVerdict.PARTIALLY_SUPPORTED,
                     rationale="O contexto não confirma integralmente o prazo.",
                     issues=["Contexto incompleto"],
@@ -519,7 +522,7 @@ def test_rerunning_validation_replaces_only_validation_outputs(tmp_path: Path) -
 
     persisted = harness.repository.load_run("run-001")
     assert persisted.variables == original_variables
-    assert batch.validations[0].confidence == 0.42
+    assert batch.validations[0].confidence == 0.72
     assert persisted.validations == batch.validations
     assert persisted.coverage_findings == batch.coverage_findings
 

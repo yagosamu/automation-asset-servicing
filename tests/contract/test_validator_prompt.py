@@ -22,7 +22,7 @@ from asset_servicing.ports.llm import (
 )
 
 pytestmark = pytest.mark.contract
-PROMPT_SNAPSHOT = Path(__file__).parents[1] / "fixtures" / "prompts" / "validator-v3.txt"
+PROMPT_SNAPSHOT = Path(__file__).parents[1] / "fixtures" / "prompts" / "validator-v4.txt"
 
 
 class CapturingProvider:
@@ -45,7 +45,7 @@ def normalized_prompt() -> str:
 
 
 def test_validator_uses_an_explicit_prompt_version() -> None:
-    assert VALIDATOR_PROMPT_VERSION == "validator-v3"
+    assert VALIDATOR_PROMPT_VERSION == "validator-v4"
 
 
 def test_prompt_excludes_adjacent_sections_from_coverage_findings() -> None:
@@ -103,6 +103,37 @@ def test_prompt_says_confidence_is_not_a_calibrated_probability() -> None:
     assert "não é probabilidade calibrada" in normalized_prompt()
 
 
+def test_prompt_classifies_evidence_before_assigning_confidence() -> None:
+    calibration_policy = (
+        "Classifique primeiro a base de suporte e somente depois atribua o score e o veredito.\n"
+        "A combinação deve obedecer exatamente a uma destas faixas:\n\n"
+        "- `literal`: `0,95 <= confidence <= 1,00` e `supported`. Use `1,00` somente quando "
+        "nome e\n"
+        "  valor estiverem completos, inequívocos e diretamente expressos na fonte, sem síntese.\n"
+        "- `normalized`: `0,85 <= confidence < 0,95` e `supported`. Use quando o significado "
+        "estiver\n"
+        "  diretamente sustentado, mas o valor fizer pequena normalização, reformulação, "
+        "combinação\n"
+        "  ou síntese.\n"
+        "- `partial`: `0,60 <= confidence < 0,85` e `partially_supported`. Use quando a "
+        "evidência for\n"
+        "  parcial, ambígua, fragmentada ou depender de contexto adicional.\n"
+        "- `unsupported`: `0,00 <= confidence < 0,60` e `unsupported`. Use quando o valor estiver\n"
+        "  contradito, ausente, ilegível ou não sustentado pela fonte."
+    )
+
+    assert calibration_policy in VALIDATOR_INSTRUCTIONS
+
+
+def test_prompt_does_not_penalize_literal_score_saturation() -> None:
+    saturation_policy = (
+        "Não reduza scores para criar variação artificial. Se todas as candidatas forem realmente\n"
+        "literais, completas e inequívocas, todas podem receber `1,00`."
+    )
+
+    assert saturation_policy in VALIDATOR_INSTRUCTIONS
+
+
 def test_prompt_requires_independent_source_comparison() -> None:
     prompt = normalized_prompt()
 
@@ -134,7 +165,7 @@ def test_prompt_requires_conflict_and_omission_detection() -> None:
 
 @pytest.mark.parametrize(
     "field",
-    ["score", "veredito", "justificativa", "problemas", "has_conflict"],
+    ["score", "evidence_support", "veredito", "justificativa", "problemas", "has_conflict"],
 )
 def test_prompt_requests_each_validation_field(field: str) -> None:
     assert field in normalized_prompt()

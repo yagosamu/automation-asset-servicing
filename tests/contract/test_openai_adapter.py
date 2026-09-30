@@ -19,6 +19,7 @@ from asset_servicing.adapters.llm.openai_responses import (
 from asset_servicing.ports.llm import (
     AgentDocument,
     AtomicVariable,
+    EvidenceSupport,
     ExtractionRequest,
     ExtractionResponse,
     ExtractionSourceKind,
@@ -231,6 +232,7 @@ def test_validate_sends_source_facts_without_extractor_judgment() -> None:
             VariableValidation(
                 variable_id="variable-001",
                 confidence=0.92,
+                evidence_support=EvidenceSupport.NORMALIZED,
                 verdict=ValidationVerdict.SUPPORTED,
                 rationale="O valor está diretamente sustentado.",
                 issues=[],

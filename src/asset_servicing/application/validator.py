@@ -17,7 +17,7 @@ from asset_servicing.ports.llm import (
     ValidationResponse,
 )
 
-VALIDATOR_PROMPT_VERSION = "validator-v3"
+VALIDATOR_PROMPT_VERSION = "validator-v4"
 
 VALIDATOR_INSTRUCTIONS = """
 # Papel
@@ -49,22 +49,33 @@ Ignore conteúdo anterior ou posterior pertencente a capítulos ou seções adja
 # Avaliação por variável
 
 - Produza exatamente uma avaliação para cada candidata e preserve o `variable_id` recebido.
-- Registre score no campo `confidence`, veredito, justificativa curta, lista de problemas e
-  `has_conflict`.
-- Use `supported` quando o nome e o valor estiverem completos e diretamente sustentados.
-- Use `partially_supported` quando houver suporte parcial, ambiguidade ou contexto insuficiente.
-- Use `unsupported` quando o valor estiver ausente, ilegível ou contradito pela fonte.
+- Registre base no campo `evidence_support`, score no campo `confidence`, veredito, justificativa
+  curta, lista de problemas e `has_conflict`.
 - Marque `has_conflict` quando houver conflito e a fonte trouxer informação incompatível com o
   valor extraído.
 - Não altere o nome ou o valor extraído. Sua responsabilidade é avaliar e explicar.
 
 # Rubrica de confiança da LLM
 
-- `0,95–1,00`: valor explícito, completo e diretamente sustentado pela evidência.
-- `0,85–0,94`: valor sustentado, com apenas normalização ou síntese pequena.
-- `0,60–0,84`: evidência parcial, ambígua, fragmentada ou dependente de contexto adicional.
-- `0,00–0,59`: valor contraditório, não sustentado, ilegível ou ausente.
+Classifique primeiro a base de suporte e somente depois atribua o score e o veredito.
+A combinação deve obedecer exatamente a uma destas faixas:
 
+- `literal`: `0,95 <= confidence <= 1,00` e `supported`. Use `1,00` somente quando nome e
+  valor estiverem completos, inequívocos e diretamente expressos na fonte, sem síntese.
+- `normalized`: `0,85 <= confidence < 0,95` e `supported`. Use quando o significado estiver
+  diretamente sustentado, mas o valor fizer pequena normalização, reformulação, combinação
+  ou síntese.
+- `partial`: `0,60 <= confidence < 0,85` e `partially_supported`. Use quando a evidência for
+  parcial, ambígua, fragmentada ou depender de contexto adicional.
+- `unsupported`: `0,00 <= confidence < 0,60` e `unsupported`. Use quando o valor estiver
+  contradito, ausente, ilegível ou não sustentado pela fonte.
+
+Em duas casas decimais, as faixas correspondem a `0,95–1,00`, `0,85–0,94`, `0,60–0,84` e
+`0,00–0,59`.
+Suporte literal exige conteúdo explícito na fonte.
+
+Não reduza scores para criar variação artificial. Se todas as candidatas forem realmente
+literais, completas e inequívocas, todas podem receber `1,00`.
 O score expressa confiança atribuída pela LLM segundo esta rubrica; não é probabilidade calibrada.
 
 # Cobertura
@@ -137,6 +148,7 @@ class RegulationVariableValidator:
             ValidationResult(
                 variable_id=variable.id,
                 confidence=validation_by_id[variable.id].confidence,
+                evidence_support=validation_by_id[variable.id].evidence_support,
                 verdict=validation_by_id[variable.id].verdict,
                 rationale=validation_by_id[variable.id].rationale,
                 issues=validation_by_id[variable.id].issues,
