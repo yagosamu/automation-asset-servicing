@@ -58,13 +58,13 @@ Executar a jornada offline completa, observar a progressão das quatro etapas, c
 
 | Requirement | Status |
 | --- | --- |
-| UIP-01 | Implemented |
-| UIP-02 | Implemented |
-| UIP-03 | Implemented |
-| UIP-04 | Implemented |
-| UIP-05 | Implemented |
-| UIP-06 | Implemented |
-| UIP-07 | Implemented |
+| UIP-01 | Verified |
+| UIP-02 | Verified |
+| UIP-03 | Verified |
+| UIP-04 | Verified |
+| UIP-05 | Verified |
+| UIP-06 | Verified |
+| UIP-07 | Verified |
 
 ## Implicit Requirement Dimensions
 
