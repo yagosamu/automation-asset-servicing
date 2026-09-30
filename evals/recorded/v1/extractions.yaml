@@ -6,8 +6,8 @@ models:
   validator: recorded-fixture-v1
 prompt_versions:
   locator: locator-v1
-  extractor: extractor-v1
-  validator: validator-v1
+  extractor: extractor-v2
+  validator: validator-v2
 documents:
   - document_id: reg-23183-2026-05
     variables:

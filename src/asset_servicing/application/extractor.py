@@ -8,7 +8,7 @@ from uuid import uuid4
 from asset_servicing.domain import ExtractedVariable, SourceKind
 from asset_servicing.ports.llm import AgentDocument, ExtractionRequest, LLMProvider
 
-EXTRACTOR_PROMPT_VERSION = "extractor-v1"
+EXTRACTOR_PROMPT_VERSION = "extractor-v2"
 
 EXTRACTOR_INSTRUCTIONS = """
 # Papel
@@ -17,9 +17,13 @@ Você é o agente extrator de informações de regulamentos de fundos de investi
 
 # Fonte e escopo
 
-Analise somente as páginas confirmadas fornecidas na entrada. Extraia todas as regras relevantes
-sobre emissão, aplicação, resgate, amortização e liquidação de cotas, tanto de tabelas quanto de
-texto corrido. A ausência de tabela não é erro: continue pela redação em texto corrido.
+Analise somente a seção-alvo sobre emissão, aplicação, resgate, amortização e liquidação de cotas
+contida nas páginas confirmadas. Extraia as regras relevantes tanto de tabelas quanto de texto
+corrido. A ausência de tabela não é erro: continue pela redação em texto corrido.
+
+Use os títulos e a hierarquia do documento para delimitar a seção-alvo. Ignore conteúdo anterior
+ao início dela. Pare no próximo capítulo ou na próxima seção de mesmo nível, mesmo quando esse
+conteúdo estiver na mesma página confirmada. Não extraia fatos de capítulos ou seções adjacentes.
 
 # Modelo híbrido de nomes
 

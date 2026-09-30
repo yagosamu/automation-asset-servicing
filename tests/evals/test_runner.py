@@ -176,8 +176,8 @@ def test_report_records_models_prompts_corpus_and_generation_time() -> None:
     }
     assert report.prompt_versions == {
         "locator": "locator-v1",
-        "extractor": "extractor-v1",
-        "validator": "validator-v1",
+        "extractor": "extractor-v2",
+        "validator": "validator-v2",
     }
     assert report.corpus.corpus_id == "btg-regulations-v1"
     assert report.corpus.document_count == 4
@@ -232,7 +232,7 @@ def test_contract_change_requires_an_updated_baseline(tmp_path: Path) -> None:
 
 def test_recording_with_stale_prompt_version_fails_contract(tmp_path: Path) -> None:
     def change_prompt_version(recording: dict[str, Any]) -> None:
-        recording["prompt_versions"]["extractor"] = "extractor-v2"
+        recording["prompt_versions"]["extractor"] = "extractor-v1"
 
     report = run_evaluation(mutated_recording(tmp_path, change_prompt_version))
 

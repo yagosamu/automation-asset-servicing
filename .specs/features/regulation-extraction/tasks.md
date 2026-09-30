@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 concluído — verificação independente final aprovada
+**Status:** P1 em correção após UAT — T26 concluída, T27 pendente
 
 ---
 
@@ -81,6 +81,12 @@ T12 -> T13 -> T14 -> T15
 
 ```text
 T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
+```
+
+### Phase 5: UAT Corrections
+
+```text
+T26 -> T27
 ```
 
 ---
@@ -721,20 +727,75 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 **Gate:** build
 **Commit:** `test(pipeline): block calls on persistence failure`
 
+### Phase 5: UAT Corrections
+
+#### T26: Constrain agents to the confirmed section boundary
+
+**What:** Impedir que o extrator e o validador tratem capítulos adjacentes presentes nas páginas confirmadas como parte da seção-alvo.
+**Where:** `src/asset_servicing/application/extractor.py`, `src/asset_servicing/application/validator.py`, testes contratuais dos prompts
+**Depends on:** T25
+**Reuses:** Prompts versionados e intervalo confirmado já enviados aos agentes.
+**Requirement:** ASET-08, ASET-19 e edge case de capítulo adjacente
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] Testes contratuais exigem escopo semântico e parada no próximo capítulo ou seção de mesmo nível.
+- [x] O extrator ignora conteúdo anterior ou posterior à seção-alvo mesmo quando estiver na mesma página.
+- [x] O validador não cria omissões a partir de capítulos adjacentes.
+- [x] As versões dos dois prompts são incrementadas.
+- [x] O relatório de avaliação de prompts é atualizado.
+- [x] Gate Quick passa.
+
+**Tests:** contract + eval
+**Gate:** quick
+**Commit:** `fix(agents): constrain section boundaries`
+
+#### T27: Dismiss false omission findings with audit
+
+**What:** Permitir que o revisor descarte uma possível omissão como falso positivo ou fora de escopo, com justificativa obrigatória e trilha de auditoria.
+**Where:** serviço de revisão, domínio, persistência, interface e testes correspondentes
+**Depends on:** T26
+**Reuses:** Estados de revisão, decisões auditáveis e fila de pendências existentes.
+**Requirement:** ASET-22, ASET-31–35 e edge case de descarte de omissão
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [ ] O serviço público exige justificativa não vazia para descartar a possível omissão.
+- [ ] A decisão persiste como revisada e restaura corretamente ao reabrir a execução.
+- [ ] A interface oferece a ação de descarte sem criar variável extraída.
+- [ ] A pendência descartada sai da fila e deixa de bloquear o Excel final.
+- [ ] A auditoria registra ação, justificativa, instante e estado resultante.
+- [ ] Gate Build passa.
+
+**Tests:** unit + integration + ui
+**Gate:** build
+**Commit:** `feat(review): dismiss omission findings`
+
 ---
 
 ## Phase Execution Map
 
 ```text
-Phase 1 -> Phase 2 -> Phase 3 -> Phase 4
+Phase 1 -> Phase 2 -> Phase 3 -> Phase 4 -> Phase 5
 
 Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
 Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
+Phase 5: T26 -> T27
 ```
 
-As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas) e Phase 4 (10 tarefas após as correções do Verifier). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (2 correções de UAT). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -767,6 +828,8 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T23 | Histórico de reprocessamento | ✅ Concluída |
 | T24 | Nomes semânticos duplicados | ✅ Concluída |
 | T25 | Falha de persistência pré-provider | ✅ Concluída |
+| T26 | Limite semântico da seção nos agentes | ✅ Concluída |
+| T27 | Descarte auditável de possíveis omissões | ⏳ Pendente |
 
 ## Diagram-Definition Cross-Check
 
@@ -797,6 +860,8 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T23 | T22 | T22 -> T23 | ✅ Match |
 | T24 | T23 | T23 -> T24 | ✅ Match |
 | T25 | T24 | T24 -> T25 | ✅ Match |
+| T26 | T25 | Phase 4 -> Phase 5 | ✅ Match |
+| T27 | T26 | T26 -> T27 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -827,6 +892,8 @@ As fases formam três lotes naturais para execução sequencial: Phase 1 (6 tare
 | T23 | Pipeline | integration | integration | ✅ OK |
 | T24 | Aplicação | unit | unit | ✅ OK |
 | T25 | Pipeline | integration | integration | ✅ OK |
+| T26 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
+| T27 | Domínio/aplicação/interface | unit + integration + ui | unit + integration + ui | ✅ OK |
 
 ---
 

@@ -42,7 +42,17 @@ def normalized_prompt() -> str:
 
 
 def test_extractor_uses_an_explicit_prompt_version() -> None:
-    assert EXTRACTOR_PROMPT_VERSION == "extractor-v1"
+    assert EXTRACTOR_PROMPT_VERSION == "extractor-v2"
+
+
+def test_prompt_limits_extraction_to_the_target_section() -> None:
+    prompt = normalized_prompt()
+
+    assert "seção-alvo" in prompt
+    assert "próximo capítulo" in prompt
+    assert "mesmo nível" in prompt
+    assert "mesma página" in prompt
+    assert "ignore" in prompt
 
 
 def test_prompt_treats_pdf_as_untrusted_data() -> None:

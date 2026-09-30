@@ -42,7 +42,18 @@ def normalized_prompt() -> str:
 
 
 def test_validator_uses_an_explicit_prompt_version() -> None:
-    assert VALIDATOR_PROMPT_VERSION == "validator-v1"
+    assert VALIDATOR_PROMPT_VERSION == "validator-v2"
+
+
+def test_prompt_excludes_adjacent_sections_from_coverage_findings() -> None:
+    prompt = normalized_prompt()
+
+    assert "seção-alvo" in prompt
+    assert "próximo capítulo" in prompt
+    assert "mesmo nível" in prompt
+    assert "mesma página" in prompt
+    assert "não registre" in prompt
+    assert "omissão" in prompt
 
 
 @pytest.mark.parametrize(

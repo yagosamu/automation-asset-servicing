@@ -5,10 +5,10 @@
 ## Handoff
 
 - **Feature**: Extração e Revisão de Regulamentos / `.specs/features/regulation-extraction/`
-- **Phase / Task**: P1 complete - independent validation passed
-- **Completed**: T01–T25; 54/54 P1 requirements and 7/7 edge cases independently verified
-- **In-progress** (file:line): none
-- **Next step**: Optional credentialed smoke test and presentation rehearsal.
+- **Phase / Task**: Phase 5 / T27 - dismiss false omission findings with audit
+- **Completed**: T01–T26; agent prompts now stop at adjacent chapter boundaries
+- **In-progress** (file:line): none; T27 starts after the T26 commit
+- **Next step**: Implement audited omission dismissal in the review service and UI.
 - **Blockers**: none
-- **Uncommitted files**: final validation report and lessons artifacts ready for commit
+- **Uncommitted files**: T26 implementation and specification updates ready for commit
 - **Branch**: main

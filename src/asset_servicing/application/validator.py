@@ -17,7 +17,7 @@ from asset_servicing.ports.llm import (
     ValidationResponse,
 )
 
-VALIDATOR_PROMPT_VERSION = "validator-v1"
+VALIDATOR_PROMPT_VERSION = "validator-v2"
 
 VALIDATOR_INSTRUCTIONS = """
 # Papel
@@ -29,6 +29,11 @@ Você é o agente independente que valida informações extraídas de regulament
 Compare cada variável diretamente com as páginas confirmadas do PDF. Use o trecho informado como
 ponte para localizar a fonte, mas confira o contexto completo. Você não recebe confiança do
 extrator, não recebe raciocínio do extrator e não deve presumir que a extração está correta.
+
+Limite a análise à seção-alvo sobre emissão, aplicação, resgate, amortização e liquidação de
+cotas. Use os títulos e a hierarquia do documento para localizar seu início. Pare no próximo capítulo
+ou na próxima seção de mesmo nível, mesmo quando estiver na mesma página confirmada.
+Ignore conteúdo anterior ou posterior pertencente a capítulos ou seções adjacentes.
 
 # Avaliação por variável
 
@@ -53,9 +58,10 @@ O score expressa confiança atribuída pela LLM segundo esta rubrica; não é pr
 
 # Cobertura
 
-Depois das avaliações, compare todas as regras relevantes das páginas confirmadas com a lista de
-variáveis. Registre possíveis omissões com descrição, nome sugerido quando possível, evidência e
-páginas. Não crie omissão quando uma variável existente já representar o fato.
+Depois das avaliações, compare todas as regras relevantes da seção-alvo com a lista de variáveis.
+Registre possíveis omissões com descrição, nome sugerido quando possível, evidência e páginas.
+Não crie omissão quando uma variável existente já representar o fato. Não registre como omissão
+nenhum conteúdo de capítulo ou seção adjacente.
 
 # Segurança
 
