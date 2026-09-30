@@ -23,6 +23,20 @@ _VERDICT_LABELS = {
     "unsupported": "não suportado",
 }
 
+_ACTIVE_RUN_VIEW_KEYS = (
+    "_asset_servicing_review_run_id",
+    "_review_flash",
+    "location_run_id",
+    "location_page_count",
+    "location_confirmed",
+    "location_previews",
+    "location_result",
+    "location_page_start",
+    "location_page_end",
+    "confirmed_page_start",
+    "confirmed_page_end",
+)
+
 
 class Preview(Protocol):
     page_number: int
@@ -113,9 +127,7 @@ class ReviewWorkflow(Protocol):
 
 
 class DeliveryWorkflow(Protocol):
-    """Public recovery operations consumed by the delivery UI."""
-
-    def list_runs(self) -> list[Run]: ...
+    """Public export and summary operations consumed by the delivery UI."""
 
     def get_run(self, run_id: str) -> Run: ...
 
@@ -153,6 +165,7 @@ def render_document_location(
         ["Pasta do projeto", "Upload"],
         horizontal=True,
         key="document_source",
+        on_change=_clear_active_run_view,
     )
     source_path: Path | None = None
     if source_kind == "Pasta do projeto":
@@ -162,6 +175,7 @@ def render_document_location(
             filenames,
             key="project_pdf",
             placeholder="Nenhum PDF encontrado",
+            on_change=_clear_active_run_view,
         )
         if selected:
             source_path = Path(regulations_dir) / selected
@@ -170,6 +184,7 @@ def render_document_location(
             "Selecione um regulamento PDF",
             type=["pdf"],
             key="uploaded_pdf",
+            on_change=_clear_active_run_view,
         )
         if upload is not None:
             upload_dir = Path(upload_dir)
@@ -202,6 +217,7 @@ def _start_location(
 ) -> None:
     if source_path is None:
         return
+    _clear_active_run_view()
     try:
         run = pipeline.create_run(source_path)
         location = pipeline.locate_section(run.run_id, chapter_hint=chapter_hint)
@@ -304,6 +320,13 @@ def _extract_and_validate(pipeline: DocumentLocationPipeline, run_id: str) -> No
         return
     st.session_state["_asset_servicing_review_run_id"] = run_id
     st.success("Extração e validação concluídas.")
+
+
+def _clear_active_run_view() -> None:
+    """Clear only browser state tied to the previously active document."""
+
+    for key in _ACTIVE_RUN_VIEW_KEYS:
+        st.session_state.pop(key, None)
 
 
 def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> None:
@@ -518,35 +541,6 @@ def render_review_results(*, review_service: ReviewWorkflow, run_id: str) -> Non
                     st.rerun()
 
 
-def render_run_recovery(*, delivery_service: DeliveryWorkflow) -> str | None:
-    """Render persisted-run selection and return the active run identifier."""
-
-    try:
-        runs = delivery_service.list_runs()
-    except (OSError, RuntimeError, ValueError) as error:
-        st.error(str(error))
-        return None
-    st.header("Execuções salvas")
-    if not runs:
-        st.info("Nenhuma execução persistida foi encontrada.")
-        return None
-
-    runs_by_id = {run.run_id: run for run in runs}
-    selected_run_id = st.selectbox(
-        "Retomar execução",
-        list(runs_by_id),
-        key="saved_run",
-    )
-    if selected_run_id is None:
-        return None
-    selected_run = runs_by_id[selected_run_id]
-    st.caption(
-        f"{selected_run.document_name} · estado: {selected_run.state.value} · "
-        f"criada em {selected_run.created_at.isoformat()}"
-    )
-    return selected_run_id
-
-
 def render_run_delivery(*, delivery_service: DeliveryWorkflow, run_id: str) -> None:
     """Render workbook generation and downloads for one persisted run."""
 
@@ -678,12 +672,8 @@ def main(services: LocalAppServices | None = None) -> None:
             regulations_dir=Path(regulations_dir),
             upload_dir=Path(upload_dir),
         )
+    review_run_id = st.session_state.get("_asset_servicing_review_run_id")
     active_run_id = None if review_run_id is None else str(review_run_id)
-    if delivery_service is not None:
-        recovered_run_id = render_run_recovery(delivery_service=delivery_service)
-        if recovered_run_id is not None:
-            active_run_id = recovered_run_id
-            st.session_state["_asset_servicing_review_run_id"] = recovered_run_id
     if review_service is not None and active_run_id is not None:
         render_review_results(
             review_service=review_service,
@@ -710,5 +700,4 @@ __all__ = [
     "render_document_location",
     "render_review_results",
     "render_run_delivery",
-    "render_run_recovery",
 ]

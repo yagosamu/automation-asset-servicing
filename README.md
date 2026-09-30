@@ -201,8 +201,9 @@ A extração continua pelo mesmo pipeline e mantém a origem manual na auditoria
   estado concluído permanece persistido. Repita a ação depois de revisar modelo e configuração.
 - **Localização incorreta ou inconclusiva:** ajuste o intervalo manual, atualize a prévia e confirme
   antes da extração.
-- **Navegador fechado ou aplicação reiniciada:** abra novamente o Streamlit e escolha o `run_id` em
-  **Retomar execução**. O estado vem de `data/runs/`.
+- **Conclusão da extração:** os resultados aparecem imediatamente, sem selecionar uma execução
+  intermediária. Ao trocar de regulamento, a visualização anterior é limpa, mas o histórico
+  permanece em `data/runs/` para auditoria e recuperação técnica.
 - **Excel final bloqueado:** resolva todas as pendências. O preliminar continua disponível para
   inspeção enquanto a revisão estiver aberta.
 - **PDF rejeitado:** confirme formato, tamanho máximo de 50 MB, limite de 200 páginas, integridade e

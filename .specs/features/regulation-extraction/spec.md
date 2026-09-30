@@ -125,7 +125,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 
 **Acceptance Criteria:**
 
-1. [ASET-24] WHEN a validação terminar THEN o sistema SHALL mostrar todas as variáveis em uma visão geral e somente as pendências na fila de revisão.
+1. [ASET-24] WHEN a validação terminar THEN o sistema SHALL tornar a execução recém-validada ativa e mostrar imediatamente todas as variáveis em uma visão geral e somente as pendências na fila de revisão, sem exigir seleção intermediária.
 2. [ASET-25] WHEN uma pendência for aberta THEN o sistema SHALL mostrar nome, valor, trecho-fonte imutável, página, score, veredito e justificativa do validador.
 3. [ASET-26] WHEN o usuário confirmar uma variável THEN o sistema SHALL manter nome e valor vigentes e registrar `Foi revisado?` como verdadeiro.
 4. [ASET-27] WHEN o usuário editar uma variável THEN o sistema SHALL permitir alterar nome e valor, preservar os originais e registrar `Foi revisado?` como verdadeiro.
@@ -133,7 +133,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 6. [ASET-29] WHEN o usuário aceitar uma possível omissão THEN o sistema SHALL permitir criar a variável ausente com nome, valor e evidência revisados manualmente.
 7. [ASET-30] The system SHALL marcar `Foi revisado?` como verdadeiro somente após ação humana explícita.
 8. [ASET-31] WHEN qualquer decisão de revisão ocorrer THEN o sistema SHALL persistir atomicamente valor original, valor vigente, ação, instante e estado atualizado da execução.
-9. [ASET-32] WHEN uma execução existente for reaberta THEN o sistema SHALL restaurar páginas confirmadas, extrações, validações e revisões já salvas.
+9. [ASET-32] WHEN a interface for atualizada na mesma sessão THEN o sistema SHALL restaurar a execução ativa, suas extrações, validações e revisões já salvas sem expor um seletor de histórico no fluxo principal.
 
 **Independent Test:** Interromper e reabrir uma execução com uma variável confirmada, uma editada e uma não aplicável; verificar o estado e a trilha de cada uma.
 
@@ -230,6 +230,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 - IF uma cláusula listar atributos coordenados da mesma ação, como execução equânime, simultânea, proporcional e sem taxa, THEN o sistema SHALL representá-los em uma única variável sem perder os atributos no valor ou na evidência.
 - IF todas as variáveis de uma execução tiverem suporte literal, completo e inequívoco THEN o sistema SHALL permitir que todas recebam `1,00` sem criar falha ou pendência somente por saturação da distribuição.
 - IF a base de suporte, a faixa de confiança e o veredito forem incoerentes THEN o sistema SHALL rejeitar a resposta estruturada antes de persistir a validação.
+- WHEN o usuário selecionar outro regulamento THEN o sistema SHALL limpar da interface a localização, os resultados, a revisão e o resumo da execução anterior sem apagar seu histórico persistido.
 
 ---
 
@@ -260,7 +261,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-21 | P1: Validação | Design | Implemented (T02, T09) |
 | ASET-22 | P1: Validação | Design | Verified (T02, T09, T27) |
 | ASET-23 | P1: Validação | Design | Implemented (T02, T09, T30) |
-| ASET-24 | P1: Revisão | Design | Implemented (T02, T09–T11, T14) |
+| ASET-24 | P1: Revisão | Design | Implemented (T02, T09–T11, T14, T31) |
 | ASET-25 | P1: Revisão | Design | Implemented (T02, T09, T11, T14) |
 | ASET-26 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-27 | P1: Revisão | Design | Implemented (T02, T11, T14) |
@@ -268,7 +269,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 | ASET-29 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-30 | P1: Revisão | Design | Implemented (T02, T11, T14) |
 | ASET-31 | P1: Revisão | Design | Verified (T03, T11, T27) |
-| ASET-32 | P1: Revisão | Design | Verified (T03, T11, T15, T27) |
+| ASET-32 | P1: Revisão | Design | Implemented (T03, T11, T15, T27, T31) |
 | ASET-33 | P1: Excel | Design | Implemented (T12, T15) |
 | ASET-34 | P1: Excel | Design | Verified (T02, T12, T15, T27) |
 | ASET-35 | P1: Excel | Design | Verified (T02, T12, T15, T27) |
@@ -298,7 +299,7 @@ O resultado precisa ser demonstrável localmente, reproduzível nos quatro docum
 T18 adiciona evidência ponta a ponta offline para o fluxo integrado de ASET-01–53. T19
 completa ASET-54 com um smoke test real opt-in, isolado do gate offline e sanitizado.
 
-**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T30 concluídas, com verificação independente da T30 pendente.
+**Coverage:** 57 requisitos totais; 54 P1 implementados; 3 P3 postergados; T01–T30 concluídas e T31 em execução, com verificação independente de T30–T31 pendente.
 
 ---
 

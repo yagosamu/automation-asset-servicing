@@ -69,7 +69,9 @@ def test_presentation_runbook_covers_primary_surprise_and_manual_paths() -> None
 def test_recovery_instructions_match_the_persisted_ui_workflow() -> None:
     readme = _readme()
 
-    assert "Retomar execução" in readme
+    assert "Retomar execução" not in readme
+    assert "resultados aparecem imediatamente" in readme
+    assert "histórico permanece em `data/runs/`" in readme
     assert "O progresso foi preservado" in readme
     assert "Clique novamente em **Extrair informações**" in readme
 

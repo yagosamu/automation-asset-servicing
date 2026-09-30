@@ -1,4 +1,4 @@
-"""Streamlit journeys for recovery, exports, and operational summaries."""
+"""Streamlit journeys for the active run, exports, and operational summaries."""
 
 from __future__ import annotations
 
@@ -100,6 +100,7 @@ def make_app(tmp_path: Path) -> tuple[AppTest, JsonRunRepository]:
     app = AppTest.from_file(Path(ui_app.__file__), default_timeout=30)
     app.session_state["_asset_servicing_delivery_service"] = delivery_service
     app.session_state["_asset_servicing_review_service"] = ReviewService(repository=repository)
+    app.session_state["_asset_servicing_review_run_id"] = "run-002"
     return app.run(), repository
 
 
@@ -167,35 +168,28 @@ def add_summary_events(repository: JsonRunRepository) -> None:
         )
 
 
-def test_persisted_runs_are_available_for_recovery_newest_first(tmp_path: Path) -> None:
+def test_saved_run_selector_is_not_rendered_in_the_primary_flow(tmp_path: Path) -> None:
     app, _ = make_app(tmp_path)
 
-    selector = app.get_by_key("saved_run")
-
-    assert selector.value == "run-002"
-    assert selector.options == ["run-002", "run-001"]
-    assert any("regulamento-recente.pdf" in item.value for item in app.caption)
+    assert "Execuções salvas" not in [header.value for header in app.header]
+    assert "saved_run" not in [selectbox.key for selectbox in app.selectbox]
 
 
-def test_selecting_a_saved_run_restores_its_persisted_results(tmp_path: Path) -> None:
+def test_active_run_results_render_without_a_recovery_selection(tmp_path: Path) -> None:
     app, _ = make_app(tmp_path)
-
-    app.get_by_key("saved_run").select("run-001").run()
 
     overview = app.dataframe[0].value
-    assert list(overview["Valor"]) == ["D+30"]
+    assert list(overview["Valor"]) == ["D+5"]
     assert list(overview["Confiança"]) == [0.72]
-    assert any("regulamento-antigo.pdf" in item.value for item in app.caption)
 
 
-def test_refresh_preserves_the_recovered_run_and_progress(tmp_path: Path) -> None:
+def test_refresh_preserves_the_active_run_and_progress(tmp_path: Path) -> None:
     app, _ = make_app(tmp_path)
-    app.get_by_key("saved_run").select("run-001").run()
 
     app.run()
 
-    assert app.get_by_key("saved_run").value == "run-001"
-    assert list(app.dataframe[0].value["Valor"]) == ["D+30"]
+    assert app.session_state["_asset_servicing_review_run_id"] == "run-002"
+    assert list(app.dataframe[0].value["Valor"]) == ["D+5"]
     assert [metric.value for metric in app.metric[:3]] == ["1", "1", "0"]
 
 
@@ -216,9 +210,10 @@ def test_preliminary_workbook_is_generated_and_offered_with_pending_review(
     assert app.get_by_key("download_preliminary").proto.label == "Baixar Excel preliminar"
 
 
-def test_preliminary_download_belongs_to_the_selected_run(tmp_path: Path) -> None:
+def test_preliminary_download_belongs_to_the_active_run(tmp_path: Path) -> None:
     app, repository = make_app(tmp_path)
-    app.get_by_key("saved_run").select("run-001").run()
+    app.session_state["_asset_servicing_review_run_id"] = "run-001"
+    app.run()
 
     app.get_by_key("generate_preliminary").click().run()
 

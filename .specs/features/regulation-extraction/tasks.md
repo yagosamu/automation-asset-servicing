@@ -9,7 +9,7 @@ Se `tlc-spec-driven` não puder ser ativada, interromper a execução e informar
 ---
 
 **Design:** `.specs/features/regulation-extraction/design.md`
-**Status:** P1 refinado após UAT — T30 concluída, verificação independente pendente
+**Status:** P1 refinado após UAT — T31 em execução, verificação independente de T30–T31 pendente
 
 ---
 
@@ -86,7 +86,7 @@ T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
 ### Phase 5: UAT Corrections
 
 ```text
-T26 -> T27 -> T28 -> T29 -> T30
+T26 -> T27 -> T28 -> T29 -> T30 -> T31
 ```
 
 ---
@@ -859,6 +859,32 @@ T26 -> T27 -> T28 -> T29 -> T30
 **Gate:** build
 **Commit:** `fix(validator): calibrate confidence scores`
 
+#### T31: Streamline the active-run UI flow
+
+**What:** Remover o seletor de execuções salvas do fluxo principal, ativar imediatamente a execução recém-extraída e limpar o estado visível ao trocar de regulamento.
+**Where:** interface Streamlit, jornadas de UI, contrato do README e runbook
+**Depends on:** T30
+**Reuses:** Persistência local, identificador da execução ativa e serviços de revisão/exportação existentes.
+**Requirement:** ASET-24, ASET-32 e edge case de troca de regulamento
+
+**Tools:**
+
+- MCP: NONE
+- Skills: `tdd`, `git-workflow-and-versioning`
+
+**Done when:**
+
+- [x] A conclusão da extração mostra resultados, revisão, resumo e arquivos da execução recém-criada sem clique intermediário.
+- [x] O fluxo principal não mostra `Execuções salvas` nem `Retomar execução`.
+- [x] Selecionar outro PDF limpa localização, resultados, revisão e resumo anteriores.
+- [x] A limpeza visual não apaga nenhuma execução já persistida no repositório.
+- [x] Atualizar a interface na mesma sessão preserva a execução ativa e o progresso de revisão.
+- [x] O README descreve o novo fluxo e o Gate Build passa.
+
+**Tests:** ui + contract
+**Gate:** build
+**Commit:** `fix(ui): streamline active run flow`
+
 ---
 
 ## Phase Execution Map
@@ -870,10 +896,10 @@ Phase 1: T01 -> T02 -> T03 -> T04 -> T05 -> T06
 Phase 2: T07 -> T08 -> T09 -> T10 -> T11
 Phase 3: T12 -> T13 -> T14 -> T15
 Phase 4: T16 -> T17 -> T18 -> T19 -> T20 -> T21 -> T22 -> T23 -> T24 -> T25
-Phase 5: T26 -> T27 -> T28 -> T29 -> T30
+Phase 5: T26 -> T27 -> T28 -> T29 -> T30 -> T31
 ```
 
-As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (5 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
+As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tarefas), Phases 2+3 (9 tarefas), Phase 4 (10 tarefas após as correções do Verifier) e Phase 5 (6 correções de UAT e verificação). Nenhum lote inicia antes do anterior terminar com gate verde.
 
 ---
 
@@ -911,6 +937,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T28 | Testes discriminantes da fronteira da seção | ✅ Concluída |
 | T29 | Granularidade operacional da extração | ✅ Concluída |
 | T30 | Calibração discriminante da confiança | ✅ Concluída |
+| T31 | Fluxo direto da execução ativa na interface | 🚧 Em execução |
 
 ## Diagram-Definition Cross-Check
 
@@ -946,6 +973,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T28 | T27 | T27 -> T28 | ✅ Match |
 | T29 | T28 | T28 -> T29 | ✅ Match |
 | T30 | T29 | T29 -> T30 | ✅ Match |
+| T31 | T30 | T30 -> T31 | ✅ Match |
 
 ## Test Co-location Validation
 
@@ -981,6 +1009,7 @@ As fases formam quatro lotes naturais para execução sequencial: Phase 1 (6 tar
 | T28 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 | T29 | Prompts/evals | contract + eval | contract + eval | ✅ OK |
 | T30 | Domínio/contratos/prompts/evals | unit + contract + eval | unit + contract + eval | ✅ OK |
+| T31 | Interface + documentação | ui + contract | ui + contract | ✅ OK |
 
 ---
 

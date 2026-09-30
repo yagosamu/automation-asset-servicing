@@ -136,10 +136,17 @@ def _make_pdf(path: Path, *, pages: int = 4) -> None:
         document.close()
 
 
-def _make_harness(tmp_path: Path, *, pages: int = 4) -> JourneyHarness:
+def _make_harness(
+    tmp_path: Path,
+    *,
+    pages: int = 4,
+    additional_pdf: bool = False,
+) -> JourneyHarness:
     regulations_dir = tmp_path / "Regulamentos"
     regulations_dir.mkdir()
     _make_pdf(regulations_dir / "regulamento-e2e.pdf", pages=pages)
+    if additional_pdf:
+        _make_pdf(regulations_dir / "regulamento-seguinte.pdf", pages=pages)
     repository = JsonRunRepository(tmp_path / "runs")
     provider = RecordedProvider()
     variable_ids = cycle(("variable-low", "variable-supported"))
@@ -208,6 +215,8 @@ def test_complete_journey_reviews_low_confidence_and_downloads_workbooks(
         "prazo_pagamento_resgate",
         "aplicacao_minima",
     ]
+    assert "Execuções salvas" not in [header.value for header in app.header]
+    assert "saved_run" not in [selectbox.key for selectbox in app.selectbox]
     assert app.get_by_key("generate_final").disabled is True
     assert any("1 pendência" in warning.value for warning in app.warning)
 
@@ -293,7 +302,7 @@ def test_refresh_restores_review_progress_and_preliminary_download(tmp_path: Pat
 
     app.run()
 
-    assert app.get_by_key("saved_run").value == "run-e2e"
+    assert app.session_state["_asset_servicing_review_run_id"] == "run-e2e"
     assert app.get_by_key("download_preliminary").proto.label == "Baixar Excel preliminar"
 
     app.get_by_key("confirm_variable-low").click().run()
@@ -303,10 +312,32 @@ def test_refresh_restores_review_progress_and_preliminary_download(tmp_path: Pat
     persisted = harness.repository.load_run("run-e2e")
     assert persisted.pending_items() == []
     assert persisted.variables[0].reviewed is True
-    assert app.get_by_key("saved_run").value == "run-e2e"
+    assert app.session_state["_asset_servicing_review_run_id"] == "run-e2e"
     assert harness.delivery.get_export("run-e2e", final=False) is None
     assert app.get_by_key("generate_final").disabled is False
     assert list(app.dataframe[0].value["Foi revisado?"]) == [True, False]
+
+
+def test_selecting_another_regulation_clears_the_previous_visible_run(
+    tmp_path: Path,
+) -> None:
+    harness = _make_harness(tmp_path, additional_pdf=True)
+    app = _locate_confirm_and_process(harness)
+
+    assert len(app.dataframe) == 1
+    assert len(harness.repository.list_runs()) == 1
+
+    app.get_by_key("project_pdf").select("regulamento-seguinte.pdf").run()
+
+    assert "_asset_servicing_review_run_id" not in app.session_state
+    assert len(app.dataframe) == 0
+    assert len(app.image) == 0
+    assert {
+        "Resultados e revisão",
+        "Resumo operacional",
+        "Arquivos da execução",
+    }.isdisjoint(header.value for header in app.header)
+    assert len(harness.repository.list_runs()) == 1
 
 
 def test_failed_extraction_can_retry_without_recreating_the_run(tmp_path: Path) -> None:
